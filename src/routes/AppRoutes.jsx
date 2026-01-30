@@ -1,5 +1,10 @@
 import { Routes, Route } from 'react-router-dom'
 import Home from '@/pages/Home'
+import Login from '@/pages/Login'
+import Register from '@/pages/Register'
+import ChangePassword from '@/pages/ChangePassword'
+import ForgotPassword from '@/pages/ForgotPassword'
+import OTPVerifyPassword from '@/pages/OTPVerifyPassword'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -15,6 +20,11 @@ export default function AppRoutes() {
             <Route path="/collections" element={<Collections />} />
             <Route path="/experiences" element={<Experiences />} />
             <Route path="/about-us" element={<AboutUs />} /> */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/changepassword" element={<ChangePassword />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/otpverify" element={<OTPVerifyPassword />} />
         </Routes>
     )
 }
