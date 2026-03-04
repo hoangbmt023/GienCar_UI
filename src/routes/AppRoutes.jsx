@@ -5,6 +5,7 @@ import Register from '@/pages/Register'
 import ChangePassword from '@/pages/ChangePassword'
 import ForgotPassword from '@/pages/ForgotPassword'
 import OTPVerifyPassword from '@/pages/OTPVerifyPassword'
+import MainLayout from '@/components/MainLayout/MainLayout'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -14,7 +15,9 @@ import OTPVerifyPassword from '@/pages/OTPVerifyPassword'
 export default function AppRoutes() {
     return (
         <Routes>
-            <Route path="/home" element={<Home />} />
+            <Route element={<MainLayout />}>
+                <Route path="/home" element={<Home />} />
+            </Route>
             {/* <Route path="/racing" element={<Racing />} />
             <Route path="/sports-cars" element={<SportsCars />} />
             <Route path="/collections" element={<Collections />} />

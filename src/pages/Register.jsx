@@ -2,110 +2,93 @@ import googleIcon from '@/assets/icons/google.svg'
 import appleIcon from '@/assets/icons/apple.svg'
 import eyeIcon from '@/assets/icons/eye.svg'
 import logo from '@/assets/logo/backgroundgiencar.jpg'
+import loginVideo from "../assets/video/login-video.mp4";
+import React from "react";
+import { Link } from "react-router-dom";
 import "@/components/Authenticator/Login.scss"
 
-export default function Register() {
+const Register = () => {
     return (
-        <div className='login-page'>
+        <div className="login-container">
+            {/* LEFT SIDE */}
             <div className="login-left">
-                <div className="body-register">
-                    <div className="title-forgot">
-                        <div className="text-wrapper">Get Started Now</div>
-                    </div>
-                    <div className="social-section">
-                        <div className="lbl-or">
-                            <span>OR</span>
-                        </div>
-                        <div className="social-buttons">
-                            <div className="btn-signingoogle">
-                                <div className="button-google">
-                                    <div className="group">
-                                        <div className="google">
-                                            <img src={googleIcon} alt="Google" />
-                                        </div>
-                                        <div className="div">Sign up with Google</div>
-                                    </div>
-                                </div>
-                            </div>
+                <div className="login-box">
+                    <h1 className="login-title">Get Started Now</h1>
 
-                            <div className="btn-signupapple">
-                                <div className="frame">
-                                    <div className="button-apple">
-                                        <div className="apple-logo">
-                                            <img src={appleIcon} alt="Apple" />
-                                        </div>
-                                        <div className="text-wrapper-3">Sign up with Apple</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="form-fields">
-                        <div className="input-email name">
-                            <div className="text-wrapper-4">Full Name</div>
-                            <div className="input">
-                                <input
-                                    type="text"
-                                    placeholder="Enter your name"
-                                    className="input-field"
-                                />
-                            </div>
+                    <form>
+                        <div className="form-group">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                className="input-field"
+                                placeholder="Enter your name"
+                            />
                         </div>
 
-                        <div className="input-email email">
-                            <div className="text-wrapper-4">Email Address</div>
-                            <div className="input">
-                                <input
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    className="input-field"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Email Address</label>
+                            <input
+                                type="email"
+                                className="input-field"
+                                placeholder="Enter your email"
+                            />
                         </div>
 
-                        <div className="input-email phone">
-                            <div className="text-wrapper-4">Phone Number</div>
-                            <div className="input">
-                                <input
-                                    type="tel"
-                                    placeholder="Enter your phone number"
-                                    className="input-field"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Password</label>
+                            <input
+                                type="password"
+                                placeholder="Enter your password"
+                                className="input-field"
+                            />
                         </div>
 
-                        <div className="input-password">
-                            <div className="text-wrapper-4">Password</div>
-                            <div className="input">
-                                <input
-                                    type="password"
-                                    placeholder="Enter your password"
-                                    className="input-field"
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label>Phone Number</label>
+                            <input
+                                type="text"
+                                className="input-field"
+                                placeholder="Enter your phone number"
+                            />
                         </div>
-                    </div>
 
-                    <div className="mdi-eye">
-                        <img src={eyeIcon} alt="Eye" />
-                    </div>
+                        <div className="options-row">
+                            <label className="remember-me">
+                                <input type="checkbox" />
+                                <span>
+                                    I agree to the{" "}
+                                    <Link to="/terms" className="policy-link">
+                                        terms & policy
+                                    </Link>
+                                </span>
+                            </label>
+                        </div>
 
-                    <button className="btn-login">
-                        <div className="rectangle-2"></div>
-                        <div className="text-wrapper-6">Register</div>
-                    </button>
+                        <button type="submit" className="login-btn">
+                            Sign Up
+                        </button>
 
-                    {/* Navigate */}
-                    <div className="navigate-signup">
-                        <div className="text-wrapper-7">Already have an account?</div>
-                        <div className="text-wrapper-8">Login</div>
-                    </div>
+                        <p className="signup-text">
+                            Already have an account?{" "}
+                            <Link to="/login">Sign in</Link>
+                        </p>
+                    </form>
                 </div>
             </div>
 
+            {/* RIGHT SIDE */}
             <div className="login-right">
-                <img src={logo} alt="Register" />
+                <video
+                    src={loginVideo}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="login-video"
+                />
             </div>
         </div>
-    )
-}
+    );
+};
+
+export default Register;
