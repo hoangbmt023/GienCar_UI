@@ -1,7 +1,17 @@
+import "../components/Authenticator/Home.scss";
+import HeroVideo from "../components/HeroVideo/HeroVideo";
+import HeroContent from "../components/HeroContent/HeroContent";
+import HeroGrid from "../components/HeroGrid/HeroGrid";
+
 export default function Home() {
     return (
-        <div className="p-8 text-3xl font-bold">
-            Home
-        </div>
+        <main className="home">
+            {/* HERO VIDEO */}
+            <HeroVideo />
+            {/* HERO CONTENT */}
+            <HeroContent />
+            {/* GRID CONTENT */}
+            <HeroGrid />
+        </main>
     )
 }
