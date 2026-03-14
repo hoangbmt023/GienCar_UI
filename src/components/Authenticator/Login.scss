@@ -6,7 +6,6 @@ body,
 
 body {
     margin: 0;
-    overflow: hidden;
 }
 
 * {
@@ -16,75 +15,22 @@ body {
     font-family: sans-serif;
 }
 
-.login-container {
-    display: flex;
-    height: 100vh;
-}
-
-.login-left,
-.login-right {
-    width: 50%;
-}
-
-.login-left {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #ffffff;
-}
-
-.login-box {
-    width: 350px;
-}
-
 .login-title {
-    font-size: 32px;
-    margin-bottom: 30px;
-    text-align: center;
+    font-size: 34px;
+    margin-bottom: 0px;
+    text-align: left;
+    font-weight: bold;
 }
 
 .subtitle {
     font-size: 14px;
     color: #666;
     margin-bottom: 25px;
-}
-
-.form-group {
-    margin-bottom: 15px;
-
-    label {
-        font-size: 15px;
-        font-weight: bold;
-        display: block;
-        margin-bottom: 6px;
-    }
-}
-
-.input-field {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 14px;
-    transition: 0.2s ease;
-
-    &:focus {
-        border-color: #000;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
-    }
+    margin-left: 5px;
 }
 
 .password-wrapper {
     position: relative;
-}
-
-.options-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    font-size: 14px;
 }
 
 .remember-me input {
@@ -136,31 +82,6 @@ body {
     }
 }
 
-.social-btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 0.75px solid #000000;
-    background: #fff;
-    cursor: pointer;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-size: 14px;
-    transition: 0.3s ease;
-}
-
-.social-btn:hover {
-    background: #f3f3f3;
-    transform: translateY(-2px);
-}
-
-.social-btn img {
-    width: 18px;
-}
-
 .signup-text {
     text-align: center;
     margin-top: 15px;
@@ -183,24 +104,6 @@ body {
     color: #0C6917;
     font-weight: 600;
     text-decoration: underline;
-}
-
-.login-right {
-    width: 50%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.login-video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
 }
 
 .otp-wrapper {
