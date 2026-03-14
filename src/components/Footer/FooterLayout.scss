@@ -1,0 +1,67 @@
+.footer {
+  background: #0b0b0b;
+  color: white;
+  font-family: sans-serif;
+}
+
+/* NEWSLETTER */
+
+.footer-news {
+  background: #3a3a3a;
+  text-align: center;
+  padding: 80px 20px;
+
+  h2 {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: #d1d1d1;
+    margin-bottom: 30px;
+  }
+}
+
+.subscribe-btn {
+  background: linear-gradient(#ff2d2d,#d80000);
+  border: none;
+  padding: 18px 50px;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+/* MENU */
+
+.footer-menu {
+  max-width: 1400px;
+  margin: auto;
+  padding: 70px 40px;
+
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 60px;
+}
+
+.footer-col h4 {
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col li {
+  font-size: 14px;
+  color: #cfcfcf;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.footer-col li:hover {
+  color: white;
+}
