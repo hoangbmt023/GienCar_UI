@@ -6,6 +6,7 @@ import ChangePassword from '@/pages/ChangePassword'
 import ForgotPassword from '@/pages/ForgotPassword'
 import OTPVerifyPassword from '@/pages/OTPVerifyPassword'
 import MainLayout from '@/components/MainLayout/MainLayout'
+import OTPVerifyForgotPassword from '../pages/OTPVerifyForgotPassword'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -28,6 +29,7 @@ export default function AppRoutes() {
             <Route path="/changepassword" element={<ChangePassword />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/otpverify" element={<OTPVerifyPassword />} />
+            <Route path="/otpverifyforgotpassword" element={<OTPVerifyForgotPassword />} />
         </Routes>
     )
 }

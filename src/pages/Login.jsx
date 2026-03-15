@@ -120,7 +120,7 @@ const Login = () => {
                         Remember
                     </label>
 
-                    <Link to="/forgot-password" className="forgot-link">
+                    <Link to="/forgotpassword" className="forgot-link">
                         Forgot password?
                     </Link>
                 </OptionsRow>
