@@ -8,6 +8,11 @@ export const authService = {
         return publicRequest.post("/auth/login", data);
     },
 
+    // register
+    register(data) {
+        return publicRequest.post("/users/register", data);
+    },
+
     // refresh token
     refreshToken(data) {
         return publicRequest.post("/auth/refresh-token", data);
