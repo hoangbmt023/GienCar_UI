@@ -56,6 +56,24 @@ const Login = () => {
 
             const data = error.response?.data;
 
+            // nếu tài khoản chưa kích hoạt
+            if (data?.message === "Tài khoản chưa được kích hoạt") {
+
+                const confirmActivate = window.confirm(
+                    "Tài khoản chưa được kích hoạt.\nBạn có muốn xác minh tài khoản không?"
+                );
+
+                if (!confirmActivate) return;
+
+                // lưu email cho OTP page
+                localStorage.setItem("activateEmail", formData.email);
+
+                // chuyển sang trang OTP
+                navigate("/otpverify");
+
+                return;
+            }
+
             if (data?.errors) {
                 setFieldErrors(data.errors);
             } else {
