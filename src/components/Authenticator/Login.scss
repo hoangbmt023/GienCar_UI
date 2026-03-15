@@ -190,3 +190,40 @@ body {
     border: 1px solid #ff4d4f;
     background: #fff1f0;
 }
+
+.success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 999;
+}
+
+.success-box {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    width: 350px;
+}
+
+.success-box h2 {
+    margin-bottom: 10px;
+}
+
+.success-box p {
+    margin-bottom: 20px;
+}
+
+.success-icon {
+    font-size: 40px;
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
