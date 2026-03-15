@@ -5,7 +5,7 @@ import HeroGrid from "../components/HeroGrid/HeroGrid";
 
 export default function Home() {
     return (
-        <main className="home">
+        <main className="home">     
             {/* HERO VIDEO */}
             <HeroVideo />
             {/* HERO CONTENT */}
