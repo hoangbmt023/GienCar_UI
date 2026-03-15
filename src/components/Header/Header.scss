@@ -45,7 +45,9 @@
   display: flex;
   background: black;
   z-index: 9000;
-  contain: layout paint;
+
+  transform: translateZ(0);
+  will-change: transform, opacity;
 }
 
 /* PANEL 1 */
