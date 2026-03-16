@@ -19,8 +19,16 @@ export const authService = {
     },
 
     // logout
-    logout(data) {
-        return axiosClient.post("/auth/logout", data);
+    logout() {
+
+        const refreshToken = getRefreshToken();
+
+        return axiosClient.post("/auth/logout", {
+            refreshToken: refreshToken
+        }).finally(() => {
+            clearTokens();
+        });
+
     },
 
     // forgot password
