@@ -1,7 +1,8 @@
 import googleIcon from '@/assets/icons/google.svg'
 import appleIcon from '@/assets/icons/apple.svg'
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 import "@/components/Authenticator/Login.scss"
 
@@ -16,6 +17,14 @@ import { saveTokens } from "@/utils/tokenService";
 const Login = () => {
 
     const navigate = useNavigate();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state?.fromProtected) {
+            toast.error("Bạn cần đăng nhập để truy cập trang này!");
+        }
+    }, [location]);
 
     const [formData, setFormData] = useState({
         email: "",

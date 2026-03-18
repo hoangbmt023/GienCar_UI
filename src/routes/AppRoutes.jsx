@@ -7,6 +7,7 @@ import ForgotPassword from '@/pages/ForgotPassword'
 import OTPVerifyPassword from '@/pages/OTPVerifyPassword'
 import MainLayout from '@/components/MainLayout/MainLayout'
 import OTPVerifyForgotPassword from '../pages/OTPVerifyForgotPassword'
+import ProtectedRoute from './ProtectedRoute'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -19,6 +20,15 @@ export default function AppRoutes() {
             <Route element={<MainLayout />}>
                 <Route path="/home" element={<Home />} />
             </Route>
+            {/* test routes cần đăng nhập
+            <Route element={<ProtectedRoute />}>
+
+                <Route element={<MainLayout />}>
+                    <Route path="/home" element={<Home />} />
+                </Route>
+
+            </Route> */}
+
             {/* <Route path="/racing" element={<Racing />} />
             <Route path="/sports-cars" element={<SportsCars />} />
             <Route path="/collections" element={<Collections />} />
