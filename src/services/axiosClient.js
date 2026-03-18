@@ -20,6 +20,7 @@ axiosClient.interceptors.request.use((config) => {
 axiosClient.interceptors.response.use(
     (response) => response,
     async (error) => {
+
         const originalRequest = error.config;
 
         // Cho lỗi 429 đi thẳng về component
@@ -28,27 +29,43 @@ axiosClient.interceptors.response.use(
         }
 
         // Nếu lỗi 401 và chưa thử refresh token
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+
             originalRequest._retry = true;
 
             try {
+
                 const refreshToken = getRefreshToken();
+
+                // nếu không có refresh token thì logout luôn
+                if (!refreshToken) {
+                    clearTokens();
+                    window.location.href = "/login";
+                    return Promise.reject(error);
+                }
 
                 const res = await axios.post(
                     `${import.meta.env.VITE_API_URL}/auth/refresh-token`,
                     { refreshToken }
                 );
 
-                const newAccess = res.data.accessToken;
-                saveTokens(newAccess, refreshToken);
+                // hỗ trợ refresh token rotation
+                const { accessToken, refreshToken: newRefreshToken } = res.data;
 
-                originalRequest.headers.Authorization = `Bearer ${newAccess}`;
+                saveTokens(accessToken, newRefreshToken || refreshToken);
+
+                // gắn access token mới vào request cũ
+                originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+
                 return axiosClient(originalRequest);
 
             } catch (err) {
-                // Xóa token và chuyển hướng về trang đăng nhập khi không thể refresh token
+
+                // refresh token cũng hết hạn → logout
                 clearTokens();
                 window.location.href = "/login";
+
+                return Promise.reject(err);
             }
         }
 
