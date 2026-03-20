@@ -281,3 +281,52 @@
         opacity: 0;
     }
 }
+
+@media (max-width: 768px) {
+    .hero-video {
+        height: 100vh;
+
+        &__content {
+            bottom: 60px; // giảm từ 120px
+            padding: 0 16px;
+            max-width: 100%;
+        }
+
+        &__title {
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        &__text {
+            font-size: 28px; // giảm mạnh từ 56px
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        &__link {
+            font-size: 12px;
+            letter-spacing: 1.5px;
+        }
+
+        &__dots {
+            bottom: 20px;
+            gap: 10px;
+        }
+    }
+
+    .dot {
+        width: 14px;
+        height: 14px;
+    }
+
+    .dot::before {
+        width: 6px;
+        height: 6px;
+    }
+
+    .dot-bg,
+    .dot-progress {
+        stroke-width: 2;
+    }
+}
