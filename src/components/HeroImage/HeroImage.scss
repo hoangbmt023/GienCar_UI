@@ -93,4 +93,43 @@
             display: inline-block;
         }
     }
+
+    @media (max-width: 640px) {
+        height: 50vh; // giảm từ 100vh → 50vh cho điện thoại
+    }
+
+    &__overlay {
+        @media (max-width: 640px) {
+            padding: 1rem; // giảm padding overlay
+        }
+    }
+
+    &__title {
+        @media (max-width: 640px) {
+            font-size: 1.5rem; // giảm font-size
+        }
+    }
+
+    &__price {
+        @media (max-width: 640px) {
+            font-size: 1rem; // giảm font-size
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    &__specs {
+        @media (max-width: 640px) {
+            flex-direction: column; // chuyển thành cột
+            gap: 0.25rem;
+            font-size: 0.875rem; // giảm font-size
+        }
+    }
+
+    &__labels {
+        @media (max-width: 640px) {
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.75rem; // giảm font-size
+        }
+    }
 }

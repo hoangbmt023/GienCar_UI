@@ -1,0 +1,125 @@
+.car-detail-specs {
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    &__title {
+        text-align: center; // tiêu đề căn giữa
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0;
+        color: #000;
+    }
+
+    &__content {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+
+        @media (max-width: 768px) {
+            flex-direction: column; // mobile xuống 1 cột
+        }
+    }
+
+    &__image {
+        flex: 1; // 50% width
+        max-width: 50%;
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            object-fit: cover;
+        }
+    }
+
+    &__info {
+        flex: 1;
+        max-width: 50%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .spec-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 12.5px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .label {
+        font-weight: 600;
+        color: #000;
+    }
+
+    .value {
+        color: #000;
+        text-align: right;
+    }
+
+    .price {
+        font-weight: 500;
+    }
+
+    .note {
+        margin-top: 16px;
+        font-size: 14px;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+        gap: 1.5rem;
+
+        &__title {
+            font-size: 1.5rem; // giảm từ 28px
+        }
+
+        &__content {
+            flex-direction: column; // ảnh trên, info dưới
+            gap: 1rem;
+        }
+
+        &__image {
+            max-width: 100%; // full width trên mobile
+
+            img {
+                width: 100%;
+                height: auto;
+                border-radius: 0.5rem;
+            }
+        }
+
+        &__info {
+            max-width: 100%; // full width
+            gap: 0.75rem; // khoảng cách giữa các spec-row
+        }
+
+        .spec-row {
+            padding: 10px 0;
+            flex-direction: column; // label & value xếp trên dưới
+            align-items: flex-start;
+        }
+
+        .label,
+        .value {
+            font-size: 0.875rem; // giảm text
+        }
+
+        .value {
+            text-align: left; // căn trái cho dòng dọc
+        }
+
+        .price {
+            font-weight: 500;
+        }
+
+        .note {
+            font-size: 0.75rem; // giảm text
+            line-height: 1.3;
+        }
+    }
+}

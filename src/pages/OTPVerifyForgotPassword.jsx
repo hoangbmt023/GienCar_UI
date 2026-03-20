@@ -72,7 +72,6 @@ const OTPVerifyForgotPassword = () => {
                 otp
             })
 
-            // lưu OTP để dùng ở bước reset password
             localStorage.setItem("otpVerified", "true")
             localStorage.setItem("forgotOtp", otp)
 

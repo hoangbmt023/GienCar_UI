@@ -9,7 +9,7 @@ import MainLayout from '@/components/MainLayout/MainLayout'
 import OTPVerifyForgotPassword from '../pages/OTPVerifyForgotPassword'
 import ProtectedRoute from './ProtectedRoute'
 import CarListPage from '../pages/CarList'
-import CarDetail from '../pages/CarDetail'
+import CarDetailPage from '../pages/CarDetail'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -43,7 +43,7 @@ export default function AppRoutes() {
             <Route path="/otpverify" element={<OTPVerifyPassword />} />
             <Route path="/otpverifyforgotpassword" element={<OTPVerifyForgotPassword />} />
             <Route path="/models" element={<CarListPage />} />
-            <Route path="/car-detail" element={<CarDetail />} />
+            <Route path="/car-detail" element={<CarDetailPage />} />
         </Routes>
     )
 }
