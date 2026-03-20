@@ -1,0 +1,125 @@
+/* HEADER */
+
+.header {
+  background: transparent;
+  transition: background 0.3s ease;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10000;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.header-open {
+  background: black;
+}
+/* TOP NAV */
+
+.header-nav {
+  background: transparent;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  padding: 0 48px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.nav-item {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* MEGA MENU */
+
+.mega-menu {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 64px);
+  display: flex;
+  background: black;
+  z-index: 9000;
+
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+/* PANEL 1 */
+
+.panel-1 {
+  width: 130px;
+  background: #111;
+}
+
+/* PANEL 2 */
+
+.panel-2 {
+  width: 450px;
+  padding-top: 56px;
+  padding-left: 64px;
+  background: linear-gradient(
+    90deg,
+    #121212 0%,
+    #0f0f0f 60%,
+    #0b0b0b 100%
+  );
+}
+
+.panel2-item {
+  font-size: 24px;
+  color: #888;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.panel2-item.active {
+  color: white;
+}
+
+/* PANEL 3 */
+
+.panel-3 {
+  width: 450px;
+  padding-top: 65px;
+  padding-left: 64px;
+  background: linear-gradient(
+    90deg,
+    #111 0%,
+    #0d0d0d 60%,
+    #090909 100%
+  );
+}
+
+.panel3-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.panel3-item {
+  color: #bbb;
+  text-decoration: none;
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.panel3-item:hover {
+  color: white;
+}
+
+/* FILL AREA */
+
+.panel-fill {
+   flex: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
