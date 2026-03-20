@@ -17,9 +17,9 @@ import ProtectedRoute from './ProtectedRoute'
 export default function AppRoutes() {
     return (
         <Routes>
-            {/* <Route element={<MainLayout />}>
+            <Route element={<MainLayout />}>
                 <Route path="/home" element={<Home />} />
-            </Route> */}
+            </Route>
             {/* test routes cần đăng nhập
             <Route element={<ProtectedRoute />}>
 
@@ -34,7 +34,7 @@ export default function AppRoutes() {
             <Route path="/collections" element={<Collections />} />
             <Route path="/experiences" element={<Experiences />} />
             <Route path="/about-us" element={<AboutUs />} /> */}
-            <Route path="/home" element={<Home />} />
+            {/* <Route path="/home" element={<Home />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/changepassword" element={<ChangePassword />} />

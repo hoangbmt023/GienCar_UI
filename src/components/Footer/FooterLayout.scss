@@ -1,67 +1,107 @@
 .footer {
-  background: #0b0b0b;
-  color: white;
-  font-family: sans-serif;
+    background: #0b0b0b;
+    color: white;
+    font-family: sans-serif;
 }
 
 /* NEWSLETTER */
 
 .footer-news {
-  background: #3a3a3a;
-  text-align: center;
-  padding: 80px 20px;
+    background: #3a3a3a;
+    text-align: center;
+    padding: 80px 20px;
 
-  h2 {
-    font-size: 28px;
-    margin-bottom: 12px;
-  }
+    h2 {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
 
-  p {
-    color: #d1d1d1;
-    margin-bottom: 30px;
-  }
+    p {
+        color: #d1d1d1;
+        margin-bottom: 30px;
+    }
 }
 
 .subscribe-btn {
-  background: linear-gradient(#ff2d2d,#d80000);
-  border: none;
-  padding: 18px 50px;
-  color: white;
-  font-weight: 600;
-  letter-spacing: 2px;
-  cursor: pointer;
+    background: linear-gradient(#ff2d2d, #d80000);
+    border: none;
+    padding: 18px 50px;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
 }
 
 /* MENU */
 
 .footer-menu {
-  max-width: 1400px;
-  margin: auto;
-  padding: 70px 40px;
+    max-width: 1400px;
+    margin: auto;
+    padding: 70px 40px;
 
-  display: grid;
-  grid-template-columns: repeat(5,1fr);
-  gap: 60px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 60px;
 }
 
 .footer-col h4 {
-  font-size: 13px;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
 }
 
 .footer-col ul {
-  list-style: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
 }
 
 .footer-col li {
-  font-size: 14px;
-  color: #cfcfcf;
-  margin-bottom: 12px;
-  cursor: pointer;
+    font-size: 14px;
+    color: #cfcfcf;
+    margin-bottom: 12px;
+    cursor: pointer;
 }
 
 .footer-col li:hover {
-  color: white;
+    color: white;
+}
+
+@media (max-width: 768px) {
+
+    /* NEWSLETTER */
+    .footer-news {
+        padding: 50px 15px;
+
+        h2 {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    .subscribe-btn {
+        padding: 14px 30px;
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+    /* MENU */
+    .footer-menu {
+        grid-template-columns: 1fr;
+        /* 1 cột */
+        padding: 40px 20px;
+        gap: 30px;
+    }
+
+    .footer-col h4 {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .footer-col li {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
 }
