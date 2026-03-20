@@ -1,0 +1,39 @@
+.car-card {
+    @apply border rounded-xl overflow-hidden shadow-sm transition bg-white hover:shadow-md;
+}
+
+.car-card__image {
+    @apply w-full h-48 overflow-hidden;
+}
+
+.car-card__image img {
+    @apply w-full h-full object-cover transition duration-300;
+}
+
+.car-card__image img:hover {
+    @apply scale-105;
+}
+
+.car-card__content {
+    @apply p-4;
+}
+
+.car-card__title {
+    @apply text-lg font-semibold line-clamp-2;
+}
+
+.car-card__price {
+    @apply text-blue-600 font-bold mt-2;
+}
+
+.car-card__actions {
+    @apply flex gap-2 mt-4;
+}
+
+.car-card__btn-primary {
+    @apply flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition;
+}
+
+.car-card__btn-secondary {
+    @apply flex-1 border py-2 rounded-lg hover:bg-gray-100 transition;
+}
