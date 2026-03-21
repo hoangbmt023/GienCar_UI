@@ -1,0 +1,16 @@
+# Tất cả file text dùng LF trong repo, tự động chuyển khi checkout
+* text=auto eol=lf
+
+# CSS, SCSS
+*.css text
+*.scss text
+
+# JS, JSX
+*.js text
+*.jsx text
+
+# HTML
+*.html text
+
+# JSON
+*.json text
