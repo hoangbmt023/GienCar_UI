@@ -11,7 +11,7 @@ import car6 from "../assets/images/car6.jpg";
 
 export default function CarDetailPage() {
     const cars = [
-        { id: 0, name: "Test Car", image: testImage },
+        { id: 0, name: "Test Car", image: testImage, price: "Giá demo 1.000.000 VNĐ", power: "300 PS (220 kW)", acceleration: "5,0 giây (4,8 giây với Gói Sport Chrono)", topSpeed: "250 km/h" },
         { id: 1, name: "Toyota Camry", image: car1 },
         { id: 2, name: "Honda Civic", image: car2 },
         { id: 3, name: "BMW X5", image: car3 },

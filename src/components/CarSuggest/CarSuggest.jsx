@@ -1,39 +1,57 @@
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./CarSuggest.scss";
 
 const CarSuggest = ({ cars = [] }) => {
-    const [startIndex, setStartIndex] = useState(0);
-    const visibleCount = 4; // số xe hiển thị cùng lúc
-    const itemWidth = 800; // width cố định mỗi item
-    const gap = 16; // px gap
+    const listRef = useRef();
+    const [canScrollPrev, setCanScrollPrev] = useState(false);
+    const [canScrollNext, setCanScrollNext] = useState(true);
+
+    const checkScroll = () => {
+        if (!listRef.current) return;
+        const { scrollLeft, scrollWidth, clientWidth } = listRef.current;
+        setCanScrollPrev(scrollLeft > 0);
+        setCanScrollNext(scrollLeft + clientWidth < scrollWidth);
+    };
 
     const handlePrev = () => {
-        setStartIndex((prev) => Math.max(prev - 1, 0));
+        if (listRef.current) {
+            listRef.current.scrollBy({
+                left: -listRef.current.clientWidth,
+                behavior: "smooth",
+            });
+        }
     };
 
     const handleNext = () => {
-        setStartIndex((prev) =>
-            Math.min(prev + 1, cars.length - visibleCount)
-        );
+        if (listRef.current) {
+            listRef.current.scrollBy({
+                left: listRef.current.clientWidth,
+                behavior: "smooth",
+            });
+        }
     };
 
+    // Kiểm tra scroll mỗi khi người dùng scroll
+    useEffect(() => {
+        const el = listRef.current;
+        if (!el) return;
+        el.addEventListener("scroll", checkScroll);
+        checkScroll(); // check lần đầu
+        return () => el.removeEventListener("scroll", checkScroll);
+    }, []);
+
     return (
-        <div className="car-suggest">
+        <div className="car-suggest relative">
             <button
                 className="car-suggest__arrow car-suggest__arrow--left"
                 onClick={handlePrev}
-                disabled={startIndex === 0}
+                disabled={!canScrollPrev} // disable khi không thể scroll
             >
                 &#8249;
             </button>
 
-            <div className="car-suggest__list-wrapper">
-                <div
-                    className="car-suggest__list"
-                    style={{
-                        transform: `translateX(-${startIndex * (itemWidth + gap)}px)`,
-                    }}
-                >
+            <div className="car-suggest__list-wrapper" ref={listRef}>
+                <div className="car-suggest__list">
                     {cars.map((car) => (
                         <div key={car.id} className="car-suggest__item">
                             <div className="car-suggest__inner">
@@ -54,7 +72,7 @@ const CarSuggest = ({ cars = [] }) => {
             <button
                 className="car-suggest__arrow car-suggest__arrow--right"
                 onClick={handleNext}
-                disabled={startIndex >= cars.length - visibleCount}
+                disabled={!canScrollNext}
             >
                 &#8250;
             </button>

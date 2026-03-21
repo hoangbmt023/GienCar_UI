@@ -37,3 +37,39 @@
 .car-card__btn-secondary {
     @apply flex-1 border py-2 rounded-lg hover:bg-gray-100 transition;
 }
+
+@media (max-width: 768px) {
+
+    .car-card {
+        @apply rounded-lg shadow-sm;
+    }
+
+    /* Ảnh thấp lại cho gọn */
+    .car-card__image {
+        @apply h-36;
+    }
+
+    /* Content compact */
+    .car-card__content {
+        @apply p-3;
+    }
+
+    .car-card__title {
+        @apply text-sm font-semibold line-clamp-2;
+    }
+
+    .car-card__price {
+        @apply text-sm mt-1;
+    }
+
+    /* Actions stack lại */
+    .car-card__actions {
+        @apply flex flex-col gap-2 mt-3;
+    }
+
+    /* Button to hơn để bấm */
+    .car-card__btn-primary,
+    .car-card__btn-secondary {
+        @apply py-2 text-sm;
+    }
+}

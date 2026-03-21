@@ -20,8 +20,8 @@
 
     &__item {
         position: relative;
-        width: 700px; // cố định
-        height: 425px; // cố định
+        width: 700px;
+        height: 425px;
         flex: 0 0 auto;
         border-radius: 0.5rem;
         overflow: hidden;
@@ -56,7 +56,7 @@
         font-size: 1.25rem;
         font-weight: bold;
         margin: 0 auto;
-        display: inline-block; // căn giữa
+        display: inline-block;
     }
 
     &__arrow {
@@ -98,9 +98,10 @@
         gap: 0.5rem;
 
         &__item {
-            width: 80%; // rộng 80% màn hình
-            height: 250px; // giảm chiều cao
+            width: 80%;
+            height: 250px;
             border-radius: 0.5rem;
+            scroll-snap-align: start; // snap từng item
         }
 
         &__img {
@@ -116,7 +117,17 @@
         }
 
         &__arrow {
-            font-size: 1.5rem;
+            display: none; // ẩn nút trên mobile
+        }
+
+        &__list-wrapper {
+            overflow-x: auto; // cho phép kéo ngang
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch; // mượt trên iOS
+        }
+
+        &__list {
+            gap: 10px;
         }
     }
 }

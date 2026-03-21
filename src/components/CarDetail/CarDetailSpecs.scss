@@ -31,6 +31,11 @@
             height: auto;
             border-radius: 0.5rem;
             object-fit: cover;
+            margin-top: 18px;
+
+            @media (max-width: 640px) {
+                margin-top: -12px;
+            }
         }
     }
 
