@@ -1,16 +1,25 @@
 /* HEADER */
 
 .header {
-    background: transparent;
-    transition: background 0.3s ease;
+    background: rgba(0, 0, 0, 0.07); /* 🔥 đen nhẹ */
+    backdrop-filter: blur(6px);      /* 🔥 blur nhẹ phía sau */
+    -webkit-backdrop-filter: blur(6px); /* hỗ trợ Safari */
+
+    transition: transform 0.35s ease, background 0.3s ease;
     color: white;
+
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 10000;
+
     transform: translateZ(0);
     will-change: transform;
+}
+
+.header.hide {
+    transform: translateY(-100%);
 }
 
 .header-open {
@@ -32,7 +41,7 @@
 
 .nav-item {
     cursor: pointer;
-    font-size: 18px;
+    font-size: 22px;
 }
 
 /* MEGA MENU */
@@ -175,5 +184,9 @@
         border-bottom: 1px solid #222;
         color: white;
         cursor: pointer;
+    }
+
+    @media screen {
+        
     }
 }
