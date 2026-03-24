@@ -1,0 +1,25 @@
+.global-search {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    input {
+        width: 300px;
+        padding: 8px 14px;
+        border-radius: 20px;
+        border: 1px solid #333;
+        background: #111;
+        color: #fff;
+        outline: none;
+        transition: 0.3s;
+
+        &::placeholder {
+            color: #777;
+        }
+
+        &:focus {
+            border-color: #fff;
+            width: 360px;
+        }
+    }
+}

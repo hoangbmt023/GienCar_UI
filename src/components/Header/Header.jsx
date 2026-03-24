@@ -175,7 +175,25 @@ export default function Header() {
                 ))}
             </div>
 
+            {/* {/*
+            <div className="h-16 flex items-center px-12 uppercase tracking-widest">
 
+                <div className="flex gap-12">
+                    {Header_Menu.map((menu, i) => (
+                        <div key={i} className="cursor-pointer">
+                            {menu.label}
+                        </div>
+                    ))}
+                </div>
+
+                <GlobalSearch />
+
+                <div className="ml-auto">
+                    <AvatarHeader />
+                </div>
+
+            </div>
+            */}
 
             {menu && (
 
