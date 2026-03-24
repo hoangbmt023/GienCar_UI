@@ -66,6 +66,13 @@ function HeroContent() {
                     {images[current].description}
                 </p>
 
+                <a
+                    href={images[current].link?.url || "#"} // thêm link trong dữ liệu
+                    className="hero-content__link"
+                >
+                    {images[current].link?.label || "Read More"}
+                </a>
+
             </div>
 
             {/* RIGHT IMAGE SLIDER */}

@@ -1,67 +1,149 @@
 .footer {
-  background: #0b0b0b;
-  color: white;
-  font-family: sans-serif;
+    background: #0b0b0b;
+    color: white;
+    font-family: sans-serif;
 }
 
-/* NEWSLETTER */
+/* ================= NEWSLETTER ================= */
 
 .footer-news {
-  background: #3a3a3a;
-  text-align: center;
-  padding: 80px 20px;
+    background: #3a3a3a;
+    text-align: center;
+    padding: 80px 20px;
 
-  h2 {
-    font-size: 28px;
-    margin-bottom: 12px;
-  }
+    h2 {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
 
-  p {
-    color: #d1d1d1;
-    margin-bottom: 30px;
-  }
+    p {
+        color: #d1d1d1;
+        margin-bottom: 30px;
+    }
 }
 
 .subscribe-btn {
-  background: linear-gradient(#ff2d2d,#d80000);
-  border: none;
-  padding: 18px 50px;
-  color: white;
-  font-weight: 600;
-  letter-spacing: 2px;
-  cursor: pointer;
+    background: linear-gradient(#ff2d2d, #d80000);
+    border: none;
+    padding: 18px 50px;
+    color: white;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-/* MENU */
+.subscribe-btn:hover {
+    opacity: 0.85;
+}
+
+/* ================= MENU ================= */
 
 .footer-menu {
-  max-width: 1400px;
-  margin: auto;
-  padding: 70px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 70px 20px;
 
-  display: grid;
-  grid-template-columns: repeat(5,1fr);
-  gap: 60px;
+    display: grid;
+
+    /* 🔥 AUTO COLUMN (QUAN TRỌNG NHẤT) */
+    grid-template-columns: repeat(auto-fit, minmax(180px, max-content));
+
+    justify-content: center;   /* 🔥 căn giữa toàn bộ */
+    align-items: start;
+
+    gap: 60px;
 }
 
+/* COLUMN */
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* 🔥 căn giữa nội dung */
+    text-align: center;
+}
+
+/* TITLE */
 .footer-col h4 {
-  font-size: 13px;
-  letter-spacing: 2px;
-  margin-bottom: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+    color: white;
 }
 
+/* LIST */
 .footer-col ul {
-  list-style: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* 🔥 căn giữa list */
 }
 
+/* ITEM */
 .footer-col li {
-  font-size: 14px;
-  color: #cfcfcf;
-  margin-bottom: 12px;
-  cursor: pointer;
+    font-size: 13px;
+    color: #cfcfcf;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 .footer-col li:hover {
-  color: white;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* LINK */
+.footer-col a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+    .footer-menu {
+        gap: 40px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* NEWSLETTER */
+    .footer-news {
+        padding: 50px 15px;
+
+        h2 {
+            font-size: 20px;
+        }
+
+        p {
+            font-size: 14px;
+        }
+    }
+
+    .subscribe-btn {
+        padding: 14px 30px;
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+    /* MENU */
+    .footer-menu {
+        grid-template-columns: 1fr;   /* 1 cột mobile */
+        gap: 30px;
+        padding: 40px 20px;
+    }
+
+    .footer-col h4 {
+        font-size: 14px;
+    }
+
+    .footer-col li {
+        font-size: 13px;
+    }
 }

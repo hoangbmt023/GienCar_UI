@@ -6,7 +6,7 @@ import LogoutButton from "../components/Commons/LogoutButton/LogoutButton";
 
 export default function Home() {
     return (
-        <main className="home">
+        <main className="home">     
             {/* HERO VIDEO */}
             <HeroVideo />
 
