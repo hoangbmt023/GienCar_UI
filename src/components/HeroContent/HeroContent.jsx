@@ -1,62 +1,69 @@
 import { useState, useEffect } from "react";
-import heroImage1 from "../../assets/images/hero-image1.jpg";
-import heroImage2 from "../../assets/images/hero-image2.jpg";
-import heroImage3 from "../../assets/images/hero-image3.jpg";
+import { homeService } from "@/services/homeService";
 import "./HeroContent.scss";
 
 function HeroContent() {
 
+    const [images, setImages] = useState([]);
     const [current, setCurrent] = useState(0);
     const [prev, setPrev] = useState(null);
 
-    const images = [
-        {
-            src: heroImage1,
-            title: "Premium Products",
-            description:
-                "Discover our latest collection designed with modern aesthetics and premium quality.",
-        },
-        {
-            src: heroImage2,
-            title: "Innovative Design",
-            description:
-                "Crafted with cutting-edge technology and timeless design for everyday excellence.",
-        },
-        {
-            src: heroImage3,
-            title: "Elevated Lifestyle",
-            description:
-                "Experience products that combine performance, elegance, and durability.",
-        },
-    ];
+    // gọi API
+    useEffect(() => {
+        const fetchBanners = async () => {
+            try {
+                const res = await homeService.getBanners("CONTENT_CAR");
 
+                const banners = res.data.data
+                    .sort((a, b) => a.order - b.order)
+                    .map(item => ({
+                        id: item.id,
+                        src: item.imageUrl,
+                        title: item.title,
+                        description: item.description,
+                        link: {
+                            label: item.ctaText,
+                            url: item.ctaLink
+                        }
+                    }));
+
+                setImages(banners);
+
+            } catch (error) {
+                console.error("Lỗi lấy content banner:", error);
+            }
+        };
+
+        fetchBanners();
+    }, []);
+
+    // auto slide
     useEffect(() => {
 
-        const timer = setTimeout(() => {
+        if (!images.length) return;
 
+        const timer = setTimeout(() => {
             setPrev(current);
             setCurrent((prevIndex) => (prevIndex + 1) % images.length);
-
         }, 8000);
 
         return () => clearTimeout(timer);
 
-    }, [current]);
+    }, [current, images]);
 
     const changeImage = (index) => {
-
         if (index === current) return;
-
         setPrev(current);
         setCurrent(index);
-
     };
+
+    if (!images.length) return null;
 
     return (
         <section className="hero-content">
 
-            {/* LEFT TEXT */}
-            <div key={current} className="hero-content__text">
+            {/* TEXT */}
+            <div key={`content-${images[current].id}`} className="hero-content__text">
 
                 <h1 className="hero-content__title">
                     {images[current].title}
@@ -67,32 +74,32 @@ function HeroContent() {
                 </p>
 
                 <a
-                    href={images[current].link?.url || "#"} // thêm link trong dữ liệu
+                    href={images[current].link?.url}
                     className="hero-content__link"
                 >
-                    {images[current].link?.label || "Read More"}
+                    {images[current].link?.label}
                 </a>
 
             </div>
 
-            {/* RIGHT IMAGE SLIDER */}
+            {/* IMAGE */}
             <div className="hero-content__image">
 
-                {/* IMAGE CURRENT */}
+                {/* CURRENT */}
                 <img
-                    key={current}
+                    key={images[current].id}
                     src={images[current].src}
                     className="hero-content__media active"
-                    alt={images[current].label}
+                    alt={images[current].title}
                 />
 
-                {/* IMAGE PREVIOUS */}
-                {prev !== null && (
+                {/* PREV */}
+                {prev !== null && images[prev] && (
                     <img
-                        key={prev}
+                        key={`prev-${images[prev].id}`}
                         src={images[prev].src}
                         className="hero-content__media prev"
-                        alt={images[prev].label}
+                        alt={images[prev].title}
                     />
                 )}
 
@@ -100,30 +107,15 @@ function HeroContent() {
 
             {/* DOTS */}
             <div className="hero-content__dots">
-                {images.map((_, index) => (
+                {images.map((item, index) => (
                     <div
-                        key={index}
+                        key={item.id}
                         className={`dot ${index === current ? "active" : ""}`}
                         onClick={() => changeImage(index)}
                     >
                         <svg className="dot-svg" viewBox="0 0 36 36">
-
-                            <circle
-                                className="dot-bg"
-                                cx="18"
-                                cy="18"
-                                r="16"
-                                fill="none"
-                            />
-
-                            <circle
-                                className="dot-progress"
-                                cx="18"
-                                cy="18"
-                                r="16"
-                                fill="none"
-                            />
-
+                            <circle className="dot-bg" cx="18" cy="18" r="16" fill="none" />
+                            <circle className="dot-progress" cx="18" cy="18" r="16" fill="none" />
                         </svg>
                     </div>
                 ))}
