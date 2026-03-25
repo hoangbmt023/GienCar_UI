@@ -1,72 +1,71 @@
 import { useState, useEffect } from "react";
-import homeVideo1 from "../../assets/video/home-video1.mp4";
-import homeVideo2 from "../../assets/video/home-video2.mp4";
-import homeVideo3 from "../../assets/video/home-video3.mp4";
+import { homeService } from "@/services/homeService";
 import "./HeroVideo.scss";
 
 function HeroVideo() {
 
+    const [videos, setVideos] = useState([]);
     const [current, setCurrent] = useState(0);
     const [prev, setPrev] = useState(null);
 
-    const videos = [
-        {
-            src: homeVideo1,
-            title: "Racing",
-            content: "CONTENT A",
-            link: {
-                label: "Discover",
-                url: "/racing"
-            }
-        },
-        {
-            src: homeVideo2,
-            title: "Sports cars",
-            content: "START YOUR ENGINE",
-            link: {
-                label: "Discover",
-                url: "/sports"
-            }
-        },
-        {
-            src: homeVideo3,
-            title: "Collections",
-            content: "NEW ARRIVALS",
-            link: {
-                label: "Discover",
-                url: "/collections"
-            }
-        }
-    ];
+    // gọi API
+    useEffect(() => {
+        const fetchBanners = async () => {
+            try {
+                const res = await homeService.getBanners("HERO_CAR");
 
+                const banners = res.data.data
+                    .sort((a, b) => a.order - b.order)
+                    .map(item => ({
+                        id: item.id,
+                        src: item.videoUrl,
+                        title: item.title,
+                        content: item.description,
+                        link: {
+                            label: item.ctaText,
+                            url: item.ctaLink
+                        }
+                    }));
+
+                setVideos(banners);
+
+            } catch (error) {
+                console.error("Lỗi lấy banner:", error);
+            }
+        };
+
+        fetchBanners();
+    }, []);
+
+    // auto slide
     useEffect(() => {
 
-        const timer = setTimeout(() => {
+        if (!videos.length) return;
 
+        const timer = setTimeout(() => {
             setPrev(current);
             setCurrent((prevIndex) => (prevIndex + 1) % videos.length);
-
         }, 8000);
 
         return () => clearTimeout(timer);
 
-    }, [current]);
+    }, [current, videos]);
 
     const changeVideo = (index) => {
-
         if (index === current) return;
-
         setPrev(current);
         setCurrent(index);
-
     };
+
+    // loading
+    if (!videos.length) return null;
 
     return (
         <section className="hero-video">
 
             {/* VIDEO CURRENT */}
             <video
-                key={current}
+                key={videos[current].id}
                 autoPlay
                 muted
                 playsInline
@@ -76,9 +75,9 @@ function HeroVideo() {
             </video>
 
             {/* VIDEO PREVIOUS */}
-            {prev !== null && (
+            {prev !== null && videos[prev] && (
                 <video
-                    key={prev}
+                    key={`prev-${videos[prev].id}`}
                     autoPlay
                     muted
                     playsInline
@@ -88,9 +87,9 @@ function HeroVideo() {
                 </video>
             )}
 
-            {/* TEXT CONTENT */}
-            <div key={current} className="hero-video__content">
-                <div key={current} className="text-slide active">
+            {/* TEXT */}
+            <div key={`content-${videos[current].id}`} className="hero-video__content">
+                <div className="text-slide active">
 
                     <h3 className="hero-video__title">
                         {videos[current].title}
@@ -111,30 +110,15 @@ function HeroVideo() {
 
             {/* DOTS */}
             <div className="hero-video__dots">
-                {videos.map((_, index) => (
+                {videos.map((item, index) => (
                     <div
-                        key={index}
+                        key={item.id}
                         className={`dot ${index === current ? "active" : ""}`}
                         onClick={() => changeVideo(index)}
                     >
                         <svg className="dot-svg" viewBox="0 0 36 36">
-
-                            <circle
-                                className="dot-bg"
-                                cx="18"
-                                cy="18"
-                                r="16"
-                                fill="none"
-                            />
-
-                            <circle
-                                className="dot-progress"
-                                cx="18"
-                                cy="18"
-                                r="16"
-                                fill="none"
-                            />
-
+                            <circle className="dot-bg" cx="18" cy="18" r="16" fill="none" />
+                            <circle className="dot-progress" cx="18" cy="18" r="16" fill="none" />
                         </svg>
                     </div>
                 ))}

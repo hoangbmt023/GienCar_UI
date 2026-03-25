@@ -1,54 +1,44 @@
-import { useEffect } from "react";
-import car1 from "../../assets/images/car1.jpg";
-import car2 from "../../assets/images/car2.jpg";
-import car3 from "../../assets/images/car3.jpg";
-import car4 from "../../assets/images/car4.jpg";
-import car5 from "../../assets/images/car5.jpg";
-import car6 from "../../assets/images/car6.jpg";
+import { useEffect, useState } from "react";
+import { homeService } from "@/services/homeService";
 import "./HeroGrid.scss";
 
 function HeroGrid() {
 
-    const items = [
-        {
-            img: car1,
-            title: "Racing",
-            content: "TRACK PERFORMANCE",
-            link: { label: "Discover", url: "/racing" }
-        },
-        {
-            img: car2,
-            title: "Sports Cars",
-            content: "PURE DRIVING EXPERIENCE",
-            link: { label: "Discover", url: "/sports" }
-        },
-        {
-            img: car3,
-            title: "Collections",
-            content: "NEW ARRIVALS",
-            link: { label: "Discover", url: "/collections" }
-        },
-        {
-            img: car4,
-            title: "Technology",
-            content: "INNOVATION & POWER",
-            link: { label: "Discover", url: "/technology" }
-        },
-        {
-            img: car5,
-            title: "Lifestyle",
-            content: "ELEVATE YOUR STYLE",
-            link: { label: "Discover", url: "/lifestyle" }
-        },
-        {
-            img: car6,
-            title: "Heritage",
-            content: "LEGACY OF SPEED",
-            link: { label: "Discover", url: "/heritage" }
-        }
-    ];
+    const [items, setItems] = useState([]);
 
+    // gọi API
     useEffect(() => {
+        const fetchBanners = async () => {
+            try {
+                const res = await homeService.getBanners("FEATURED_CAR");
+
+                const banners = res.data.data
+                    .sort((a, b) => a.order - b.order)
+                    .map(item => ({
+                        id: item.id,
+                        img: item.imageUrl,
+                        title: item.title,
+                        content: item.description,
+                        link: {
+                            label: item.ctaText,
+                            url: item.ctaLink
+                        }
+                    }));
+
+                setItems(banners);
+
+            } catch (error) {
+                console.error("Lỗi lấy featured banner:", error);
+            }
+        };
+
+        fetchBanners();
+    }, []);
+
+    // animation scroll
+    useEffect(() => {
+
+        if (!items.length) return;
 
         const elements = document.querySelectorAll(".product-item");
 
@@ -67,13 +57,15 @@ function HeroGrid() {
 
         return () => observer.disconnect();
 
-    }, []);
+    }, [items]);
+
+    if (!items.length) return null;
 
     return (
         <section className="product-grid">
 
-            {items.map((item, index) => (
-                <div className="product-item" key={index}>
+            {items.map((item) => (
+                <div className="product-item" key={item.id}>
 
                     <img
                         src={item.img}
