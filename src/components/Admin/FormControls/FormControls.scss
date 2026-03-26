@@ -1,0 +1,232 @@
+.FC.Field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.Field__label {
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #32325d;
+}
+
+.Field__req {
+    color: #f5365c;
+}
+
+.Field__control {
+    border: 1px solid rgba(136, 152, 170, 0.35);
+    border-radius: 12px;
+    background: #fff;
+    padding: 10px 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.Field__control--error {
+    border-color: rgba(245, 54, 92, 0.8);
+}
+
+.Field__input,
+.Field__textarea,
+.Field__select {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #525f7f;
+}
+
+.Field__textarea {
+    resize: vertical;
+}
+
+.Field__icon {
+    display: grid;
+    place-items: center;
+    color: rgba(0, 0, 0, 0.55);
+}
+
+.Field__hint {
+    font-size: 12px;
+    color: rgba(82, 95, 127, 0.8);
+}
+
+.Field__error {
+    font-size: 12px;
+    color: #f5365c;
+    font-weight: 600;
+}
+
+/* Upload */
+.UploadBox {
+    position: relative;
+    border: 1px dashed rgba(136, 152, 170, 0.55);
+    border-radius: 12px;
+    background: rgba(247, 250, 252, 0.7);
+    overflow: hidden;
+
+    min-height: 120px;
+}
+
+.UploadBox--error {
+    border-color: rgba(245, 54, 92, 0.85);
+}
+
+.UploadBox__input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.UploadBox__content {
+    padding: 14px;
+    display: grid;
+    place-items: center;
+    min-height: 120px;
+}
+
+.UploadBox__placeholder {
+    font-size: 14px;
+    color: rgba(82, 95, 127, 0.75);
+}
+
+.UploadBox__preview img {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.UploadBox__remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    height: 30px;
+    padding: 0 10px;
+
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+
+    font-weight: 700;
+    font-size: 12px;
+
+    background: rgba(245, 54, 92, 0.12);
+    color: #f5365c;
+}
+
+// MenuHomeForm.scss
+@import "react-datepicker/dist/react-datepicker.css";
+
+// Style cho wrapper
+.datepicker-wrapper {
+    margin-bottom: 16px;
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        color: #525f7f;
+
+        .required {
+            color: #f5365c;
+            margin-left: 4px;
+        }
+    }
+}
+
+// Style cho input
+.react-datepicker-wrapper {
+    width: 100%;
+    display: block;
+}
+
+.react-datepicker__input-container {
+    width: 100%;
+
+    input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #1a202c;
+        background: white;
+        transition: all 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: #5e72e4;
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
+        }
+
+        &:disabled {
+            background-color: #f7fafc;
+            cursor: not-allowed;
+            color: #a0aec0;
+        }
+    }
+}
+
+// Style cho calendar popup
+.datepicker-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 12px;
+
+    label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #2d3748;
+
+        .required {
+            color: #f5365c;
+            margin-left: 2px;
+        }
+    }
+
+    input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #1a202c;
+        background: white;
+        transition: all 0.2s;
+
+        &:focus {
+            outline: none;
+            border-color: #5e72e4;
+            box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.1);
+        }
+
+        &:disabled {
+            background-color: #f7fafc;
+            cursor: not-allowed;
+            color: #a0aec0;
+        }
+    }
+}
+
+
+// Error message
+.datepicker-error {
+    color: #f5365c;
+    font-size: 12px;
+    margin-top: 4px;
+}

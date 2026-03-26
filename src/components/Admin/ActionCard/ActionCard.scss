@@ -1,0 +1,155 @@
+.ActionCard {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    box-shadow: 0px 0px 32px rgba(136, 152, 170, 0.15);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    max-width: 380px; // tuỳ bạn
+}
+
+.ActionCard__title {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(60, 72, 88, 0.7);
+    margin-bottom: 6px;
+}
+
+.ActionCard__value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #3c4858;
+    margin-bottom: 4px;
+}
+
+.ActionCard__subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(60, 72, 88, 0.55);
+}
+
+.ActionCard__right {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ActionCard__btn {
+    border: none;
+    cursor: pointer;
+    border-radius: 999px;
+
+    padding: 10px 14px;
+    min-width: 150px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    font-size: 12px;
+
+    box-shadow: 0px 10px 24px rgba(251, 99, 64, 0.25);
+
+    &:active {
+        transform: translateY(1px);
+    }
+}
+
+.ActionCard__btn--add,
+.ActionCard__btn--delete {
+    background: #fb6340; // tông đỏ cam như Argon
+}
+
+.ActionCard__btnIcon {
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+
+    display: grid;
+    place-items: center;
+
+    font-size: 16px;
+    line-height: 1;
+
+    /* nếu dùng lucide */
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ActionCard {
+        max-width: 100%;
+        padding: 14px;
+        border-radius: 12px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    /* TEXT */
+    .ActionCard__left {
+        text-align: center;
+    }
+
+    .ActionCard__title {
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+    .ActionCard__value {
+        font-size: 20px;
+        margin-bottom: 2px;
+    }
+
+    .ActionCard__subtitle {
+        font-size: 12px;
+    }
+
+    /* BUTTONS */
+    .ActionCard__right {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .ActionCard__btn {
+        flex: 1;
+        min-width: 0;
+        height: 44px;
+        /* chuẩn tap mobile */
+        padding: 0 12px;
+
+        font-size: 12px;
+        font-weight: 800;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .ActionCard__btnIcon {
+        width: 26px;
+        height: 26px;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    /* TAP FEEDBACK */
+    .ActionCard__btn:active {
+        transform: scale(0.96);
+    }
+}
+

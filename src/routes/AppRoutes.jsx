@@ -8,6 +8,8 @@ import OTPVerifyPassword from '@/pages/OTPVerifyPassword'
 import MainLayout from '@/components/MainLayout/MainLayout'
 import OTPVerifyForgotPassword from '../pages/OTPVerifyForgotPassword'
 import ProtectedRoute from './ProtectedRoute'
+import AdminLayout from '../components/Admin/AdminLayout/AdminLayout'
+import ListMenuHome from '@/pages/Admin/Menu-Home'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -41,6 +43,11 @@ export default function AppRoutes() {
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/otpverify" element={<OTPVerifyPassword />} />
             <Route path="/otpverifyforgotpassword" element={<OTPVerifyForgotPassword />} />
+
+            {/* Router Admin */}
+            <Route path="/admin" element={<AdminLayout />}>
+                <Route path="Menu-Home" element={<ListMenuHome />} />
+            </Route>
         </Routes>
     )
 }

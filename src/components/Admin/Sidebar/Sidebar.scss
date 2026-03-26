@@ -1,0 +1,308 @@
+/* ===== ROOT ===== */
+.Sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* ===== LOGO ===== */
+.Sidebar__logo {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        height: 72px;
+        object-fit: contain;
+        cursor: pointer;
+        transition: transform 0.25s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+}
+
+/* ===== NAV ===== */
+.Sidebar__nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 12px;
+}
+
+/* ===== ITEM (GIỮ NGUYÊN STYLE CORE) ===== */
+.Sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(136, 152, 170, 0.12);
+    }
+}
+
+/* ===== ACTIVE (GIỮ NGUYÊN) ===== */
+.Sidebar__item--active {
+    background: rgba(94, 114, 228, 0.12);
+
+    .Sidebar__label {
+        opacity: 1;
+        font-weight: 700;
+        color: #5e72e4;
+    }
+
+    .Sidebar__icon svg {
+        color: #5e72e4;
+    }
+}
+
+/* ===== ICON ===== */
+.Sidebar__icon {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+
+    svg {
+        width: 18px;
+        height: 18px;
+        color: rgba(0, 0, 0, 0.55);
+        transition: 0.2s;
+    }
+}
+
+/* hover icon */
+.Sidebar__item:hover .Sidebar__icon svg {
+    color: #5e72e4;
+}
+
+/* ===== LABEL ===== */
+.Sidebar__label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    transition: 0.2s;
+}
+
+/* hover text */
+.Sidebar__item:hover .Sidebar__label {
+    color: #5e72e4;
+}
+
+/* ===== ARROW (dropdown icon) ===== */
+.Sidebar__arrow {
+    margin-left: auto;
+    transition: transform 0.25s ease;
+    opacity: 0.6;
+}
+
+.Sidebar__arrow.open {
+    transform: rotate(180deg);
+}
+
+/* ===== SUBMENU ===== */
+.Sidebar__submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    padding-left: 40px;
+}
+
+.Sidebar__submenu.show {
+    max-height: 300px;
+    margin-top: 4px;
+}
+
+/* ===== SUB ITEM ===== */
+.Sidebar__subitem {
+    display: block;
+    padding: 6px 0;
+    font-size: 13px;
+    color: #888;
+    text-decoration: none;
+    transition: 0.2s;
+
+    &:hover {
+        color: #5e72e4;
+    }
+}
+
+.Sidebar__subitem.active {
+    color: #5e72e4;
+    font-weight: 600;
+}
+
+/* ===== FOOTER (GIỮ NGUYÊN CLASS) ===== */
+.Sidebar__footer {
+    padding: 12px;
+    border-top: 1px solid rgba(136, 152, 170, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* ===== FOOTER BUTTON FIX ===== */
+.Sidebar__footer .Sidebar__item {
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+/* ===== DANGER (FIX THEO JSX) ===== */
+.Sidebar__danger {
+    color: #e03131;
+
+    .Sidebar__icon svg {
+        color: rgba(224, 49, 49, 0.85);
+    }
+
+    &:hover {
+        background: rgba(224, 49, 49, 0.12);
+    }
+
+    &:hover .Sidebar__label {
+        color: #e03131;
+    }
+
+    &:hover .Sidebar__icon svg {
+        color: #e03131;
+    }
+}
+
+/* ===== TOP ===== */
+.Sidebar__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.Sidebar__toggle {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.05);
+    }
+}
+
+/* ===== COLLAPSE ===== */
+.Sidebar.collapsed {
+    width: 80px;
+}
+
+.Sidebar.collapsed .Sidebar__label {
+    display: none;
+}
+
+.Sidebar.collapsed .Sidebar__submenu {
+    display: none;
+}
+
+.Sidebar.collapsed .Sidebar__arrow {
+    display: none;
+}
+
+.Sidebar.collapsed .Sidebar__logo img {
+    height: 40px;
+}
+
+/* center icon */
+.Sidebar.collapsed .Sidebar__item {
+    justify-content: center;
+}
+
+/* ===== ANIMATION ===== */
+.Sidebar__submenu {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.Sidebar__arrow {
+    margin-left: auto;
+    transition: transform 0.3s;
+}
+
+.Sidebar__arrow.open {
+    transform: rotate(180deg);
+}
+
+/* ===== MOBILE SIDEBAR ===== */
+@media (max-width: 768px) {
+
+    .Sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px; // ẩn ngoài màn hình
+        width: 250px;
+        height: 100vh;
+        z-index: 1200;
+
+        transition: all 0.3s ease;
+    }
+
+    /* Khi mở sidebar */
+    .AdminLayout.sidebar-open .Sidebar {
+        left: 0;
+    }
+
+    /* Overlay nền mờ */
+    .SidebarOverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1100;
+    }
+
+    /* Ẩn collapse trên mobile */
+    .Sidebar.collapsed {
+        width: 250px;
+    }
+
+    .Sidebar.collapsed .Sidebar__label {
+        display: block;
+    }
+
+    .Sidebar.collapsed .Sidebar__submenu {
+        display: flex;
+    }
+
+    .Sidebar.collapsed .Sidebar__arrow {
+        display: block;
+    }
+
+    /* Logo nhỏ lại chút */
+    .Sidebar__logo {
+        height: 80px;
+
+        img {
+            height: 60px;
+        }
+    }
+
+    /* Item spacing dễ bấm hơn */
+    .Sidebar__item {
+        padding: 12px;
+    }
+
+    /* Submenu rõ hơn */
+    .Sidebar__submenu {
+        padding-left: 30px;
+    }
+}

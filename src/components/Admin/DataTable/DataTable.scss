@@ -1,0 +1,161 @@
+.DataTable {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0px 0px 32px rgba(136, 152, 170, 0.15);
+    overflow: hidden; // bo góc table
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.DataTable__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.DataTable__th,
+.DataTable__td {
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 18px;
+    color: #525f7f;
+    white-space: nowrap;
+}
+
+.DataTable__th {
+    font-weight: 700;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.DataTable__tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.DataTable__tr:last-child {
+    border-bottom: none;
+}
+
+.DataTable__td {
+    font-size: 18px;
+    color: rgba(60, 72, 88, 0.75);
+}
+
+.DataTable__th--check,
+.DataTable__td--check {
+    width: 44px;
+}
+
+.DataTable__th--actions,
+.DataTable__td--actions {
+    width: 170px; // tăng nhẹ để đủ 3 icon
+    text-align: right;
+}
+
+.DataTable input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #fb6340; // đỏ cam giống nút
+}
+
+.DataTable__td--actions {
+    // vì td đang text-align right, ta dùng inline-flex để canh phải đẹp
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+.DataTable__action {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    color: rgba(60, 72, 88, 0.8); // fallback
+
+    &:hover {
+        background: rgba(136, 152, 170, 0.12);
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+        stroke-width: 1.8;
+    }
+}
+
+/* Màu theo loại action */
+.DataTable__action--view {
+    svg {
+        color: #5e72e4; // xanh tím
+    }
+}
+
+.DataTable__action--edit {
+    svg {
+        color: #11cdef; // xanh ngọc
+    }
+}
+
+.DataTable__action--delete {
+    svg {
+        color: #f5365c; // đỏ
+    }
+
+    &:hover {
+        background: rgba(245, 54, 92, 0.12);
+    }
+}
+
+/* Scroll ngang */
+.PhimTableScroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* Ép bảng rộng */
+.PhimTableInner {
+    min-width: 2800px;
+    display: inline-block;
+}
+
+/* 🔥 FIX CỘT KHÔNG NGANG HÀNG */
+.PhimTableScroll table thead th {
+    white-space: nowrap; // ❗ không cho xuống dòng
+    vertical-align: middle; // căn giữa theo chiều dọc
+    height: 56px; // cố định chiều cao header
+}
+
+.DataTable__tr--active {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+@media (max-width: 768px) {
+    .DataTable {
+        border-radius: 10px;
+    }
+
+    .DataTable__th,
+    .DataTable__td {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .DataTable__th--actions,
+    .DataTable__td--actions {
+        width: 120px;
+    }
+
+    .DataTable__action {
+        width: 30px;
+        height: 30px;
+    }
+}
