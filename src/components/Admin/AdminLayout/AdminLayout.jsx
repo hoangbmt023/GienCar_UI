@@ -7,11 +7,9 @@ import * as authServices from "../../../services/Admin/AuthenticationService.jsx
 
 import "./AdminLayout.scss";
 import useIsMobile from "../../../hooks/useIsMobile";
-
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Menu } from "lucide-react";
 
 export default function AdminLayout() {
-    const [q, setQ] = useState("");
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [dataUser, setDataUser] = useState([]);
@@ -35,11 +33,19 @@ export default function AdminLayout() {
         setIsLogin(true);
 
         // const fetchApi = async () => {
-        //     var result = await authServices.getUserById(userId);
+        //     const result = await authServices.getUserById(userId);
         //     setDataUser(result.data);
         // };
         // fetchApi();
     }, [userId]);
+
+    const handleToggleSidebar = () => {
+        if (isMobile) {
+            setSidebarOpen((prev) => !prev); // mobile toggle
+        } else {
+            setCollapsed((prev) => !prev); // desktop collapse
+        }
+    };
 
     return (
         <div
@@ -47,42 +53,52 @@ export default function AdminLayout() {
                 ${sidebarOpen ? "sidebar-open" : ""} 
                 ${collapsed ? "collapsed" : ""}`}
         >
+            {/* ===== SIDEBAR ===== */}
             <Sidebar
                 collapsed={collapsed}
                 onClose={() => setSidebarOpen(false)}
                 dataUser={dataUser}
             />
 
-            {sidebarOpen && (
+            {/* ===== OVERLAY (mobile) ===== */}
+            {sidebarOpen && isMobile && (
                 <div
                     className="SidebarOverlay"
                     onClick={() => setSidebarOpen(false)}
                 />
             )}
 
+            {/* ===== MAIN ===== */}
             <div className="AdminLayout__main">
                 <div className="BackgroundHeader" />
 
+                {/* ===== NAVBAR ===== */}
                 <div className="NavBar">
 
-                    {!isMobile && (
-                        <div
-                            className="SidebarToggle"
-                            onClick={() => setCollapsed(!collapsed)}
-                        >
-                            {collapsed ? (
-                                <ChevronRight size={18} color="#333" />
-                            ) : (
-                                <ChevronLeft size={18} color="#333" />
-                            )}
-                        </div>
-                    )}
+                    <div
+                        className="SidebarToggle"
+                        onClick={() => {
+                            if (isMobile) {
+                                setSidebarOpen(!sidebarOpen);
+                            } else {
+                                setCollapsed(!collapsed);
+                            }
+                        }}
+                    >
+                        {collapsed ? (
+                            <ChevronRight size={18} color="#333" />
+                        ) : (
+                            <ChevronLeft size={18} color="#333" />
+                        )}
+                    </div>
 
+                    {/* ===== TITLE ===== */}
                     <div className="NavBar__title NavBar__title--center">
                         {title}
                     </div>
                 </div>
 
+                {/* ===== CONTENT ===== */}
                 <div className="AdminLayout__content">
                     <Outlet />
                 </div>

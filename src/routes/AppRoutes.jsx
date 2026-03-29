@@ -10,6 +10,7 @@ import OTPVerifyForgotPassword from '../pages/OTPVerifyForgotPassword'
 import ProtectedRoute from './ProtectedRoute'
 import AdminLayout from '../components/Admin/AdminLayout/AdminLayout'
 import ListMenuHome from '@/pages/Admin/Menu-Home'
+import ListMenuHeaderFooter from '@/pages/Admin/Menu-Header-Footer'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -47,6 +48,7 @@ export default function AppRoutes() {
             {/* Router Admin */}
             <Route path="/admin" element={<AdminLayout />}>
                 <Route path="Menu-Home" element={<ListMenuHome />} />
+                <Route path="Menu-Header-Footer" element={<ListMenuHeaderFooter />} />
             </Route>
         </Routes>
     )

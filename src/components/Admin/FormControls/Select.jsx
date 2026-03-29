@@ -20,7 +20,6 @@ export default function Select({
 
             <div className={`Field__control ${error ? "Field__control--error" : ""}`}>
                 <select className="Field__select" {...props}>
-                    <option value="">{placeholder}</option>
                     {options.map((opt) => (
                         <option key={String(opt.value)} value={opt.value}>
                             {opt.label}

@@ -10,14 +10,17 @@
 
 /* ===== LOGO ===== */
 .Sidebar__logo {
-    height: 100px;
+    height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    overflow: hidden;
 
     img {
-        height: 72px;
-        object-fit: contain;
+        height: 140px;
+        width: 100%;
+        object-fit: cover !important;
         cursor: pointer;
         transition: transform 0.25s ease;
 
@@ -241,6 +244,41 @@
 
 .Sidebar__arrow.open {
     transform: rotate(180deg);
+}
+
+.Sidebar__user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+}
+
+.Sidebar__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #3b82f6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.Sidebar__userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.Sidebar__userName {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.Sidebar__userRole {
+    font-size: 12px;
+    color: #888;
 }
 
 /* ===== MOBILE SIDEBAR ===== */

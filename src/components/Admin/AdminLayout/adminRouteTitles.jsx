@@ -1,5 +1,5 @@
 const adminRouteTitles = {
-    "/admin/List-Menu-Home": "BẢNG THÔNG TIN MENU HIỂN THỊ HOME",
+    "/admin/menu-home": "BẢNG THÔNG TIN MENU HIỂN THỊ HOME",
     "/admin/List-Xe": "BẢNG XE",
 };
 

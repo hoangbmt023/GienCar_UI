@@ -374,3 +374,93 @@
 .GroupActionBtn.approved:hover {
     filter: brightness(0.95);
 }
+
+/* ================= MOBILE (<=768px) ================= */
+@media (max-width: 768px) {
+    .ModalOverlay {
+        padding: 12px; // giảm padding để modal không bị bó
+    }
+
+    .ModalBox {
+        max-height: 95vh;
+        border-radius: 12px;
+    }
+
+    .ModalBox--sm,
+    .ModalBox--md,
+    .ModalBox--lg {
+        max-width: 100%;
+    }
+
+    .ModalHeader {
+        padding: 12px;
+    }
+
+    .ModalTitle {
+        font-size: 15px;
+    }
+
+    .ModalClose {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+
+    .ModalBody {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .ModalInput {
+        font-size: 16px; // tránh zoom iOS
+        padding: 12px;
+    }
+
+    .ModalFooter {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .Btn {
+        width: 100%;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    /* Tabs */
+    .ModalTabs {
+        flex-direction: column;
+    }
+
+    .TabBtn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    /* Group list */
+    .GroupRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .GroupRow__action {
+        width: 100%;
+    }
+
+    .GroupActionBtn {
+        width: 100%;
+        height: 36px;
+    }
+
+    /* Image preview */
+    .ImgPreviewBox {
+        max-width: 95vw;
+        max-height: 95vh;
+        padding: 8px;
+    }
+
+    .ImgPreviewHeader {
+        font-size: 14px;
+    }
+}

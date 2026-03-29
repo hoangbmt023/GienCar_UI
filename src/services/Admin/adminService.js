@@ -25,5 +25,25 @@ export const adminService = {
         return axiosClient.delete("/banners", {
             data
         });
-    }
+    },
+
+    getMenus(params) {
+        return publicRequest.get("/menus", {
+            params
+        });
+    },
+
+    createMenu(data) {
+        return axiosClient.post("/menus", data);
+    },
+
+    deleteMenu(data) {
+        return axiosClient.delete("/menus", {
+            data
+        });
+    },
+
+    moveMenu(data) {
+        return axiosClient.patch("/menus/move", data);
+    },
 };

@@ -1,6 +1,7 @@
 import "./Sidebar.scss";
 import { useState } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { getUserFromToken, getRoleFromToken, clearTokens } from "@/utils/tokenService";
 import logo from "@/assets/logo/backgroundgiencar.jpg";
 import {
     LayoutDashboard,
@@ -8,7 +9,6 @@ import {
     Home,
     LogOut,
     ChevronDown,
-    Menu,
 } from "lucide-react";
 
 const menus = [
@@ -18,7 +18,7 @@ const menus = [
         icon: LayoutDashboard,
         children: [
             { label: "Menu home", to: "/admin/menu-home" },
-            { label: "Màu xe", to: "/admin/mau-xe" },
+            { label: "Menu header/footer", to: "/admin/Menu-Header-Footer" },
             { label: "Danh mục xe", to: "/admin/danh-muc-xe" },
         ],
     },
@@ -46,6 +46,13 @@ const menus = [
 ];
 
 export default function Sidebar({ collapsed, onlogins, onClose }) {
+
+    // ===== USER INFO =====
+    const rawUser = getUserFromToken();
+    const role = getRoleFromToken();
+
+    const userName = rawUser ? rawUser.split("@")[0] : "User";
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -65,8 +72,7 @@ export default function Sidebar({ collapsed, onlogins, onClose }) {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("rf_token");
+        clearTokens();
         onlogins?.(false);
         navigate("/login");
     };
@@ -100,8 +106,7 @@ export default function Sidebar({ collapsed, onlogins, onClose }) {
                         <div key={m.id}>
                             {/* MENU CHA */}
                             <div
-                                className={`Sidebar__item ${active ? "Sidebar__item--active" : ""
-                                    }`}
+                                className={`Sidebar__item ${active ? "Sidebar__item--active" : ""}`}
                                 onClick={() => toggleMenu(m.id)}
                             >
                                 <span className="Sidebar__icon">
@@ -116,8 +121,7 @@ export default function Sidebar({ collapsed, onlogins, onClose }) {
 
                                         <ChevronDown
                                             size={16}
-                                            className={`Sidebar__arrow ${openMenu === m.id ? "open" : ""
-                                                }`}
+                                            className={`Sidebar__arrow ${openMenu === m.id ? "open" : ""}`}
                                         />
                                     </>
                                 )}
@@ -126,8 +130,7 @@ export default function Sidebar({ collapsed, onlogins, onClose }) {
                             {/* SUBMENU */}
                             {!collapsed && (
                                 <div
-                                    className={`Sidebar__submenu ${openMenu === m.id ? "show" : ""
-                                        }`}
+                                    className={`Sidebar__submenu ${openMenu === m.id ? "show" : ""}`}
                                 >
                                     {m.children.map((sub, i) => (
                                         <NavLink
@@ -135,8 +138,7 @@ export default function Sidebar({ collapsed, onlogins, onClose }) {
                                             to={sub.to}
                                             onClick={() => onClose?.()}
                                             className={({ isActive }) =>
-                                                `Sidebar__subitem ${isActive ? "active" : ""
-                                                }`
+                                                `Sidebar__subitem ${isActive ? "active" : ""}`
                                             }
                                         >
                                             {sub.label}
@@ -149,7 +151,21 @@ export default function Sidebar({ collapsed, onlogins, onClose }) {
                 })}
             </nav>
 
-            {/* ===== FOOTER (GIỮ NGUYÊN) ===== */}
+            {/* ===== USER INFO ===== */}
+            <div className="Sidebar__user">
+                <div className="Sidebar__avatar">
+                    {userName?.charAt(0)?.toUpperCase()}
+                </div>
+
+                {!collapsed && (
+                    <div className="Sidebar__userInfo">
+                        <div className="Sidebar__userName">{userName}</div>
+                        <div className="Sidebar__userRole">{role || "USER"}</div>
+                    </div>
+                )}
+            </div>
+
+            {/* ===== FOOTER ===== */}
             <div className="Sidebar__footer">
                 <button
                     className="Sidebar__item"

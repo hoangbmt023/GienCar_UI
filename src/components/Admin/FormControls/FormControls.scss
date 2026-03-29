@@ -230,3 +230,72 @@
     font-size: 12px;
     margin-top: 4px;
 }
+
+/* ================= MOBILE (<=768px) ================= */
+@media (max-width: 768px) {
+    .FC.Field {
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+
+    .Field__label {
+        font-size: 14px;
+    }
+
+    .Field__control {
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .Field__input,
+    .Field__textarea,
+    .Field__select {
+        font-size: 16px; // tránh zoom iOS
+    }
+
+    .Field__textarea {
+        min-height: 80px;
+    }
+
+    .Field__hint,
+    .Field__error {
+        font-size: 13px;
+    }
+
+    /* Upload */
+    .UploadBox {
+        min-height: 140px;
+    }
+
+    .UploadBox__content {
+        padding: 12px;
+    }
+
+    .UploadBox__placeholder {
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .UploadBox__preview img {
+        max-height: 180px;
+    }
+
+    .UploadBox__remove {
+        height: 28px;
+        font-size: 11px;
+    }
+
+    /* DatePicker */
+    .datepicker-wrapper label {
+        font-size: 13px;
+    }
+
+    .react-datepicker__input-container input {
+        font-size: 16px; // rất quan trọng
+        padding: 12px;
+    }
+
+    .datepicker-error {
+        font-size: 13px;
+    }
+}
