@@ -4,16 +4,19 @@ import { NavLink } from "react-router-dom";
 import { menuService } from "@/services/menuService";
 import "./Header.scss";
 import env from "../../config/Config";
+import GlobalSearch from "../GlobalSearch/GlobalSearch";
+import AvatarHeader from "../AvatarHeader/AvatarHeader";
 
 export default function Header() {
     const [activeMenu, setActiveMenu] = useState(null);
     const [activeItem, setActiveItem] = useState(0);
     const [menus, setMenus] = useState([]);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    
+
     // Logic mới cho Mobile: Lưu danh sách các menu đang mở để hỗ trợ đa cấp
     const [mobileActiveMenus, setMobileActiveMenus] = useState([]);
-    
+
+    const [isAtTop, setIsAtTop] = useState(true);
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -22,12 +25,22 @@ export default function Header() {
     useEffect(() => {
         const controlHeader = () => {
             if (typeof window !== 'undefined') {
-                if (window.scrollY > lastScrollY && window.scrollY > 100) { 
+
+                // 👇 check top
+                if (window.scrollY <= 10) {
+                    setIsAtTop(true);
+                } else {
+                    setIsAtTop(false);
+                }
+
+                // 👇 logic ẩn/hiện
+                if (window.scrollY > lastScrollY && window.scrollY > 100) {
                     setIsVisible(false);
                     setActiveMenu(null);
                 } else {
                     setIsVisible(true);
                 }
+
                 setLastScrollY(window.scrollY);
             }
         };
@@ -70,9 +83,9 @@ export default function Header() {
 
     // Logic Mobile
     const toggleMobileSubmenu = (menuKey) => {
-        setMobileActiveMenus(prev => 
-            prev.includes(menuKey) 
-                ? prev.filter(key => key !== menuKey) 
+        setMobileActiveMenus(prev =>
+            prev.includes(menuKey)
+                ? prev.filter(key => key !== menuKey)
                 : [...prev, menuKey]
         );
     };
@@ -116,7 +129,7 @@ export default function Header() {
 
         const isExternal = item.target === "_blank";
         const linkClass = `mobile-menu-link mobile-menu-level-${level}`;
-        
+
         return isExternal ? (
             <a href={item.url} target="_blank" rel="noopener noreferrer" className={linkClass} onClick={() => setIsMobileMenuOpen(false)}>
                 {level === 0 ? item.label.toUpperCase() : item.label}
@@ -133,8 +146,7 @@ export default function Header() {
 
     return (
         <>
-            {/* Desktop Header - KHÔI PHỤC NGUYÊN VẸN HIỆU ỨNG CŨ */}
-            <header className={`header desktop-header ${!isVisible ? "header--hidden" : ""} ${activeMenu !== null ? "header-open" : ""}`}>
+            <header className={`header desktop-header ${!isVisible ? "header--hidden" : ""} ${activeMenu !== null ? "header-open" : ""} ${!isAtTop ? "header-scrolled" : ""}`}>
                 <div className="header-nav">
                     {menus.map((m, i) => (
                         <div key={m.id || i} onMouseEnter={() => { setActiveMenu(i); setActiveItem(0); }} className="nav-item">
@@ -180,7 +192,6 @@ export default function Header() {
                 )}
             </header>
 
-            {/* Mobile Header - GIỮ LOGIC ĐA CẤP MỚI */}
             <header className={`header mobile-header ${!isVisible ? "header--hidden" : ""}`}>
                 <div className="mobile-header-container">
                     <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
@@ -204,6 +215,13 @@ export default function Header() {
                     )}
                 </AnimatePresence>
             </header>
+
+            <div className={`custom-header-tools ${!isVisible ? "hidden-tools" : ""}`}>
+                <div className="header-tools-inner">
+                    <GlobalSearch />
+                    <AvatarHeader />
+                </div>
+            </div>
         </>
     );
 }
