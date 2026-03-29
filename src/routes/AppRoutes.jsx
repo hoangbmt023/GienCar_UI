@@ -8,14 +8,11 @@ import OTPVerifyPassword from '@/pages/OTPVerifyPassword'
 import MainLayout from '@/components/MainLayout/MainLayout'
 import OTPVerifyForgotPassword from '../pages/OTPVerifyForgotPassword'
 import ProtectedRoute from './ProtectedRoute'
-<<<<<<< HEAD
 import AdminLayout from '../components/Admin/AdminLayout/AdminLayout'
 import ListMenuHome from '@/pages/Admin/Menu-Home'
 import ListMenuHeaderFooter from '@/pages/Admin/Menu-Header-Footer'
-=======
 import CarListPage from '../pages/CarList'
 import CarDetailPage from '../pages/CarDetail'
->>>>>>> feature/carlist
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
