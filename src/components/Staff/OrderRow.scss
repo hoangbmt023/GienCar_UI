@@ -1,0 +1,38 @@
+.order-row {
+    transition: background 0.2s ease;
+
+    &:hover {
+        background: #1f1f1f;
+    }
+
+    &__id {
+        color: #888;
+        font-size: 13px;
+    }
+
+    &__user {
+        font-weight: 500;
+    }
+
+    &__car {
+        color: #ccc;
+    }
+
+    &__status {
+        font-weight: 500;
+        text-transform: capitalize;
+    }
+}
+
+/* STATUS COLORS */
+.status-pending {
+    color: #facc15;
+}
+
+.status-confirmed {
+    color: #22c55e;
+}
+
+.status-test_drive {
+    color: #38bdf8;
+}

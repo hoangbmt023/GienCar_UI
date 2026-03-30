@@ -14,6 +14,7 @@ import ListMenuHeaderFooter from '@/pages/Admin/Menu-Header-Footer'
 import CarListPage from '../pages/CarList'
 import CarDetailPage from '../pages/CarDetail'
 import OrderPage from '@/pages/Order'
+import OrderManagementPage from '@/pages/OrderManagementPage'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -50,6 +51,7 @@ export default function AppRoutes() {
             <Route path="/models" element={<CarListPage />} />
             <Route path="/car-detail" element={<CarDetailPage />} />
             <Route path="/order" element={<OrderPage />} />
+            <Route path="/oder-manager" element={<OrderManagementPage />} />
             {/* Router Admin */}
             <Route path="/admin" element={<AdminLayout />}>
                 <Route path="Menu-Home" element={<ListMenuHome />} />

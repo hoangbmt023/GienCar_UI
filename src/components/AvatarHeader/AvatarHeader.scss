@@ -53,9 +53,11 @@
 
             &.logout {
                 color: #ff4d4f;
+                font-weight: 500;
 
                 &:hover {
-                    background: #2a0f0f;
+                    background: #3a0f0f;
+                    color: #ff7875;
                 }
             }
         }

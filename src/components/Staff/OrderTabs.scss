@@ -1,0 +1,28 @@
+.order-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+
+    button {
+        padding: 8px 16px;
+        border-radius: 20px;
+        border: none;
+        background: #1a1a1a;
+        color: #ccc;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+
+        &:hover {
+            background: #2a2a2a;
+            color: #fff;
+        }
+
+        &.active {
+            background: #3b82f6; // 🔵 xanh
+            color: #fff;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+    }
+}

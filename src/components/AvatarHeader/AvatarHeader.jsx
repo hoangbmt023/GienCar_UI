@@ -15,14 +15,11 @@ export default function AvatarHeader() {
     const ref = useRef();
     const navigate = useNavigate();
 
-    // 🔥 lấy user + role
     const user = getUserFromToken();
     const role = getRoleFromToken();
 
-    // ❌ chưa login → không hiển thị avatar
     if (!user) return null;
 
-    // click outside để đóng menu
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (ref.current && !ref.current.contains(e.target)) {
@@ -35,15 +32,14 @@ export default function AvatarHeader() {
             document.removeEventListener("click", handleClickOutside);
     }, []);
 
-    // 🔥 LOGOUT
     const handleLogout = async () => {
         try {
-            await authService.logout(); // đã clear token trong service
+            await authService.logout();
         } catch (err) {
             console.error("Logout error:", err);
         } finally {
             setOpen(false);
-            navigate("/login"); // redirect
+            navigate("/login");
         }
     };
 
@@ -75,17 +71,17 @@ export default function AvatarHeader() {
                     >
                         {/* USER INFO */}
                         <div className="dropdown-item">
-                            👤 {user}
+                            {user?.split("@")[0]}
                         </div>
 
                         <div
                             className="dropdown-item"
                             onClick={() => navigate("/profile")}
                         >
-                            ⚙️ Cài đặt
+                            Cài đặt
                         </div>
 
-                        {/* 🔥 ADMIN ONLY */}
+                        {/* ADMIN */}
                         {role === "ADMIN" && (
                             <div
                                 className="dropdown-item"
@@ -93,7 +89,7 @@ export default function AvatarHeader() {
                                     navigate("/admin/menu-car")
                                 }
                             >
-                                🛠️ Trang admin
+                                Trang admin
                             </div>
                         )}
 
@@ -104,7 +100,7 @@ export default function AvatarHeader() {
                             className="dropdown-item logout"
                             onClick={handleLogout}
                         >
-                            🚪 Đăng xuất
+                            Đăng xuất
                         </div>
                     </motion.div>
                 )}
