@@ -8,8 +8,15 @@ import car3 from "../assets/images/car3.jpg";
 import car4 from "../assets/images/car4.jpg";
 import car5 from "../assets/images/car5.jpg";
 import car6 from "../assets/images/car6.jpg";
+import ChatBox from "../components/ChatBox/ChatBox";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function CarDetailPage() {
+    const [showChat, setShowChat] = useState(false);
+
+    const navigate = useNavigate();
+
     const cars = [
         { id: 0, name: "Test Car", image: testImage, price: "Giá demo 1.000.000 VNĐ", power: "300 PS (220 kW)", acceleration: "5,0 giây (4,8 giây với Gói Sport Chrono)", topSpeed: "250 km/h" },
         { id: 1, name: "Toyota Camry", image: car1 },
@@ -42,6 +49,22 @@ export default function CarDetailPage() {
                     <CarDetail car={mockCar} />
                 </div>
             </div>
+            <button
+                onClick={() => navigate("/order", { state: { car: mockCar } })}
+            >
+                Đặt cọc
+            </button>
+
+            <button
+                onClick={() => setShowChat(prev => !prev)}
+                className="fixed bottom-6 right-6 bg-black text-white px-4 py-2 rounded-full shadow-lg"
+            >
+                Tư vấn
+            </button>
+
+            {showChat && (
+                <ChatBox onClose={() => setShowChat(false)} />
+            )}
         </div>
     )
 }

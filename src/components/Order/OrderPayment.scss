@@ -1,0 +1,99 @@
+.order-payment {
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+    &__title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 16px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: #444;
+
+        span:last-child {
+            font-weight: 500;
+        }
+    }
+
+    .divider {
+        border: none;
+        border-top: 1px solid #5f5f5f;
+        margin: 12px 0;
+    }
+
+    .deposit {
+        font-size: 15px;
+        font-weight: 600;
+
+        span:last-child {
+            color: #2563eb;
+        }
+    }
+
+    &__btn {
+        width: 100%;
+        margin-top: 16px;
+        background: linear-gradient(135deg, #000, #333);
+        color: #fff;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        transition: 0.25s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .order-payment {
+        padding: 16px;
+        border-radius: 14px;
+
+        &__title {
+            font-size: 16px;
+        }
+
+        &__content {
+            gap: 8px;
+        }
+
+        .row {
+            font-size: 13px;
+
+            span:last-child {
+                font-weight: 600;
+            }
+        }
+
+        .divider {
+            margin: 10px 0;
+        }
+
+        .deposit {
+            font-size: 14px;
+        }
+
+        &__btn {
+            padding: 14px;
+            font-size: 15px;
+            border-radius: 12px;
+        }
+    }
+}
