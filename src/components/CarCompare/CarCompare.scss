@@ -1,0 +1,117 @@
+// Container chính
+.car-compare {
+    @apply overflow-x-auto border rounded-lg;
+    margin-top: 50px;
+}
+
+/* TABLE GRID (QUAN TRỌNG NHẤT) */
+.car-compare__table {
+    display: grid;
+    grid-template-columns: 220px repeat(3, minmax(220px, 1fr));
+    border: 1px solid #ddd;
+    min-width: 900px;
+}
+
+/* HEADER (ảnh + tên xe) */
+.car-compare__header {
+    @apply p-4 border-b border-l text-center relative bg-white;
+
+    img {
+        @apply w-full h-32 object-cover mb-2 rounded;
+    }
+
+    h3 {
+        @apply font-semibold text-base;
+    }
+}
+
+/* CỘT LABEL (bên trái) */
+.car-compare__label {
+    @apply bg-gray-100 font-semibold border-b p-4 flex items-center;
+    min-height: 60px;
+}
+
+/* VALUE (cell) */
+.car-compare__value {
+    @apply border-b border-l p-4 flex items-center bg-white;
+    min-height: 60px;
+}
+
+/* FOOTER */
+.car-compare__footer {
+    @apply border-l p-4 bg-white;
+}
+
+/* BUTTON */
+.car-compare__btn-explore {
+    @apply w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition;
+}
+
+/* REMOVE BTN */
+.car-compare__btn-remove {
+    @apply absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full text-black hover:bg-red-500 hover:text-white cursor-pointer text-sm font-bold;
+}
+
+/* EMPTY SLOT */
+.car-compare__empty-slot {
+    @apply w-full h-full border-dashed border-2 border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-500 hover:text-black transition p-6;
+}
+
+/* COMPACT MODE */
+.car-compare__compact {
+    @apply p-4;
+}
+
+.car-compare__compact-list {
+    @apply grid grid-cols-3 gap-4;
+}
+
+.car-compare__compact-item {
+    @apply border border-gray-300 bg-gray-100 py-4 text-center hover:bg-gray-200 transition font-medium;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    .car-compare {
+        @apply overflow-x-hidden;
+    }
+
+    /* chuyển sang dạng card swipe */
+    .car-compare__table {
+        @apply flex gap-4 overflow-x-auto;
+        min-width: unset;
+    }
+
+    /* Ẩn label */
+    .car-compare__label {
+        @apply hidden;
+    }
+
+    /* Header thành card */
+    .car-compare__header {
+        @apply min-w-[85%] border rounded-lg shadow-sm;
+    }
+
+    .car-compare__value {
+        @apply min-w-[85%] border rounded-lg shadow-sm;
+    }
+
+    /* Hiển thị dạng key-value */
+    .car-compare__value::before {
+        content: attr(data-label);
+        @apply block text-gray-500 text-sm mb-1;
+    }
+
+    .car-compare__header img {
+        @apply h-40;
+    }
+
+    .car-compare__btn-explore {
+        @apply py-3 text-base;
+    }
+
+    .car-compare__btn-remove {
+        @apply w-8 h-8 text-base;
+    }
+}

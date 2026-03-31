@@ -1,0 +1,41 @@
+.table-page-pagination {
+    display: flex;
+    justify-content: right;
+    margin-top: 10px;
+    gap: 8px;
+    right: 20px;
+    background-color: #343a40;
+    margin: 20px 0;
+    padding: 10px;
+
+    .page-btn-pagination {
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        background: white;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.3s;
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        &.active {
+            background: orangered;
+            color: white;
+            border-color: red;
+        }
+    }
+
+
+    span {
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 991px) {
+    .page-btn-pagination:active {
+        transform: scale(0.95);
+    }
+}

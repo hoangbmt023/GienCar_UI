@@ -1,0 +1,16 @@
+# Text files chuẩn hóa line endings
+* text=auto eol=lf
+
+# SCSS, CSS
+*.scss text
+*.css text
+
+# JS / JSX / TS / TSX
+*.js text
+*.jsx text
+*.ts text
+*.tsx text
+
+# HTML / JSON
+*.html text
+*.json text

@@ -8,6 +8,13 @@ import OTPVerifyPassword from '@/pages/OTPVerifyPassword'
 import MainLayout from '@/components/MainLayout/MainLayout'
 import OTPVerifyForgotPassword from '../pages/OTPVerifyForgotPassword'
 import ProtectedRoute from './ProtectedRoute'
+import AdminLayout from '../components/Admin/AdminLayout/AdminLayout'
+import ListMenuHome from '@/pages/Admin/Menu-Home'
+import ListMenuHeaderFooter from '@/pages/Admin/Menu-Header-Footer'
+import CarListPage from '../pages/CarList'
+import CarDetailPage from '../pages/CarDetail'
+import OrderPage from '@/pages/Order'
+import OrderManagementPage from '@/pages/OrderManagementPage'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -19,6 +26,10 @@ export default function AppRoutes() {
         <Routes>
             <Route element={<MainLayout />}>
                 <Route path="/home" element={<Home />} />
+                <Route path="/models" element={<CarListPage />} />
+                <Route path="/models/:slug" element={<CarDetailPage />} />
+                <Route path="/order" element={<OrderPage />} />
+                <Route path="/oder-manager" element={<OrderManagementPage />} />
             </Route>
             {/* test routes cần đăng nhập
             <Route element={<ProtectedRoute />}>
@@ -41,6 +52,12 @@ export default function AppRoutes() {
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/otpverify" element={<OTPVerifyPassword />} />
             <Route path="/otpverifyforgotpassword" element={<OTPVerifyForgotPassword />} />
+
+            {/* Router Admin */}
+            <Route path="/admin" element={<AdminLayout />}>
+                <Route path="Menu-Home" element={<ListMenuHome />} />
+                <Route path="Menu-Header-Footer" element={<ListMenuHeaderFooter />} />
+            </Route>
         </Routes>
     )
 }

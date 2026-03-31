@@ -1,0 +1,140 @@
+.car-filter {
+    @apply bg-gray-100 rounded-lg mb-6 overflow-hidden;
+
+    /* HEADER */
+    &__header {
+        @apply flex justify-between items-center px-4 py-3 font-semibold cursor-pointer bg-gray-200;
+
+        span {
+            @apply text-sm;
+        }
+    }
+
+    /* ===== GRID WRAPPER (ANIMATION CORE) ===== */
+    &__grid {
+        display: grid;
+        grid-template-rows: 0fr; // ❗ đóng
+
+        transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ❗ wrapper bên trong */
+    &__grid>div {
+        overflow: hidden;
+
+        display: grid;
+        gap: 24px;
+
+        grid-template-columns: repeat(3, 1fr);
+
+        padding: 0; // 🔥 FIX: đóng thì không padding
+    }
+
+    /* khi mở */
+    &.open {
+        .car-filter__grid {
+            grid-template-rows: 1fr;
+        }
+
+        /* 🔥 FIX: chỉ mở mới có padding */
+        .car-filter__grid>div {
+            padding: 24px;
+        }
+    }
+
+    /* ===== GROUP ANIMATION ===== */
+    &__group {
+        opacity: 0;
+        transform: translateY(-10px);
+
+        transition: all 0.3s ease;
+
+        h4 {
+            @apply font-semibold mb-3;
+        }
+    }
+
+    /* khi mở thì hiện */
+    &.open &__group {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== CHECKBOX ===== */
+.checkbox {
+    @apply flex items-center gap-2 mb-2 cursor-pointer text-sm;
+
+    input {
+        @apply w-4 h-4 cursor-pointer;
+    }
+}
+
+/* ===== INPUT RANGE ===== */
+.range-inputs {
+    @apply flex gap-2;
+
+    input {
+        @apply w-full border rounded px-3 py-2 text-sm outline-none;
+
+        &:focus {
+            @apply border-black;
+        }
+    }
+}
+
+////////////////////////////////////////////////////////
+//////////////////// MOBILE ////////////////////////////
+////////////////////////////////////////////////////////
+
+@media (max-width: 768px) {
+
+    .car-filter {
+
+        @apply rounded-none;
+
+        &__header {
+            @apply text-base px-4 py-4;
+        }
+
+        /* mobile layout */
+        &__grid>div {
+            @apply grid-cols-1 gap-4 p-4;
+        }
+
+        &__group {
+            @apply border-b pb-3;
+
+            h4 {
+                @apply text-base mb-2;
+            }
+        }
+    }
+
+    .checkbox {
+        @apply text-base py-1;
+    }
+
+    .range-inputs {
+        @apply flex-col gap-2;
+
+        input {
+            @apply py-3 text-base;
+        }
+    }
+}
+
+////////////////////////////////////////////////////////
+//////////////////// ARROW /////////////////////////////
+////////////////////////////////////////////////////////
+
+.arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
+
+    transform: rotate(0deg); // ↓
+}
+
+.arrow.open {
+    transform: rotate(180deg); // ↑
+}

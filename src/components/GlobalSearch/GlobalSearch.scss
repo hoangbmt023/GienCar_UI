@@ -1,0 +1,122 @@
+.global-search {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    input {
+        width: 300px;
+        padding: 8px 14px;
+        border-radius: 20px;
+        border: 1px solid #333;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        outline: none;
+        transition: 0.3s;
+
+        &::placeholder {
+            color: #777;
+        }
+
+        &:focus {
+            border-color: #fff;
+            width: 360px;
+        }
+    }
+}
+
+.global-search-mobile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* overlay search */
+.search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+
+    background: black;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px;
+    z-index: 30000;
+}
+
+.search-overlay input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    margin-top: 8px;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.search-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 22px;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+        background: #f5f5f5;
+    }
+
+    &__img {
+        width: 80px;
+        height: 60px;
+        object-fit: contain;
+        border-radius: 6px;
+        background: #fafafa;
+        padding: 4px;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .name {
+        font-size: 16px;
+        font-weight: 500;
+        color: #111;
+    }
+}
+
+.search-empty {
+    padding: 12px;
+    font-size: 14px;
+    color: #777;
+    text-align: center;
+}
+
+.search-dropdown.mobile {
+    position: static;
+    transform: none;
+    width: 100%;
+    box-shadow: none;
+    margin-top: 10px;
+}
