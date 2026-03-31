@@ -1,56 +1,156 @@
 import HeroImage from "../components/HeroImage/HeroImage";
-import testImage from "../assets/images/testimage.jpg";
 import CarSuggest from "../components/CarSuggest/CarSuggest";
 import CarDetail from "../components/CarDetail/CarDetail";
-import car1 from "../assets/images/car1.jpg";
-import car2 from "../assets/images/car2.jpg";
-import car3 from "../assets/images/car3.jpg";
-import car4 from "../assets/images/car4.jpg";
-import car5 from "../assets/images/car5.jpg";
-import car6 from "../assets/images/car6.jpg";
 import ChatBox from "../components/ChatBox/ChatBox";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { carService } from "../services/carService";
+import { specificationService } from "../services/specificationService";
 
 export default function CarDetailPage() {
     const [showChat, setShowChat] = useState(false);
+    const [car, setCar] = useState(null);
+    const [colors, setColors] = useState([]); // 👈 thêm
+    const [selectedImage, setSelectedImage] = useState(null); // 👈 thêm
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+    const { state } = useLocation();
+    const { id } = useParams();
+    const { slug } = useParams();
 
-    const cars = [
-        { id: 0, name: "Test Car", image: testImage, price: "Giá demo 1.000.000 VNĐ", power: "300 PS (220 kW)", acceleration: "5,0 giây (4,8 giây với Gói Sport Chrono)", topSpeed: "250 km/h" },
-        { id: 1, name: "Toyota Camry", image: car1 },
-        { id: 2, name: "Honda Civic", image: car2 },
-        { id: 3, name: "BMW X5", image: car3 },
-        { id: 4, name: "Audi A4", image: car4 },
-        { id: 5, name: "Mercedes GLE", image: car5 },
-        { id: 6, name: "Porsche 911", image: car6 }
-    ];
+    useEffect(() => {
+        fetchData();
+    }, [slug]);
 
-    const mockCar = {
-        name: "718 Boxster S",
-        price: "5.080.000.000 VNĐ*",
-        note: "* Giá tiêu chuẩn bao gồm thuế nhập khẩu, thuế tiêu thụ đặc biệt và thuế giá trị gia tăng. Đối với dòng xe Panamera, Cayenne, Macan và Taycan giá tiêu chuẩn bao gồm thêm gói dịch vụ 4 năm bảo dưỡng. Bảng giá, thông số kỹ thuật và hình ảnh có thể thay đổi theo từng thời điểm mà không báo trước.",
-        image: car1,
-        power: "350 PS (257 kW)",
-        acceleration: "4,4 giây (4,2 giây với Gói Sport Chrono)",
-        topSpeed: "285 km/h",
-        wheelbase: "2.475 mm",
-        length: "4.379 mm",
-        height: "1.280 mm"
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+
+            const carRes = state?.car
+                ? { data: { data: state.car } }
+                : await carService.getCarBySlug(slug);
+
+            const data = state?.car || carRes.data.data;
+
+            const specRes = await specificationService.getCarSpecs(data.id);
+            const spec = specRes.data.data;
+
+            setColors(data.exteriorColors || []);
+
+            const mappedCar = {
+                id: data.id,
+                name: data.name,
+                image: data.images?.[0]?.url || data.image || "",
+                price: data.price,
+                formattedPrice: formatPrice(data.price),
+                note: data.description || "",
+
+                power:
+                    spec.engine?.powerKw != null
+                        ? `${spec.engine.powerKw} kW`
+                        : "-",
+
+                acceleration:
+                    spec.efficiency?.acceleration0To100 != null
+                        ? `${spec.efficiency.acceleration0To100}s`
+                        : "-",
+
+                topSpeed:
+                    spec.efficiency?.maxSpeedKmH != null
+                        ? `${spec.efficiency.maxSpeedKmH} km/h`
+                        : "-",
+
+                fuel:
+                    spec.consumption?.combinedLPer100Km != null
+                        ? `${spec.consumption.combinedLPer100Km} L/100km`
+                        : "-",
+
+                co2:
+                    spec.consumption?.co2EmissionsGPerKm != null
+                        ? `${spec.consumption.co2EmissionsGPerKm} g/km`
+                        : "-",
+
+                torque:
+                    spec.engine?.torqueNm != null
+                        ? `${spec.engine.torqueNm} Nm`
+                        : "-",
+
+                height:
+                    spec.body?.heightMm != null
+                        ? `${spec.body.heightMm} mm`
+                        : "-",
+
+                width:
+                    spec.body?.widthMm != null
+                        ? `${spec.body.widthMm} mm`
+                        : "-",
+
+                length:
+                    spec.body?.lengthMm != null
+                        ? `${spec.body.lengthMm} mm`
+                        : "-",
+
+                wheelbase:
+                    spec.body?.wheelBaseMm != null
+                        ? `${spec.body.wheelBaseMm} mm`
+                        : "-",
+            };
+
+            setCar(mappedCar);
+            setSelectedImage(mappedCar.image);
+
+        } catch (err) {
+            console.error("Lỗi fetch detail:", err);
+        } finally {
+            setLoading(false);
+        }
     };
+
+    const handleSelectColor = (color) => {
+        if (color.imageUrls?.length) {
+            setSelectedImage(color.imageUrls[0]);
+        }
+    };
+
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        }).format(price);
+    };
+
+    if (loading) return <p>Đang tải...</p>;
+    if (!car) return <p>Không tìm thấy xe</p>;
 
     return (
         <div>
-            <HeroImage car={cars[0]} />
-            <CarSuggest cars={cars} />
+            <HeroImage car={{ ...car, image: selectedImage || car.image }} />
+
+            <CarSuggest
+                colors={colors}
+                onSelectColor={handleSelectColor}
+                selectedColor={selectedImage}
+            />
+
             <div className="px-4 sm:px-6 lg:px-1 max-w-[1375px] mx-auto">
                 <div className="car-detail-wrapper">
-                    <CarDetail car={mockCar} />
+                    <CarDetail car={{ ...car, image: selectedImage || car.image }} />
                 </div>
             </div>
+
             <button
-                onClick={() => navigate("/order", { state: { car: mockCar } })}
+                onClick={() =>
+                    navigate("/order", {
+                        state: {
+                            car: {
+                                ...car,
+                                image: selectedImage || car.image
+                            }
+                        }
+                    })
+                }
             >
                 Đặt cọc
             </button>
@@ -66,5 +166,5 @@ export default function CarDetailPage() {
                 <ChatBox onClose={() => setShowChat(false)} />
             )}
         </div>
-    )
+    );
 }

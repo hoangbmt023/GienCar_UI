@@ -26,6 +26,10 @@ export default function AppRoutes() {
         <Routes>
             <Route element={<MainLayout />}>
                 <Route path="/home" element={<Home />} />
+                <Route path="/models" element={<CarListPage />} />
+                <Route path="/models/:slug" element={<CarDetailPage />} />
+                <Route path="/order" element={<OrderPage />} />
+                <Route path="/oder-manager" element={<OrderManagementPage />} />
             </Route>
             {/* test routes cần đăng nhập
             <Route element={<ProtectedRoute />}>
@@ -48,10 +52,7 @@ export default function AppRoutes() {
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/otpverify" element={<OTPVerifyPassword />} />
             <Route path="/otpverifyforgotpassword" element={<OTPVerifyForgotPassword />} />
-            <Route path="/models" element={<CarListPage />} />
-            <Route path="/car-detail" element={<CarDetailPage />} />
-            <Route path="/order" element={<OrderPage />} />
-            <Route path="/oder-manager" element={<OrderManagementPage />} />
+
             {/* Router Admin */}
             <Route path="/admin" element={<AdminLayout />}>
                 <Route path="Menu-Home" element={<ListMenuHome />} />

@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import "./CarSuggest.scss";
 
-const CarSuggest = ({ cars = [] }) => {
+const CarSuggest = ({ colors = [], onSelectColor, selectedColor }) => {
     const listRef = useRef();
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(true);
@@ -52,17 +52,19 @@ const CarSuggest = ({ cars = [] }) => {
 
             <div className="car-suggest__list-wrapper" ref={listRef}>
                 <div className="car-suggest__list">
-                    {cars.map((car) => (
-                        <div key={car.id} className="car-suggest__item">
+                    {colors.map((color, index) => (
+                        <div
+                            key={color.colorId || index}
+                            className={`car-suggest__item ${selectedColor === color.imageUrls?.[0] ? "active" : ""
+                                }`}
+                            onClick={() => onSelectColor?.(color)}
+                        >
                             <div className="car-suggest__inner">
                                 <img
-                                    src={car.image}
-                                    alt={car.name}
+                                    src={color.imageUrls?.[0]}
+                                    alt="color"
                                     className="car-suggest__img"
                                 />
-                                <div className="car-suggest__overlay">
-                                    <p className="car-suggest__name">{car.name}</p>
-                                </div>
                             </div>
                         </div>
                     ))}

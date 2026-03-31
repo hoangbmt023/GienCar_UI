@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { menuService } from "@/services/menuService";
 import "./Header.scss";
 import env from "../../config/Config";
@@ -19,6 +19,9 @@ export default function Header() {
     const [isAtTop, setIsAtTop] = useState(true);
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
+
+    const location = useLocation();
+    const isHome = location.pathname === "/home";
 
     const BASE_URL = env.FE_URL;
 
@@ -146,7 +149,13 @@ export default function Header() {
 
     return (
         <>
-            <header className={`header desktop-header ${!isVisible ? "header--hidden" : ""} ${activeMenu !== null ? "header-open" : ""} ${!isAtTop ? "header-scrolled" : ""}`}>
+            <header
+                className={`header desktop-header 
+    ${isHome ? "header-home" : ""} 
+    ${!isVisible ? "header--hidden" : ""} 
+    ${activeMenu !== null ? "header-open" : ""} 
+    ${!isAtTop ? "header-scrolled" : ""}`}
+            >
                 <div className="header-nav">
                     {menus.map((m, i) => (
                         <div key={m.id || i} onMouseEnter={() => { setActiveMenu(i); setActiveItem(0); }} className="nav-item">
@@ -192,7 +201,8 @@ export default function Header() {
                 )}
             </header>
 
-            <header className={`header mobile-header ${!isVisible ? "header--hidden" : ""}`}>
+            <header
+                className={`header mobile-header ${isHome ? "header-home" : ""} ${!isVisible ? "header--hidden" : ""}`}>
                 <div className="mobile-header-container">
                     <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
                         <span className={`hamburger ${isMobileMenuOpen ? 'active' : ''}`}>

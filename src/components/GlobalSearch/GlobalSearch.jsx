@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { Search, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { carService } from "@/services/carService";
 import "./GlobalSearch.scss";
 
 export default function GlobalSearch() {
     const [query, setQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
     const [open, setOpen] = useState(false);
+    const [results, setResults] = useState([]);
+    const navigate = useNavigate();
 
     const isMobile = window.innerWidth <= 1024;
 
@@ -13,17 +17,61 @@ export default function GlobalSearch() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedQuery(query);
-        }, 500);
+        }, 400);
         return () => clearTimeout(timer);
     }, [query]);
 
+    // call API
     useEffect(() => {
-        if (debouncedQuery) {
-            console.log("Call API với:", debouncedQuery);
+        if (!debouncedQuery.trim()) {
+            setResults([]);
+            return;
         }
+
+        const fetchSearch = async () => {
+            try {
+                const res = await carService.searchCars(debouncedQuery, {
+                    page: 1,
+                    size: 5
+                });
+
+                setResults(res.data.data || []);
+            } catch (err) {
+                console.error("Search lỗi:", err);
+            }
+        };
+
+        fetchSearch();
     }, [debouncedQuery]);
 
-    // 👉 MOBILE UI
+    // handle click
+    const handleSelect = (car) => {
+        navigate(`/models/${car.slug}`);
+        setQuery("");
+        setResults([]);
+        setOpen(false);
+    };
+
+    // render item (🔥 tách riêng cho clean)
+    const renderItem = (car) => (
+        <div
+            key={car.id}
+            className="search-item"
+            onClick={() => handleSelect(car)}
+        >
+            <img
+                src={car.imageUrl || car.image || car.images?.[0]?.url}
+                alt={car.name}
+                className="search-item__img"
+            />
+
+            <div className="search-item__info">
+                <span className="name">{car.name}</span>
+            </div>
+        </div>
+    );
+
+    // ================= MOBILE =================
     if (isMobile) {
         return (
             <div className="global-search-mobile">
@@ -31,20 +79,34 @@ export default function GlobalSearch() {
 
                 {open && (
                     <div className="search-overlay">
-                        <input
-                            autoFocus
-                            placeholder="Search..."
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                        />
+                        <div className="search-header">
+                            <input
+                                autoFocus
+                                placeholder="Search..."
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                            />
+                            <X size={20} onClick={() => setOpen(false)} />
+                        </div>
 
-                        <X size={20} onClick={() => setOpen(false)} />
+                        {results.length > 0 && (
+                            <div className="search-dropdown mobile">
+                                {results.map(renderItem)}
+                            </div>
+                        )}
+
+                        {debouncedQuery && results.length === 0 && (
+                            <div className="search-empty">
+                                Không tìm thấy kết quả
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
         );
     }
 
+    // ================= DESKTOP =================
     return (
         <div className="global-search">
             <input
@@ -53,6 +115,18 @@ export default function GlobalSearch() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
+
+            {results.length > 0 && (
+                <div className="search-dropdown">
+                    {results.map(renderItem)}
+                </div>
+            )}
+
+            {debouncedQuery && results.length === 0 && (
+                <div className="search-empty">
+                    Không tìm thấy
+                </div>
+            )}
         </div>
     );
 }

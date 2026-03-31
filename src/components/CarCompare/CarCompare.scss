@@ -1,109 +1,112 @@
 // Container chính
 .car-compare {
     @apply overflow-x-auto border rounded-lg;
+    margin-top: 50px;
 }
 
-// Grid: Cột A + 3 slot xe
-.car-compare__grid {
-    @apply min-w-[800px] grid gap-4;
-    grid-template-columns: 200px repeat(3, minmax(200px, 1fr));
+/* TABLE GRID (QUAN TRỌNG NHẤT) */
+.car-compare__table {
+    display: grid;
+    grid-template-columns: 220px repeat(3, minmax(220px, 1fr));
+    border: 1px solid #ddd;
+    min-width: 900px;
 }
 
-// Cột A: thông số
-.car-compare__specs {
-    @apply bg-gray-100 p-4 font-semibold;
+/* HEADER (ảnh + tên xe) */
+.car-compare__header {
+    @apply p-4 border-b border-l text-center relative bg-white;
+
+    img {
+        @apply w-full h-32 object-cover mb-2 rounded;
+    }
+
+    h3 {
+        @apply font-semibold text-base;
+    }
 }
 
-.car-compare__specs>div {
-    @apply py-2 border-b;
+/* CỘT LABEL (bên trái) */
+.car-compare__label {
+    @apply bg-gray-100 font-semibold border-b p-4 flex items-center;
+    min-height: 60px;
 }
 
-// Slot xe
-.car-compare__slot {
-    @apply bg-white p-4 border-l border-b relative flex flex-col mt-1;
+/* VALUE (cell) */
+.car-compare__value {
+    @apply border-b border-l p-4 flex items-center bg-white;
+    min-height: 60px;
 }
 
-// Slot xe chưa chọn
-.car-compare__empty-slot {
-    @apply w-full h-full border-dashed border-2 border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-500 hover:text-black transition;
+/* FOOTER */
+.car-compare__footer {
+    @apply border-l p-4 bg-white;
 }
 
-// Thông tin xe
-.car-compare__car-img {
-    @apply w-full h-32 object-cover mb-2;
-}
-
-.car-compare__car-name {
-    @apply font-semibold;
-}
-
-.car-compare__car-specs {
-    @apply mt-2 space-y-1 text-sm;
-}
-
-// Nút Khám phá
+/* BUTTON */
 .car-compare__btn-explore {
-    @apply mt-4 w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition;
+    @apply w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition;
 }
 
-// Nút X góc phải để bỏ xe
+/* REMOVE BTN */
 .car-compare__btn-remove {
     @apply absolute top-2 right-2 w-6 h-6 flex items-center justify-center bg-gray-200 rounded-full text-black hover:bg-red-500 hover:text-white cursor-pointer text-sm font-bold;
 }
 
+/* EMPTY SLOT */
+.car-compare__empty-slot {
+    @apply w-full h-full border-dashed border-2 border-gray-300 flex items-center justify-center text-gray-500 hover:border-gray-500 hover:text-black transition p-6;
+}
+
+/* COMPACT MODE */
+.car-compare__compact {
+    @apply p-4;
+}
+
+.car-compare__compact-list {
+    @apply grid grid-cols-3 gap-4;
+}
+
+.car-compare__compact-item {
+    @apply border border-gray-300 bg-gray-100 py-4 text-center hover:bg-gray-200 transition font-medium;
+}
+
+/* ===== MOBILE ===== */
 @media (max-width: 768px) {
 
-    /* Container */
     .car-compare {
         @apply overflow-x-hidden;
     }
 
-    /* Chuyển sang swipe ngang */
-    .car-compare__grid {
-        @apply flex gap-4 overflow-x-auto min-w-0;
+    /* chuyển sang dạng card swipe */
+    .car-compare__table {
+        @apply flex gap-4 overflow-x-auto;
+        min-width: unset;
     }
 
-    /* Ẩn cột thông số */
-    .car-compare__specs {
+    /* Ẩn label */
+    .car-compare__label {
         @apply hidden;
     }
 
-    /* Card xe */
-    .car-compare__slot {
-        @apply min-w-[85%] flex-shrink-0 border rounded-lg shadow-sm;
+    /* Header thành card */
+    .car-compare__header {
+        @apply min-w-[85%] border rounded-lg shadow-sm;
     }
 
-    /* Slot trống */
-    .car-compare__empty-slot {
+    .car-compare__value {
+        @apply min-w-[85%] border rounded-lg shadow-sm;
+    }
+
+    /* Hiển thị dạng key-value */
+    .car-compare__value::before {
+        content: attr(data-label);
+        @apply block text-gray-500 text-sm mb-1;
+    }
+
+    .car-compare__header img {
         @apply h-40;
     }
 
-    /* Ảnh xe */
-    .car-compare__car-img {
-        @apply h-40 rounded-lg;
-    }
-
-    /* Tên xe */
-    .car-compare__car-name {
-        @apply text-base;
-    }
-
-    /* Specs dạng grid */
-    .car-compare__car-specs {
-        @apply grid grid-cols-2 gap-2 text-sm;
-    }
-
-    .car-compare__car-specs div {
-        @apply flex justify-between border-b py-1;
-    }
-
-    /* Label tự động */
-    .car-compare__car-specs div::before {
-        content: attr(data-label);
-        @apply text-gray-500 font-medium;
-    }
-
-    /* Button */
     .car-compare__btn-explore {
         @apply py-3 text-base;
     }

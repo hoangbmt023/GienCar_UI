@@ -1,20 +1,16 @@
+import { useLocation } from "react-router-dom";
 import OrderSummary from "@/components/Order/OrderSummary";
-import car1 from "@/assets/images/car1.jpg";
 
 export default function OrderPage() {
+    const { state } = useLocation();
 
-    const mockCar = {
-        id: 1,
-        name: "718 Boxster S",
-        image: car1,
-        price: "5.080.000.000 VNĐ",
-        power: "350 PS",
-        topSpeed: "285 km/h"
-    };
+    const car = state?.car;
+
+    if (!car) return <p>Không có dữ liệu xe</p>;
 
     return (
         <main>
-            <OrderSummary car={mockCar} />
+            <OrderSummary car={car} />
         </main>
     );
 }

@@ -22,7 +22,7 @@ export const connectSocket = (roomId, onMessageReceived) => {
             console.log("Connected WebSocket");
 
             client.subscribe(`/topic/chat/${roomId}`, (msg) => {
-                console.log("📩 Received:", msg.body);
+                console.log("Received:", msg.body);
                 const data = JSON.parse(msg.body);
                 onMessageReceived(data);
             });
@@ -42,7 +42,7 @@ export const sendMessageSocket = (message) => {
         return;
     }
 
-    console.log("📤 Sending:", message);
+    console.log("Sending:", message);
 
     client.publish({
         destination: "/app/chat.send",

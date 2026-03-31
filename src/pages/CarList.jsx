@@ -1,45 +1,156 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CarCompare from "../components/CarCompare/CarCompare";
 import CarList from "../components/CarList/CarList";
+import CarFilter from "../components/CarFilter/CarFilter";
+
+import { carService } from "../services/carService";
+import { specificationService } from "../services/specificationService";
+import { carSeriesService } from "../services/carSeriesService";
 
 const CarListPage = () => {
     const [selectedCars, setSelectedCars] = useState([]);
+    const [series, setSeries] = useState([]);
+    const [seriesList, setSeriesList] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const carCategories = [
-        {
-            id: 1,
-            name: "Sedan",
-            cars: [
-                { id: 1, name: "Toyota Camry", price: "1 tỷ", image: "https://source.unsplash.com/400x300/?car&sig=1" },
-                { id: 2, name: "Honda Civic", price: "800 triệu", image: "https://source.unsplash.com/400x300/?car&sig=2" },
-                { id: 3, name: "Mazda 3", price: "750 triệu", image: "https://source.unsplash.com/400x300/?car&sig=3" },
-                { id: 4, name: "Hyundai Elantra", price: "720 triệu", image: "https://source.unsplash.com/400x300/?car&sig=4" },
-                { id: 5, name: "Kia K3", price: "690 triệu", image: "https://source.unsplash.com/400x300/?car&sig=5" },
-            ],
-        },
-        {
-            id: 2,
-            name: "SUV",
-            cars: [
-                { id: 6, name: "Toyota Corolla Cross", price: "860 triệu", image: "https://source.unsplash.com/400x300/?car&sig=6" },
-                { id: 7, name: "Ford Ranger", price: "950 triệu", image: "https://source.unsplash.com/400x300/?car&sig=7" },
-                { id: 8, name: "VinFast VF 8", price: "1 tỷ 100 triệu", image: "https://source.unsplash.com/400x300/?car&sig=8" },
-            ],
-        },
-        {
-            id: 3,
-            name: "Electric",
-            cars: [
-                { id: 9, name: "Tesla Model 3", price: "1 tỷ 400 triệu", image: "https://source.unsplash.com/400x300/?car&sig=9" },
-                { id: 10, name: "VinFast VF 9", price: "1 tỷ 800 triệu", image: "https://source.unsplash.com/400x300/?car&sig=10" },
-            ],
-        },
-    ];
+    // 🔥 FILTER STATE (QUAN TRỌNG)
+    const [filters, setFilters] = useState({
+        seriesId: "",
+        minPrice: 0,
+        maxPrice: 30000000000,
+        minPowerKw: null,
+        maxPowerKw: null,
+        status: "available"
+    });
 
-    const handleCompare = (car) => {
+    // 🔥 debounce filter
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            fetchData();
+        }, 400);
+
+        return () => clearTimeout(timeout);
+    }, [filters]);
+
+    const fetchData = async () => {
+        try {
+            setLoading(true);
+
+            // clean params
+            const cleanParams = Object.fromEntries(
+                Object.entries({
+                    ...filters,
+                    page: 1,
+                    size: 10
+                }).filter(([_, v]) => v !== null && v !== "" && v !== undefined)
+            );
+
+            // 🔥 1. lấy danh sách series
+            const seriesRes = await carSeriesService.getSeries();
+            const seriesData = seriesRes.data.data;
+
+            setSeriesList(seriesData);
+
+            // 🔥 2. gọi cars theo từng series
+            const seriesWithCars = await Promise.all(
+                seriesData.map(async (s) => {
+                    try {
+                        const res = await carService.getCars({
+                            ...cleanParams,
+                            seriesId: s.id
+                        });
+
+                        const cars = res.data.data;
+
+                        return {
+                            id: s.id,
+                            name: s.name.toUpperCase(),
+                            image: s.imageUrl,
+
+                            cars: cars.map((car) => ({
+                                id: car.id,
+                                slug: car.slug,
+                                name: car.name,
+                                image: car.images?.[0]?.url || "",
+
+                                // ⚠️ giữ number + format riêng
+                                price: car.price,
+                                formattedPrice: formatPrice(car.price),
+
+                                // 🔥 QUAN TRỌNG: giữ color
+                                exteriorColors: car.exteriorColors || [],
+
+                                power: "-",
+                                acceleration: "-",
+                                topSpeed: "-",
+                                fuel: "-",
+                                co2: "-",
+                                height: "-",
+                                width: "-",
+                                length: "-",
+                                wheelbase: "-",
+                            }))
+                        };
+
+                    } catch (err) {
+                        console.error("Lỗi load cars theo series:", err);
+                        return null;
+                    }
+                })
+            );
+
+            // 🔥 lọc series rỗng
+            setSeries(seriesWithCars.filter(s => s && s.cars.length > 0));
+
+        } catch (error) {
+            console.error("Lỗi fetch data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const formatPrice = (price) => {
+        return new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+        }).format(price);
+    };
+
+    // 🔥 COMPARE
+    const handleCompare = async (car) => {
         if (selectedCars.length >= 3) return;
-        if (!selectedCars.find((c) => c.id === car.id)) {
-            setSelectedCars([...selectedCars, car]);
+        if (selectedCars.find((c) => c.id === car.id)) return;
+
+        try {
+            const res = await specificationService.getCarSpecs(car.id);
+            const spec = res.data.data;
+
+            const mappedCar = {
+                ...car,
+                power: spec.engine?.powerKw ? `${spec.engine.powerKw} kW` : "-",
+                acceleration: spec.efficiency?.acceleration0To100
+                    ? `${spec.efficiency.acceleration0To100}s`
+                    : "-",
+                topSpeed: spec.efficiency?.maxSpeedKmH
+                    ? `${spec.efficiency.maxSpeedKmH} km/h`
+                    : "-",
+                fuel: spec.consumption?.combinedLPer100Km
+                    ? `${spec.consumption.combinedLPer100Km} L/100km`
+                    : "-",
+                co2: spec.consumption?.co2EmissionsGPerKm
+                    ? `${spec.consumption.co2EmissionsGPerKm} g/km`
+                    : "-",
+                height: spec.body?.heightMm ? `${spec.body.heightMm} mm` : "-",
+                width: spec.body?.widthMm ? `${spec.body.widthMm} mm` : "-",
+                length: spec.body?.lengthMm ? `${spec.body.lengthMm} mm` : "-",
+                wheelbase: spec.body?.wheelBaseMm
+                    ? `${spec.body.wheelBaseMm} mm`
+                    : "-",
+            };
+
+            setSelectedCars([...selectedCars, mappedCar]);
+        } catch (err) {
+            console.error("Lỗi lấy specs:", err);
         }
     };
 
@@ -56,13 +167,29 @@ const CarListPage = () => {
 
     return (
         <div className="px-4 sm:px-6 lg:px-1 max-w-[1300px] mx-auto">
+
+            {/* 🔥 COMPARE */}
             <CarCompare
                 selectedCars={selectedCars}
                 removeCar={removeCar}
                 scrollToList={scrollToList}
             />
+
             <h1 className="text-2xl font-bold mb-6">Danh sách xe</h1>
-            <CarList categories={carCategories} onCompare={handleCompare} />
+
+            {/* 🔥 FILTER */}
+            <CarFilter
+                filters={filters}
+                setFilters={setFilters}
+                seriesList={seriesList}
+            />
+
+            {/* 🔥 LIST */}
+            {loading ? (
+                <p>Đang tải dữ liệu...</p>
+            ) : (
+                <CarList categories={series} onCompare={handleCompare} />
+            )}
         </div>
     );
 };
