@@ -9,6 +9,7 @@ import {
     Home,
     LogOut,
     ChevronDown,
+    Car,
 } from "lucide-react";
 
 const menus = [
@@ -19,17 +20,20 @@ const menus = [
         children: [
             { label: "Menu home", to: "/admin/menu-home" },
             { label: "Menu header/footer", to: "/admin/Menu-Header-Footer" },
-            { label: "Danh mục xe", to: "/admin/danh-muc-xe" },
         ],
     },
     {
         id: "car",
         label: "Quản lý xe",
-        icon: LayoutDashboard,
+        icon: Car,
         children: [
-            { label: "Chi nhánh", to: "/admin/chi-nhanh" },
-            { label: "Màu xe", to: "/admin/mau-xe" },
             { label: "Danh mục xe", to: "/admin/danh-muc-xe" },
+            { label: "Chi nhánh", to: "/admin/chi-nhanh" },
+            { label: "Hãng xe", to: "/admin/hang-xe" },
+            { label: "Xe", to: "/admin/xe" },
+            { label: "Thông số kỹ thuật", to: "/admin/thong-so-ky-thuat" },
+            { label: "Quản lý màu", to: "/admin/list-mau-xe" },
+            { label: "Quản lý màu xe", to: "/admin/mau-xe" },
         ],
     },
     {

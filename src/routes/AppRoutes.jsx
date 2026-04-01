@@ -15,6 +15,14 @@ import CarListPage from '../pages/CarList'
 import CarDetailPage from '../pages/CarDetail'
 import OrderPage from '@/pages/Order'
 import OrderManagementPage from '@/pages/OrderManagementPage'
+import ListCategory from '@/pages/Admin/Category'
+import ListBrandes from '@/pages/Admin/Brandes'
+import ListCarSeries from '@/pages/Admin/CarSeries'
+import ListCars from '@/pages/Admin/Cars'
+import ListCarsSpecifications from '@/pages/Admin/CarsSpecifications'
+import ListColors from '@/pages/Admin/Color'
+import ListCarColors from '@/pages/Admin/CarColor'
+import PaymentResultPage from '@/pages/PaymentResultPage'
 // import Racing from '@/pages/Racing'
 // import SportsCars from '@/pages/SportsCars'
 // import Collections from '@/pages/Collections'
@@ -30,6 +38,7 @@ export default function AppRoutes() {
                 <Route path="/models/:slug" element={<CarDetailPage />} />
                 <Route path="/order" element={<OrderPage />} />
                 <Route path="/oder-manager" element={<OrderManagementPage />} />
+                <Route path="/payment-result" element={<PaymentResultPage />} />
             </Route>
             {/* test routes cần đăng nhập
             <Route element={<ProtectedRoute />}>
@@ -57,6 +66,13 @@ export default function AppRoutes() {
             <Route path="/admin" element={<AdminLayout />}>
                 <Route path="Menu-Home" element={<ListMenuHome />} />
                 <Route path="Menu-Header-Footer" element={<ListMenuHeaderFooter />} />
+                <Route path="danh-muc-xe" element={<ListCategory />} />
+                <Route path="chi-nhanh" element={<ListBrandes />} />
+                <Route path="hang-xe" element={<ListCarSeries />} />
+                <Route path="xe" element={<ListCars />} />
+                <Route path="thong-so-ky-thuat" element={<ListCarsSpecifications />} />
+                <Route path="list-mau-xe" element={<ListColors />} />
+                <Route path="mau-xe" element={<ListCarColors />} />
             </Route>
         </Routes>
     )
