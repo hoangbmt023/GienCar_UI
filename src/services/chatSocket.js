@@ -1,63 +1,109 @@
-import SockJS from "sockjs-client/dist/sockjs";
+import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
+import { getAccessToken } from "@/utils/tokenService";
 
 let client = null;
-let currentRoomId = null;
 
-export const connectSocket = (roomId, onMessageReceived) => {
-    currentRoomId = roomId;
+export const chatSocket = {
 
-    const token = localStorage.getItem("accessToken");
+    connect(onMessageReceived) {
 
-    const socket = new SockJS(`http://localhost:8080/ws`);
-
-    client = new Client({
-        webSocketFactory: () => socket,
-
-        connectHeaders: {
-            Authorization: "Bearer " + token
-        },
-
-        onConnect: () => {
-            console.log("Connected WebSocket");
-
-            client.subscribe(`/topic/chat/${roomId}`, (msg) => {
-                console.log("Received:", msg.body);
-                const data = JSON.parse(msg.body);
-                onMessageReceived(data);
-            });
-        },
-
-        onStompError: (frame) => {
-            console.error("STOMP error:", frame);
+        // ❗ tránh connect nhiều lần
+        if (client && client.connected) {
+            console.log("⚠️ Socket đã connect rồi");
+            return;
         }
-    });
 
-    client.activate();
-};
+        const token = getAccessToken();
 
-export const sendMessageSocket = (message) => {
-    if (!client || !client.connected) {
-        console.warn("Chưa connect socket");
-        return;
-    }
+        if (!token) {
+            console.warn("❌ Không có token → không connect socket");
+            return;
+        }
 
-    console.log("Sending:", message);
+        // 🔥 truyền token qua query (QUAN TRỌNG)
+        const socket = new SockJS(
+            `http://localhost:8080/ws?token=${token}`
+        );
 
-    client.publish({
-        destination: "/app/chat.send",
+        client = new Client({
+            webSocketFactory: () => socket,
 
-        headers: {
-            Authorization: "Bearer " + localStorage.getItem("accessToken")
-        },
+            // ❗ vẫn giữ để dùng ở STOMP layer
+            connectHeaders: {
+                Authorization: `Bearer ${token}`
+            },
 
-        body: JSON.stringify(message)
-    });
-};
+            debug: (str) => {
+                console.log("STOMP:", str);
+            },
 
-export const disconnectSocket = () => {
-    if (client) {
-        client.deactivate();
-        console.log("🔌 Disconnected");
+            reconnectDelay: 5000,
+
+            onConnect: () => {
+                console.log("✅ WebSocket connected");
+
+                client.subscribe("/topic/chat", (message) => {
+                    try {
+                        const data = JSON.parse(message.body);
+                        console.log("📩 Received:", data);
+
+                        if (onMessageReceived) {
+                            onMessageReceived(data);
+                        }
+
+                    } catch (error) {
+                        console.error("Parse message error:", error);
+                    }
+                });
+            },
+
+            onStompError: (frame) => {
+                console.error("❌ STOMP error:", frame);
+            },
+
+            onWebSocketError: (error) => {
+                console.error("❌ WebSocket error:", error);
+            },
+
+            onDisconnect: () => {
+                console.log("🔌 WebSocket disconnected");
+            }
+        });
+
+        // 🔥 QUAN TRỌNG: delay nhẹ để tránh race condition
+        setTimeout(() => {
+            client.activate();
+        }, 100);
+    },
+
+    sendMessage(content) {
+        if (!client || !client.connected) {
+            console.warn("⚠️ Socket chưa connect");
+            return;
+        }
+
+        const payload = {
+            content: content
+        };
+
+        console.log("📤 Sending:", payload);
+
+        client.publish({
+            destination: "/app/chat.sendMessage",
+            body: JSON.stringify(payload)
+        });
+    },
+
+    disconnect() {
+        if (client) {
+            client.deactivate();
+            client = null;
+            console.log("🔌 Socket disconnected");
+        }
+    },
+
+    isConnected() {
+        return client && client.connected;
     }
 };

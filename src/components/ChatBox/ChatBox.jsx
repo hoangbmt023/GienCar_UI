@@ -1,62 +1,44 @@
 import { useEffect, useState } from "react";
-import { connectSocket, sendMessageSocket } from "../../services/chatSocket";
-import { getChatRoom, getChatRooms } from "../../services/chatService";
+import { chatSocket } from "../../services/chatSocket";
+import { chatService } from "../../services/chatService";
 import { jwtDecode } from "jwt-decode";
-import { userService } from "../../services/userService";
-import axios from "../../services/axiosClient";
-import "./ChatBox.scss"; // ✅ import SCSS
+import "./ChatBox.scss";
 
 export default function ChatBox({ onClose }) {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
     const [roomId, setRoomId] = useState(null);
-
-    const [chatInfo, setChatInfo] = useState({
-        userId: null,
-        adminId: null
-    });
-
-    const [loading, setLoading] = useState(true);
     const [rooms, setRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    const [currentUserId, setCurrentUserId] = useState(null);
+    const [role, setRole] = useState(null);
 
     useEffect(() => {
-        const initChat = async () => {
+        const init = async () => {
             try {
                 const token = localStorage.getItem("accessToken");
                 if (!token) return;
 
                 const decoded = jwtDecode(token);
-                const currentUserId = decoded.sub;
+                const userId = decoded.sub;
                 const role = decoded.role?.[0];
 
-                if (role === "ADMIN") {
-                    const rooms = await getChatRooms();
-                    const validRooms = rooms.filter(r => r.userId.length > 20);
+                setCurrentUserId(userId);
+                setRole(role);
 
-                    setRooms(validRooms);
+                if (role === "SALE") {
+                    const res = await chatService.getChatRoomsForSale({
+                        page: 1,
+                        size: 20,
+                        sortBy: "lastMessageAt",
+                        sortDir: "desc"
+                    });
+
+                    setRooms(res.data.data || []);
                     setLoading(false);
                     return;
                 }
-
-                const res = await userService.getAdmin();
-                const adminId = res.data.id;
-                const userId = currentUserId;
-
-                setChatInfo({ userId, adminId });
-
-                const room = await getChatRoom(userId, adminId);
-
-                setRoomId(room.id);
-
-                const resMsg = await axios.get(`/chat/${room.id}`);
-                setMessages(resMsg.data);
-
-                connectSocket(room.id, (msg) => {
-                    setMessages(prev => {
-                        if (prev.some(m => m.id === msg.id)) return prev;
-                        return [...prev, msg];
-                    });
-                });
 
                 setLoading(false);
 
@@ -66,38 +48,37 @@ export default function ChatBox({ onClose }) {
             }
         };
 
-        initChat();
+        init();
     }, []);
 
-    const handleSelectRoom = async (room) => {
-        setChatInfo({
-            userId: room.userId,
-            adminId: room.adminId
-        });
-
-        setRoomId(room.roomId);
-
-        const resMsg = await axios.get(`/chat/${room.roomId}`);
-        setMessages(resMsg.data);
-
-        connectSocket(room.roomId, (msg) => {
-            setMessages(prev => {
-                if (prev.some(m => m.id === msg.id)) return prev;
+    useEffect(() => {
+        chatSocket.connect((msg) => {
+            setMessages((prev) => {
+                if (msg.id && prev.some((m) => m.id === msg.id)) return prev;
                 return [...prev, msg];
             });
         });
+
+        return () => chatSocket.disconnect();
+    }, []);
+
+    const handleSelectRoom = async (room) => {
+        setRoomId(room.id);
+
+        const resMsg = await chatService.getMessages(room.id, {
+            page: 1,
+            size: 50,
+            sortBy: "createdAt",
+            sortDir: "asc"
+        });
+
+        setMessages(resMsg.data.data || []);
     };
 
     const sendMessage = () => {
-        if (!input.trim() || !roomId) return;
+        if (!input.trim()) return;
 
-        const msg = {
-            userId: chatInfo.userId,
-            adminId: chatInfo.adminId,
-            content: input
-        };
-
-        sendMessageSocket(msg);
+        chatSocket.sendMessage(input);
         setInput("");
     };
 
@@ -109,7 +90,7 @@ export default function ChatBox({ onClose }) {
         );
     }
 
-    if (rooms.length > 0 && !roomId) {
+    if (role === "SALE" && !roomId) {
         return (
             <div className="chat-box">
                 <div className="chat-box__header">
@@ -118,15 +99,19 @@ export default function ChatBox({ onClose }) {
                 </div>
 
                 <div className="chat-box__rooms">
-                    {rooms.map((room) => (
-                        <div
-                            key={room.roomId}
-                            className="chat-box__room"
-                            onClick={() => handleSelectRoom(room)}
-                        >
-                            👤 {room.userEmail}
-                        </div>
-                    ))}
+                    {rooms.length === 0 ? (
+                        <div>Chưa có cuộc trò chuyện nào</div>
+                    ) : (
+                        rooms.map((room) => (
+                            <div
+                                key={room.id}
+                                className="chat-box__room"
+                                onClick={() => handleSelectRoom(room)}
+                            >
+                                👤 {room.userEmail}
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
         );
@@ -144,13 +129,14 @@ export default function ChatBox({ onClose }) {
             {/* Messages */}
             <div className="chat-box__messages">
                 {messages.map((msg) => {
-                    const currentUserId = chatInfo.userId || chatInfo.adminId;
-                    const isMine = msg.senderId === currentUserId;
+                    const isMine = String(msg.senderId) === String(currentUserId);
 
                     return (
                         <div
-                            key={msg.id || msg._id}
-                            className={`chat-box__row ${isMine ? "chat-box__row--mine" : "chat-box__row--other"
+                            key={msg.id || `${msg.senderId}-${msg.content}-${Math.random()}`}
+                            className={`chat-box__row ${isMine
+                                ? "chat-box__row--mine"
+                                : "chat-box__row--other"
                                 }`}
                         >
                             <div

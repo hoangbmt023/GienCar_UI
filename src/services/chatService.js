@@ -1,13 +1,20 @@
-import axios from "./axiosClient";
+import axiosClient from "./axiosClient";
 
-export const getChatRoom = async (userId, adminId) => {
-    const res = await axios.get("/chat/room", {
-        params: { userId, adminId }
-    });
-    return res.data;
-};
+export const chatService = {
 
-export const getChatRooms = async () => {
-    const res = await axios.get("/chat/rooms");
-    return res.data;
+    // gửi tin nhắn (REST fallback)
+    sendMessage(data) {
+        return axiosClient.post("/chat/messages", data);
+    },
+
+    // lấy message theo chatroom
+    getMessages(chatRoomId, params) {
+        return axiosClient.get(`/chat/messages/${chatRoomId}`, { params });
+    },
+
+    // lấy list chat của SALE
+    getChatRoomsForSale(params) {
+        return axiosClient.get(`/chat/chatrooms/sale`, { params });
+    }
+
 };
