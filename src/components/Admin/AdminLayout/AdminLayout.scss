@@ -153,6 +153,23 @@ $headerHeightMobile: 180px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
+.BotConfigTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+    span {
+        position: relative;
+    }
+
+}
+
 /* ===== MOBILE ===== */
 @media (max-width: 768px) {
 

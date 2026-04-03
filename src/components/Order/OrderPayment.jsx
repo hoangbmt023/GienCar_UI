@@ -2,27 +2,42 @@ import "./OrderPayment.scss";
 import { useState } from "react";
 import vnpayLogo from "@/assets/logo/vnpay.png";
 import momoLogo from "@/assets/logo/momo.png";
+import { orderService } from "@/services/orderService";
 
-export default function OrderPayment({ car }) {
+export default function OrderPayment({ order }) {
     const [showPayment, setShowPayment] = useState(false);
     const [selectedMethod, setSelectedMethod] = useState(null);
 
-    if (!car) return null;
-
-    const parsePrice = (price) => {
-        if (typeof price === "number") return price;
-
-        return Number(
-            price
-                .replace(/[^\d]/g, "") // bỏ . , ₫ VNĐ
-        );
-    };
-
-    const rawPrice = parsePrice(car.price);
-    const deposit = rawPrice * 0.3;
+    // 🔥 LẤY DATA TỪ BACKEND
+    const total = order?.totalPrice || 0;
+    const deposit = order?.totalDeposit || 0;
+    const percent = order?.orderItems?.[0]?.deposit?.percentage || 0;
+    const orderId = order?.id;
 
     const format = (num) =>
         num.toLocaleString("vi-VN") + " VNĐ";
+
+    const handlePayment = async (method) => {
+        try {
+            console.log("Thanh toán bằng:", method);
+
+            if (method === "vnpay") {
+                const res = await orderService.createVnpay(orderId);
+
+                const paymentUrl = res.data.data.paymentUrl;
+
+                window.location.href = paymentUrl;
+            }
+
+            if (method === "momo") {
+                alert("MoMo chưa tích hợp");
+            }
+
+        } catch (err) {
+            console.error("Lỗi thanh toán:", err);
+            alert("Thanh toán thất bại!");
+        }
+    };
 
     return (
         <div className="order-payment">
@@ -40,14 +55,13 @@ export default function OrderPayment({ car }) {
 
                 <div className="row">
                     <span>Total</span>
-                    <span>{format(rawPrice)}</span>
+                    <span>{format(total)}</span>
                 </div>
 
-                {/* Divider */}
                 <hr className="divider" />
 
                 <div className="row deposit">
-                    <span>Đặt cọc (30%)</span>
+                    <span>Đặt cọc ({percent * 100}%)</span>
                     <span>{format(deposit)}</span>
                 </div>
 
@@ -81,9 +95,11 @@ export default function OrderPayment({ car }) {
                         <span>Thanh toán qua MoMo</span>
                     </div>
 
-                    {/* NÚT THANH TOÁN */}
                     {selectedMethod && (
-                        <button className="order-payment__btn pay-btn">
+                        <button
+                            className="order-payment__btn pay-btn"
+                            onClick={() => handlePayment(selectedMethod)}
+                        >
                             Thanh toán
                         </button>
                     )}

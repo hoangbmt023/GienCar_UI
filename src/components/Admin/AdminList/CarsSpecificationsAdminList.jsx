@@ -159,6 +159,9 @@ export default function CarsSpecificationsAdminList() {
             />
 
             <hr />
+            <div className="BotConfigTitle" style={{ marginTop: "20px" }}>
+                <span>Bảng dữ liệu</span>
+            </div>
 
             {/* TABLE */}
             <DataTable

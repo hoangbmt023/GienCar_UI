@@ -11,8 +11,9 @@ import { specificationService } from "../services/specificationService";
 export default function CarDetailPage() {
     const [showChat, setShowChat] = useState(false);
     const [car, setCar] = useState(null);
-    const [colors, setColors] = useState([]); // 👈 thêm
-    const [selectedImage, setSelectedImage] = useState(null); // 👈 thêm
+    const [colors, setColors] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedColor, setSelectedColor] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -40,13 +41,13 @@ export default function CarDetailPage() {
             setColors(data.exteriorColors || []);
 
             const mappedCar = {
-                id: data.id,
+                id: data.id || data._id,
                 name: data.name,
                 image: data.images?.[0]?.url || data.image || "",
                 price: data.price,
                 formattedPrice: formatPrice(data.price),
                 note: data.description || "",
-
+                exteriorColors: data.exteriorColors || [],
                 power:
                     spec.engine?.powerKw != null
                         ? `${spec.engine.powerKw} kW`
@@ -109,6 +110,8 @@ export default function CarDetailPage() {
     };
 
     const handleSelectColor = (color) => {
+        setSelectedColor(color);
+
         if (color.imageUrls?.length) {
             setSelectedImage(color.imageUrls[0]);
         }
@@ -128,6 +131,13 @@ export default function CarDetailPage() {
         <div>
             <HeroImage car={{ ...car, image: selectedImage || car.image }} />
 
+            <h3
+                className="car-detail-header__name"
+                style={{ marginLeft: "110px", marginTop: "20px" }}
+            >
+                Danh sách màu xe
+            </h3>
+
             <CarSuggest
                 colors={colors}
                 onSelectColor={handleSelectColor}
@@ -140,27 +150,53 @@ export default function CarDetailPage() {
                 </div>
             </div>
 
-            <button
-                onClick={() =>
-                    navigate("/order", {
-                        state: {
-                            car: {
-                                ...car,
-                                image: selectedImage || car.image
-                            }
-                        }
-                    })
-                }
-            >
-                Đặt cọc
-            </button>
+            <div className="px-4 sm:px-6 lg:px-1 max-w-[1375px] mx-auto">
+                <div className="car-detail-wrapper">
+                    <CarDetail car={{ ...car, image: selectedImage || car.image }} />
 
-            <button
-                onClick={() => setShowChat(prev => !prev)}
-                className="fixed bottom-6 right-6 bg-black text-white px-4 py-2 rounded-full shadow-lg"
-            >
-                Tư vấn
-            </button>
+                    <div className="car-action">
+                        <button
+                            className="btn-primary"
+                            onClick={() =>
+                                navigate("/order", {
+                                    state: {
+                                        car: {
+                                            ...car,
+                                            image: selectedImage || car.image,
+                                            selectedColor: selectedColor
+                                        }
+                                    }
+                                })
+                            }
+                        >
+                            Đặt cọc
+                        </button>
+
+                        <button
+                            className="btn-secondary"
+                            onClick={() => setShowChat(prev => !prev)}
+                        >
+                            Tư vấn
+                        </button>
+
+                        <button
+                            className="btn-booking"
+                            onClick={() =>
+                                navigate("/booking", {
+                                    state: {
+                                        car: {
+                                            ...car,
+                                            image: selectedImage || car.image
+                                        }
+                                    }
+                                })
+                            }
+                        >
+                            Đăng ký lái thử
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             {showChat && (
                 <ChatBox onClose={() => setShowChat(false)} />

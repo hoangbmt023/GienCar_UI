@@ -1,0 +1,199 @@
+.profile-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 16px 50px rgba(0, 0, 0, 0.12);
+    }
+}
+
+/* HEADER */
+.profile-header {
+    height: 140px;
+    background: linear-gradient(120deg, #6a85b6, #bac8e0);
+}
+
+/* INFO */
+.profile-info {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    gap: 20px;
+    position: relative;
+}
+
+/* AVATAR */
+.avatar {
+    position: relative;
+
+    img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 5px solid #fff;
+        margin-top: -50px;
+        object-fit: cover;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s;
+    }
+
+    &:hover img {
+        transform: scale(1.05);
+    }
+
+    input {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+}
+
+/* USER META */
+.user-meta {
+    flex: 1;
+
+    h2 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #111;
+    }
+
+    p {
+        margin-top: 4px;
+        color: #888;
+        font-size: 13px;
+    }
+}
+
+/* BUTTON */
+.edit-btn {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.25s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+    }
+}
+
+/* FORM GRID */
+.profile-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 24px;
+
+    .full {
+        grid-column: span 2;
+    }
+
+    label {
+        font-weight: 500;
+        margin-bottom: 6px;
+        display: block;
+        color: #444;
+        font-size: 14px;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        font-size: 14px;
+        transition: all 0.2s ease;
+
+        &:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: none;
+    }
+}
+
+/* RESPONSIVE */
+/* ================= TABLET ================= */
+@media (max-width: 992px) {
+    .profile-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 576px) {
+
+    .profile-card {
+        border-radius: 16px;
+    }
+
+    /* HEADER thấp lại cho gọn */
+    .profile-header {
+        height: 120px;
+    }
+
+    /* INFO */
+    .profile-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 16px;
+        gap: 12px;
+    }
+
+    /* AVATAR nhỏ lại + cân giữa */
+    .avatar img {
+        width: 80px;
+        height: 80px;
+        margin-top: -40px;
+    }
+
+    /* TEXT */
+    .user-meta h2 {
+        font-size: 18px;
+    }
+
+    .user-meta p {
+        font-size: 12px;
+    }
+
+    /* BUTTON full width */
+    .edit-btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* FORM */
+    .profile-form-grid {
+        grid-template-columns: 1fr;
+        padding: 16px;
+        gap: 16px;
+    }
+
+    /* INPUT dễ bấm (rất quan trọng mobile) */
+    .profile-form-grid input,
+    .profile-form-grid textarea {
+        font-size: 16px;
+    }
+
+    textarea {
+        min-height: 90px;
+    }
+}

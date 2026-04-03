@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import "./AvatarHeader.scss";
 
-// 🔥 import service + token
 import { authService } from "@/services/authService";
 import {
     getRoleFromToken,
@@ -69,11 +68,22 @@ export default function AvatarHeader() {
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
                         transition={{ duration: 0.25 }}
                     >
-                        {/* USER INFO */}
-                        <div className="dropdown-item">
+                        {/* USER INFO - KHÔNG CLICK */}
+                        <div className="dropdown-item user-info">
                             {user?.split("@")[0]}
                         </div>
 
+                        <div className="dropdown-divider"></div>
+
+                        {/* HỒ SƠ */}
+                        <div
+                            className="dropdown-item"
+                            onClick={() => navigate("/profile")}
+                        >
+                            Hồ sơ
+                        </div>
+
+                        {/* CÀI ĐẶT */}
                         <div
                             className="dropdown-item"
                             onClick={() => navigate("/profile")}
@@ -81,12 +91,31 @@ export default function AvatarHeader() {
                             Cài đặt
                         </div>
 
+                        {/* SALE */}
+                        {role === "SALE" && (
+                            <div
+                                className="dropdown-item"
+                                onClick={() => navigate("/ordermanager")}
+                            >
+                                Quản lý đơn hàng
+                            </div>
+                        )}
+
+                        {role === "USER" && (
+                            <div
+                                className="dropdown-item"
+                                onClick={() => navigate("/my-orders")}
+                            >
+                                Đơn hàng của tôi
+                            </div>
+                        )}
+
                         {/* ADMIN */}
                         {role === "ADMIN" && (
                             <div
                                 className="dropdown-item"
                                 onClick={() =>
-                                    navigate("/admin/menu-car")
+                                    navigate("/admin/menu-home")
                                 }
                             >
                                 Trang admin

@@ -1,0 +1,57 @@
+.order-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: linear-gradient(145deg, #0f172a, #020617);
+    border-radius: 16px;
+    overflow: hidden;
+    color: #e5e7eb;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+
+    // 🔥 FIX CỐT LÕI: đồng bộ toàn bộ cell
+    th,
+    td {
+        padding: 16px 20px; // ✅ giống nhau hết
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    thead {
+        background: rgba(255, 255, 255, 0.03);
+
+        th {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    }
+
+    tbody {
+        tr {
+            transition: all 0.25s ease;
+
+            &:hover {
+                background: rgba(59, 130, 246, 0.08);
+            }
+        }
+
+        td {
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+    }
+
+    td:nth-child(3) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    th:nth-child(3) {
+        text-align: center;
+    }
+
+
+}

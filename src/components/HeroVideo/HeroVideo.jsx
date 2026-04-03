@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { homeService } from "@/services/homeService";
 import "./HeroVideo.scss";
 
@@ -6,9 +6,12 @@ function HeroVideo() {
 
     const [videos, setVideos] = useState([]);
     const [current, setCurrent] = useState(0);
-    const [prev, setPrev] = useState(null);
+    const [activeVideo, setActiveVideo] = useState(0); // 0 hoặc 1
 
-    // gọi API
+    const videoRef1 = useRef(null);
+    const videoRef2 = useRef(null);
+
+    // ================= API =================
     useEffect(() => {
         const fetchBanners = async () => {
             try {
@@ -18,7 +21,8 @@ function HeroVideo() {
                     .sort((a, b) => a.order - b.order)
                     .map(item => ({
                         id: item.id,
-                        src: item.videoUrl,
+                        // tối ưu cloudinary luôn
+                        src: item.videoUrl.replace("/upload/", "/upload/q_auto,f_auto,vc_auto/"),
                         title: item.title,
                         content: item.description,
                         link: {
@@ -37,58 +41,86 @@ function HeroVideo() {
         fetchBanners();
     }, []);
 
-    // auto slide
+    // ================= PRELOAD =================
     useEffect(() => {
+        if (!videos.length) return;
 
+        videos.forEach(v => {
+            const vid = document.createElement("video");
+            vid.src = v.src;
+            vid.preload = "auto";
+        });
+    }, [videos]);
+
+    // ================= AUTO SLIDE =================
+    useEffect(() => {
         if (!videos.length) return;
 
         const timer = setTimeout(() => {
-            setPrev(current);
-            setCurrent((prevIndex) => (prevIndex + 1) % videos.length);
+            changeVideo((current + 1) % videos.length);
         }, 8000);
 
         return () => clearTimeout(timer);
 
     }, [current, videos]);
 
+    // ================= CHANGE VIDEO =================
     const changeVideo = (index) => {
         if (index === current) return;
-        setPrev(current);
+
+        const nextVideo =
+            activeVideo === 0 ? videoRef2.current : videoRef1.current;
+
+        if (nextVideo) {
+            nextVideo.src = videos[index].src;
+
+            nextVideo.onloadeddata = () => {
+                nextVideo.currentTime = 0;
+                nextVideo.play().catch(() => { });
+            };
+        }
+
         setCurrent(index);
+        setActiveVideo(prev => (prev === 0 ? 1 : 0));
     };
 
-    // loading
+    // ================= INIT FIRST VIDEO =================
+    useEffect(() => {
+        if (!videos.length) return;
+
+        if (videoRef1.current) {
+            videoRef1.current.src = videos[0].src;
+            videoRef1.current.play();
+        }
+    }, [videos]);
+
     if (!videos.length) return null;
 
     return (
         <section className="hero-video">
 
-            {/* VIDEO CURRENT */}
+            {/* VIDEO 1 */}
             <video
-                key={videos[current].id}
+                ref={videoRef1}
                 autoPlay
                 muted
                 playsInline
-                className="hero-video__media active"
-            >
-                <source src={videos[current].src} type="video/mp4" />
-            </video>
+                preload="auto"
+                className={`hero-video__media ${activeVideo === 0 ? "active" : "prev"}`}
+            />
 
-            {/* VIDEO PREVIOUS */}
-            {prev !== null && videos[prev] && (
-                <video
-                    key={`prev-${videos[prev].id}`}
-                    autoPlay
-                    muted
-                    playsInline
-                    className="hero-video__media prev"
-                >
-                    <source src={videos[prev].src} type="video/mp4" />
-                </video>
-            )}
+            {/* VIDEO 2 */}
+            <video
+                ref={videoRef2}
+                autoPlay
+                muted
+                playsInline
+                preload="auto"
+                className={`hero-video__media ${activeVideo === 1 ? "active" : "prev"}`}
+            />
 
             {/* TEXT */}
-            <div key={`content-${videos[current].id}`} className="hero-video__content">
+            <div className="hero-video__content">
                 <div className="text-slide active">
 
                     <h3 className="hero-video__title">

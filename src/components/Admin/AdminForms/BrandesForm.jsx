@@ -24,7 +24,7 @@ export default function BrandesForm({
         setForm({
             ...emptyForm,
             ...initialValues,
-            logoFile: null // ⚠️ reset file khi edit
+            logoFile: null
         });
         setErrors({});
     }, [initialValues]);
@@ -58,7 +58,7 @@ export default function BrandesForm({
         if (readOnly) return;
         if (!validate()) return;
 
-        // 🔥 convert sang FormData
+        // convert sang FormData
         const formData = new FormData();
         formData.append("name", form.name.trim());
         formData.append("country", form.country.trim());

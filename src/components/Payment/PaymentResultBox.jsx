@@ -19,8 +19,8 @@ export default function PaymentResultBox({
             {/* TITLE */}
             <h2
                 className={`payment-result__title ${success
-                        ? "payment-result__title--success"
-                        : "payment-result__title--fail"
+                    ? "payment-result__title--success"
+                    : "payment-result__title--fail"
                     }`}
             >
                 {success
@@ -44,7 +44,7 @@ export default function PaymentResultBox({
                 {success ? (
                     <button
                         className="Btn Btn--primary"
-                        onClick={() => navigate("/orders")}
+                        onClick={() => navigate("/my-orders")}
                     >
                         Xem đơn hàng
                     </button>

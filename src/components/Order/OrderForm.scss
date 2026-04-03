@@ -82,3 +82,20 @@
         }
     }
 }
+
+.order-detail__cancel-btn {
+    margin-top: 16px;
+    width: 100%;
+    padding: 12px;
+    background: #ff4d4f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.order-detail__cancel-btn:hover {
+    background: #d9363e;
+}

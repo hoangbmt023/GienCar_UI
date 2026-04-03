@@ -3,7 +3,6 @@ import { Outlet, useLocation } from "react-router-dom";
 import { decodeToken, getUserIdFromToken } from "@/hooks/auth";
 import Sidebar from "@/components/Admin/Sidebar/Sidebar";
 import adminRouteTitles from "./adminRouteTitles";
-import * as authServices from "../../../services/Admin/AuthenticationService.jsx";
 
 import "./AdminLayout.scss";
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -32,18 +31,13 @@ export default function AdminLayout() {
         }
         setIsLogin(true);
 
-        // const fetchApi = async () => {
-        //     const result = await authServices.getUserById(userId);
-        //     setDataUser(result.data);
-        // };
-        // fetchApi();
     }, [userId]);
 
     const handleToggleSidebar = () => {
         if (isMobile) {
-            setSidebarOpen((prev) => !prev); // mobile toggle
+            setSidebarOpen((prev) => !prev);
         } else {
-            setCollapsed((prev) => !prev); // desktop collapse
+            setCollapsed((prev) => !prev);
         }
     };
 
