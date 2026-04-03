@@ -11,8 +11,9 @@ import { specificationService } from "../services/specificationService";
 export default function CarDetailPage() {
     const [showChat, setShowChat] = useState(false);
     const [car, setCar] = useState(null);
-    const [colors, setColors] = useState([]); // 👈 thêm
-    const [selectedImage, setSelectedImage] = useState(null); // 👈 thêm
+    const [colors, setColors] = useState([]);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedColor, setSelectedColor] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
@@ -28,78 +29,51 @@ export default function CarDetailPage() {
         try {
             setLoading(true);
 
-            const carRes = state?.car
-                ? { data: { data: state.car } }
-                : await carService.getCarBySlug(slug);
+            // 👉 1. Hiển thị nhanh từ state (nếu có)
+            if (state?.car) {
+                setCar({
+                    ...state.car,
+                    formattedPrice: formatPrice(state.car.price)
+                });
 
-            const data = state?.car || carRes.data.data;
+                setSelectedImage(
+                    state.car.images?.[0]?.url || state.car.image || ""
+                );
+
+                setColors(state.car.exteriorColors || []);
+            }
+
+            // 👉 2. LUÔN gọi API để lấy data mới
+            const carRes = await carService.getCarBySlug(slug);
+            const data = carRes.data.data;
 
             const specRes = await specificationService.getCarSpecs(data.id);
             const spec = specRes.data.data;
 
-            setColors(data.exteriorColors || []);
-
             const mappedCar = {
                 id: data.id,
                 name: data.name,
-                image: data.images?.[0]?.url || data.image || "",
+                image: data.images?.[0]?.url || "",
                 price: data.price,
                 formattedPrice: formatPrice(data.price),
                 note: data.description || "",
+                exteriorColors: data.exteriorColors || [],
 
-                power:
-                    spec.engine?.powerKw != null
-                        ? `${spec.engine.powerKw} kW`
-                        : "-",
-
-                acceleration:
-                    spec.efficiency?.acceleration0To100 != null
-                        ? `${spec.efficiency.acceleration0To100}s`
-                        : "-",
-
-                topSpeed:
-                    spec.efficiency?.maxSpeedKmH != null
-                        ? `${spec.efficiency.maxSpeedKmH} km/h`
-                        : "-",
-
-                fuel:
-                    spec.consumption?.combinedLPer100Km != null
-                        ? `${spec.consumption.combinedLPer100Km} L/100km`
-                        : "-",
-
-                co2:
-                    spec.consumption?.co2EmissionsGPerKm != null
-                        ? `${spec.consumption.co2EmissionsGPerKm} g/km`
-                        : "-",
-
-                torque:
-                    spec.engine?.torqueNm != null
-                        ? `${spec.engine.torqueNm} Nm`
-                        : "-",
-
-                height:
-                    spec.body?.heightMm != null
-                        ? `${spec.body.heightMm} mm`
-                        : "-",
-
-                width:
-                    spec.body?.widthMm != null
-                        ? `${spec.body.widthMm} mm`
-                        : "-",
-
-                length:
-                    spec.body?.lengthMm != null
-                        ? `${spec.body.lengthMm} mm`
-                        : "-",
-
-                wheelbase:
-                    spec.body?.wheelBaseMm != null
-                        ? `${spec.body.wheelBaseMm} mm`
-                        : "-",
+                power: spec.engine?.powerKw != null ? `${spec.engine.powerKw} kW` : "-",
+                acceleration: spec.efficiency?.acceleration0To100 != null ? `${spec.efficiency.acceleration0To100}s` : "-",
+                topSpeed: spec.efficiency?.maxSpeedKmH != null ? `${spec.efficiency.maxSpeedKmH} km/h` : "-",
+                fuel: spec.consumption?.combinedLPer100Km != null ? `${spec.consumption.combinedLPer100Km} L/100km` : "-",
+                co2: spec.consumption?.co2EmissionsGPerKm != null ? `${spec.consumption.co2EmissionsGPerKm} g/km` : "-",
+                torque: spec.engine?.torqueNm != null ? `${spec.engine.torqueNm} Nm` : "-",
+                height: spec.body?.heightMm != null ? `${spec.body.heightMm} mm` : "-",
+                width: spec.body?.widthMm != null ? `${spec.body.widthMm} mm` : "-",
+                length: spec.body?.lengthMm != null ? `${spec.body.lengthMm} mm` : "-",
+                wheelbase: spec.body?.wheelBaseMm != null ? `${spec.body.wheelBaseMm} mm` : "-",
             };
 
             setCar(mappedCar);
             setSelectedImage(mappedCar.image);
+            setColors(mappedCar.exteriorColors);
 
         } catch (err) {
             console.error("Lỗi fetch detail:", err);
@@ -109,6 +83,8 @@ export default function CarDetailPage() {
     };
 
     const handleSelectColor = (color) => {
+        setSelectedColor(color);
+
         if (color.imageUrls?.length) {
             setSelectedImage(color.imageUrls[0]);
         }
@@ -128,6 +104,13 @@ export default function CarDetailPage() {
         <div>
             <HeroImage car={{ ...car, image: selectedImage || car.image }} />
 
+            <h3
+                className="car-detail-header__name"
+                style={{ marginLeft: "110px", marginTop: "20px" }}
+            >
+                Danh sách màu xe
+            </h3>
+
             <CarSuggest
                 colors={colors}
                 onSelectColor={handleSelectColor}
@@ -140,27 +123,53 @@ export default function CarDetailPage() {
                 </div>
             </div>
 
-            <button
-                onClick={() =>
-                    navigate("/order", {
-                        state: {
-                            car: {
-                                ...car,
-                                image: selectedImage || car.image
-                            }
-                        }
-                    })
-                }
-            >
-                Đặt cọc
-            </button>
+            <div className="px-4 sm:px-6 lg:px-1 max-w-[1375px] mx-auto">
+                <div className="car-detail-wrapper">
+                    <CarDetail car={{ ...car, image: selectedImage || car.image }} />
 
-            <button
-                onClick={() => setShowChat(prev => !prev)}
-                className="fixed bottom-6 right-6 bg-black text-white px-4 py-2 rounded-full shadow-lg"
-            >
-                Tư vấn
-            </button>
+                    <div className="car-action">
+                        <button
+                            className="btn-primary"
+                            onClick={() =>
+                                navigate("/order", {
+                                    state: {
+                                        car: {
+                                            ...car,
+                                            image: selectedImage || car.image,
+                                            selectedColor: selectedColor
+                                        }
+                                    }
+                                })
+                            }
+                        >
+                            Đặt cọc
+                        </button>
+
+                        <button
+                            className="btn-secondary"
+                            onClick={() => setShowChat(prev => !prev)}
+                        >
+                            Tư vấn
+                        </button>
+
+                        <button
+                            className="btn-booking"
+                            onClick={() =>
+                                navigate("/booking", {
+                                    state: {
+                                        car: {
+                                            ...car,
+                                            image: selectedImage || car.image
+                                        }
+                                    }
+                                })
+                            }
+                        >
+                            Đăng ký lái thử
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             {showChat && (
                 <ChatBox onClose={() => setShowChat(false)} />

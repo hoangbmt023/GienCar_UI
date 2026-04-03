@@ -34,7 +34,6 @@ const CarCompare = ({ selectedCars = [], removeCar, scrollToList }) => {
     return (
         <div className="car-compare mb-6">
 
-            {/* 🔥 COMPACT MODE (chưa chọn xe) */}
             {selectedCars.length === 0 ? (
                 <div className="car-compare__compact">
                     <p className="font-semibold mb-2">
@@ -55,7 +54,6 @@ const CarCompare = ({ selectedCars = [], removeCar, scrollToList }) => {
                 </div>
             ) : (
 
-                /* 🔥 FULL COMPARE MODE */
                 <div className="car-compare__table">
 
                     {/* HEADER */}
@@ -101,18 +99,6 @@ const CarCompare = ({ selectedCars = [], removeCar, scrollToList }) => {
                                 </div>
                             ))}
                         </>
-                    ))}
-
-                    {/* FOOTER */}
-                    <div></div>
-                    {cars.map((car, idx) => (
-                        <div key={idx} className="car-compare__footer">
-                            {car && (
-                                <button className="car-compare__btn-explore">
-                                    Khám phá
-                                </button>
-                            )}
-                        </div>
                     ))}
                 </div>
             )}

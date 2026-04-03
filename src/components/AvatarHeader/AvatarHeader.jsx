@@ -3,14 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import "./AvatarHeader.scss";
 
-// 🔥 import service + token
 import { authService } from "@/services/authService";
+import { userService } from "@/services/userService";
 import {
     getRoleFromToken,
     getUserFromToken,
 } from "@/utils/tokenService";
 
 export default function AvatarHeader() {
+    const [profile, setProfile] = useState(null);
     const [open, setOpen] = useState(false);
     const ref = useRef();
     const navigate = useNavigate();
@@ -19,6 +20,19 @@ export default function AvatarHeader() {
     const role = getRoleFromToken();
 
     if (!user) return null;
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const res = await userService.getMyProfile();
+                setProfile(res.data.data);
+            } catch (err) {
+                console.error("Lỗi lấy profile:", err);
+            }
+        };
+
+        fetchProfile();
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -54,7 +68,7 @@ export default function AvatarHeader() {
                 }}
             >
                 <img
-                    src="https://i.pravatar.cc/100"
+                    src={profile?.avatar || "https://i.pravatar.cc/100"}
                     alt="avatar"
                 />
             </div>
@@ -69,11 +83,22 @@ export default function AvatarHeader() {
                         exit={{ opacity: 0, y: -10, scale: 0.95 }}
                         transition={{ duration: 0.25 }}
                     >
-                        {/* USER INFO */}
-                        <div className="dropdown-item">
+                        {/* USER INFO - KHÔNG CLICK */}
+                        <div className="dropdown-item user-info">
                             {user?.split("@")[0]}
                         </div>
 
+                        <div className="dropdown-divider"></div>
+
+                        {/* HỒ SƠ */}
+                        <div
+                            className="dropdown-item"
+                            onClick={() => navigate("/profile")}
+                        >
+                            Hồ sơ
+                        </div>
+
+                        {/* CÀI ĐẶT */}
                         <div
                             className="dropdown-item"
                             onClick={() => navigate("/profile")}
@@ -81,12 +106,40 @@ export default function AvatarHeader() {
                             Cài đặt
                         </div>
 
+                        {/* SALE */}
+                        {role === "SALE" && (
+                            <div
+                                className="dropdown-item"
+                                onClick={() => navigate("/ordermanager")}
+                            >
+                                Quản lý đơn hàng
+                            </div>
+                        )}
+
+                        {role === "SALE" && (
+                            <div
+                                className="dropdown-item"
+                                onClick={() => navigate("/bookingmanager")}
+                            >
+                                Quản lý lịch chạy xe
+                            </div>
+                        )}
+
+                        {role === "USER" && (
+                            <div
+                                className="dropdown-item"
+                                onClick={() => navigate("/my-orders")}
+                            >
+                                Đơn hàng của tôi
+                            </div>
+                        )}
+
                         {/* ADMIN */}
                         {role === "ADMIN" && (
                             <div
                                 className="dropdown-item"
                                 onClick={() =>
-                                    navigate("/admin/menu-car")
+                                    navigate("/admin/menu-home")
                                 }
                             >
                                 Trang admin

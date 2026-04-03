@@ -1,0 +1,89 @@
+.booking-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th,
+    td {
+        padding: 14px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    th {
+        background: #f9fafb;
+        font-weight: 600;
+        color: #555;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid #eee;
+        transition: 0.2s;
+
+        &:hover {
+            background: #f9fafb;
+        }
+    }
+
+    /* STATUS BADGE */
+    .status {
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+
+    .pending {
+        background: #fff7e6;
+        color: #d48806;
+    }
+
+    .confirmed {
+        background: #f6ffed;
+        color: #389e0d;
+    }
+
+    .cancelled {
+        background: #fff1f0;
+        color: #cf1322;
+    }
+
+    /* ACTION BUTTON */
+    .actions {
+        display: flex;
+        gap: 8px;
+
+        button {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .confirm {
+            background: #16a34a;
+            color: #fff;
+
+            &:hover {
+                background: #15803d;
+            }
+        }
+
+        .cancel {
+            background: #ef4444;
+            color: #fff;
+
+            &:hover {
+                background: #dc2626;
+            }
+        }
+    }
+}
+
+.confirm:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

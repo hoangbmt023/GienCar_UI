@@ -128,21 +128,22 @@ export default function ChatBox({ onClose }) {
 
             {/* Messages */}
             <div className="chat-box__messages">
-                {messages.map((msg) => {
-                    const isMine = String(msg.senderId) === String(currentUserId);
+                {messages.map((msg, index) => {
+                    const isMine =
+                        String(msg.senderId) === String(currentUserId);
 
                     return (
                         <div
-                            key={msg.id || `${msg.senderId}-${msg.content}-${Math.random()}`}
+                            key={msg.id || index}
                             className={`chat-box__row ${isMine
-                                ? "chat-box__row--mine"
-                                : "chat-box__row--other"
+                                    ? "chat-box__row--mine"
+                                    : "chat-box__row--other"
                                 }`}
                         >
                             <div
                                 className={`chat-box__bubble ${isMine
-                                    ? "chat-box__bubble--mine"
-                                    : "chat-box__bubble--other"
+                                        ? "chat-box__bubble--mine"
+                                        : "chat-box__bubble--other"
                                     }`}
                             >
                                 {msg.content}
@@ -158,6 +159,9 @@ export default function ChatBox({ onClose }) {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Nhập tin nhắn..."
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") sendMessage();
+                    }}
                 />
                 <button onClick={sendMessage}>Gửi</button>
             </div>

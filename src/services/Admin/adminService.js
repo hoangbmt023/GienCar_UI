@@ -207,5 +207,71 @@ export const adminService = {
         delete(id) {
             return axiosClient.delete(`/colors/${id}`);
         }
+    },
+
+    branches: {
+        // PUBLIC: lấy danh sách active
+        getAll(params) {
+            return publicRequest.get("/branches", { params });
+        },
+
+        // ADMIN: lấy tất cả (kể cả inactive)
+        getAllForAdmin(params) {
+            return axiosClient.get("/branches/admin", { params });
+        },
+
+        // GET BY ID
+        getById(id) {
+            return publicRequest.get(`/branches/${id}`);
+        },
+
+        // CREATE
+        create(data) {
+            return axiosClient.post("/branches", data);
+        },
+
+        // UPDATE
+        update(id, data) {
+            return axiosClient.put(`/branches/${id}`, data);
+        },
+
+        // DELETE
+        delete(id) {
+            return axiosClient.delete(`/branches/${id}`);
+        },
+
+        // TOGGLE ACTIVE
+        toggleActive(id) {
+            return axiosClient.patch(`/branches/${id}/toggle`);
+        }
+    },
+
+    users: {
+        // Lấy danh sách user (filter + paging)
+        getAll(params) {
+            return axiosClient.get("/users", { params });
+        },
+
+        // Cập nhật role
+        updateRoles(userId, roles) {
+            return axiosClient.put(`/users/${userId}/roles`, {
+                roles: roles
+            });
+        },
+
+        // Khóa user
+        ban(userId) {
+            return axiosClient.put(`/users/${userId}/ban`);
+        },
+
+        // Mở khóa user
+        unban(userId) {
+            return axiosClient.put(`/users/${userId}/unban`);
+        },
+
+        // Xóa user
+        delete(userId) {
+            return axiosClient.delete(`/users/${userId}`);
+        }
     }
 };

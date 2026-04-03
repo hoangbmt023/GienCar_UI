@@ -21,15 +21,16 @@ export const authService = {
 
     // logout
     logout() {
-
         const refreshToken = getRefreshToken();
 
-        return axiosClient.post("/auth/logout", {
-            refreshToken: refreshToken
+        return axios.post(
+            `${import.meta.env.VITE_API_URL}/auth/logout`,
+            { refreshToken }
+        ).catch(() => {
+            // ignore lỗi
         }).finally(() => {
             clearTokens();
         });
-
     },
 
     // forgot password

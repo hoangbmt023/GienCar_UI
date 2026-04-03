@@ -1,26 +1,15 @@
 .order {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 24px;
-    max-width: 1200px;
+    max-width: 900px;
     margin: 40px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 
     &__title {
         font-size: 22px;
         font-weight: 600;
         margin-bottom: 16px;
-    }
-
-    &__left {
-        background: #fff;
-        padding: 20px;
-        border-radius: 16px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-    }
-
-    &__right {
-        position: sticky;
-        top: 100px;
     }
 
     &__pay {
@@ -70,14 +59,6 @@
         gap: 8px;
         justify-content: flex-start;
         padding-left: 10px;
-
-        button {
-            width: 28px;
-            height: 28px;
-            border: 1px solid #ccc;
-            background: #fff;
-            cursor: pointer;
-        }
     }
 
     &__price {
@@ -86,12 +67,6 @@
         text-align: right;
         font-size: 16px;
     }
-}
-
-.summary-row {
-    display: flex;
-    justify-content: space-between;
-    margin: 8px 0;
 }
 
 .order-header {
@@ -112,31 +87,60 @@
         text-align: left;
     }
 
-    span:nth-child(3) {
-        text-align: right;
-    }
-
+    span:nth-child(3),
     span:nth-child(4) {
         text-align: right;
     }
 }
 
+/* Payment summary (gộp vào) */
+.order-summary-box {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 2px solid #eee;
+
+    &__title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .row {
+        display: flex;
+        justify-content: space-between;
+        margin: 8px 0;
+    }
+
+    .deposit {
+        font-weight: 600;
+        color: #2563eb;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #eee;
+        margin: 10px 0;
+    }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .order {
-        grid-template-columns: 1fr;
         margin: 20px 12px;
-        gap: 16px;
-    }
-
-    .order__left {
         padding: 16px;
-    }
-
-    .order__right {
-        position: static;
     }
 
     .order__title {
         font-size: 18px;
+    }
+
+    .order-item {
+        grid-template-columns: 100px 1fr;
+        grid-template-rows: auto auto;
+    }
+
+    .order-item__qty,
+    .order-item__price {
+        margin-top: 8px;
     }
 }

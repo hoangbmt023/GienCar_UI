@@ -1,7 +1,7 @@
 import "./OrderTabs.scss"
 
 export default function OrderTabs({ active, setActive }) {
-    const tabs = ["ALL", "PENDING", "CONFIRMED", "TEST_DRIVE"];
+    const tabs = ["ALL", "PENDING", "PAY", "PAID", "CONFIRMED", "CANCELLED"];
 
     return (
         <div className="order-tabs">

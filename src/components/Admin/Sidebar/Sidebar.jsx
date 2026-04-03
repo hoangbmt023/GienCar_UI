@@ -10,6 +10,8 @@ import {
     LogOut,
     ChevronDown,
     Car,
+    Building2,
+    Users,
 } from "lucide-react";
 
 const menus = [
@@ -28,7 +30,7 @@ const menus = [
         icon: Car,
         children: [
             { label: "Danh mục xe", to: "/admin/danh-muc-xe" },
-            { label: "Chi nhánh", to: "/admin/chi-nhanh" },
+            { label: "Thương hiệu xe", to: "/admin/thuong-hieu-xe" },
             { label: "Hãng xe", to: "/admin/hang-xe" },
             { label: "Xe", to: "/admin/xe" },
             { label: "Thông số kỹ thuật", to: "/admin/thong-so-ky-thuat" },
@@ -38,13 +40,19 @@ const menus = [
     },
     {
         id: "spec",
-        label: "Thông số kỹ thuật",
-        icon: Settings,
+        label: "Chi nhánh",
+        icon: Building2,
         children: [
-            { label: "Động cơ", to: "/admin/dong-co" },
-            { label: "Hiệu suất", to: "/admin/hieu-suat" },
-            { label: "Tiêu hao", to: "/admin/tieu-hao" },
-            { label: "Kiểu thân xe", to: "/admin/kieu-than-xe" },
+            { label: "Quản lý chi nhánh", to: "/admin/chi-nhanh" },
+        ],
+    },
+    {
+        id: "user",
+        label: "Người dùng",
+        icon: Users,
+        children: [
+            { label: "Quản lý người dùng", to: "/admin/nguoi-dung" },
+            { label: "Quản lý khung giờ đặt lịch", to: "/admin/bookingtimeslot" },
         ],
     },
 ];

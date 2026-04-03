@@ -1,0 +1,85 @@
+.my-order {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+
+    &__title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__card {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid #eee;
+        cursor: pointer;
+        transition: 0.2s;
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        img {
+            width: 100px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .info {
+            flex: 1;
+
+            h3 {
+                margin: 0;
+                font-size: 18px;
+            }
+
+            p {
+                margin: 4px 0;
+                font-size: 14px;
+                color: #666;
+            }
+        }
+
+        .price {
+            text-align: right;
+
+            p {
+                font-weight: 600;
+                margin-bottom: 6px;
+            }
+
+            .status {
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .pending {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .paid {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .cancelled {
+                background: #f8d7da;
+                color: #721c24;
+            }
+        }
+    }
+}

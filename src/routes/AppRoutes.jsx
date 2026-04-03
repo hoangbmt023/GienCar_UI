@@ -23,11 +23,14 @@ import ListCarsSpecifications from '@/pages/Admin/CarsSpecifications'
 import ListColors from '@/pages/Admin/Color'
 import ListCarColors from '@/pages/Admin/CarColor'
 import PaymentResultPage from '@/pages/PaymentResultPage'
-// import Racing from '@/pages/Racing'
-// import SportsCars from '@/pages/SportsCars'
-// import Collections from '@/pages/Collections'
-// import Experiences from '@/pages/Experiences'
-// import AboutUs from '@/pages/AboutUs'
+import OrderDetailPage from '@/pages/OrderDetail'
+import MyOrderPage from '@/pages/MyOrder'
+import ListBranches from '@/pages/Admin/Branches'
+import ProfilePage from '@/pages/ProfilePage'
+import ListUsers from '@/pages/Admin/User'
+import Booking from '@/pages/Booking'
+import BookingSuccess from '@/pages/BookingSuccess'
+import BookingManagementPage from '@/pages/BookingManagementPage'
 
 export default function AppRoutes() {
     return (
@@ -37,8 +40,11 @@ export default function AppRoutes() {
                 <Route path="/models" element={<CarListPage />} />
                 <Route path="/models/:slug" element={<CarDetailPage />} />
                 <Route path="/order" element={<OrderPage />} />
-                <Route path="/oder-manager" element={<OrderManagementPage />} />
+                <Route path="/orderdetail/:id" element={<OrderDetailPage />} />
                 <Route path="/payment-result" element={<PaymentResultPage />} />
+                <Route path="/my-orders" element={<MyOrderPage />} />
+                <Route path="/booking" element={<Booking />} />
+                <Route path="/booking-success/:id" element={<BookingSuccess />} />
             </Route>
             {/* test routes cần đăng nhập
             <Route element={<ProtectedRoute />}>
@@ -49,30 +55,29 @@ export default function AppRoutes() {
 
             </Route> */}
 
-            {/* <Route path="/racing" element={<Racing />} />
-            <Route path="/sports-cars" element={<SportsCars />} />
-            <Route path="/collections" element={<Collections />} />
-            <Route path="/experiences" element={<Experiences />} />
-            <Route path="/about-us" element={<AboutUs />} /> */}
-            {/* <Route path="/home" element={<Home />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/changepassword" element={<ChangePassword />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/otpverify" element={<OTPVerifyPassword />} />
             <Route path="/otpverifyforgotpassword" element={<OTPVerifyForgotPassword />} />
+            <Route path="/ordermanager" element={<OrderManagementPage />} />
+            <Route path="/bookingmanager" element={<BookingManagementPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
 
             {/* Router Admin */}
             <Route path="/admin" element={<AdminLayout />}>
                 <Route path="Menu-Home" element={<ListMenuHome />} />
                 <Route path="Menu-Header-Footer" element={<ListMenuHeaderFooter />} />
                 <Route path="danh-muc-xe" element={<ListCategory />} />
-                <Route path="chi-nhanh" element={<ListBrandes />} />
+                <Route path="thuong-hieu-xe" element={<ListBrandes />} />
                 <Route path="hang-xe" element={<ListCarSeries />} />
                 <Route path="xe" element={<ListCars />} />
                 <Route path="thong-so-ky-thuat" element={<ListCarsSpecifications />} />
                 <Route path="list-mau-xe" element={<ListColors />} />
                 <Route path="mau-xe" element={<ListCarColors />} />
+                <Route path="chi-nhanh" element={<ListBranches />} />
+                <Route path="nguoi-dung" element={<ListUsers />} />
             </Route>
         </Routes>
     )

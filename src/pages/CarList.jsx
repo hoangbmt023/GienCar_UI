@@ -13,17 +13,15 @@ const CarListPage = () => {
     const [seriesList, setSeriesList] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // 🔥 FILTER STATE (QUAN TRỌNG)
     const [filters, setFilters] = useState({
         seriesId: "",
-        minPrice: 0,
-        maxPrice: 30000000000,
-        minPowerKw: null,
-        maxPowerKw: null,
+        minPrice: "",
+        maxPrice: "",
+        minPowerKw: "",
+        maxPowerKw: "",
         status: "available"
     });
 
-    // 🔥 debounce filter
     useEffect(() => {
         const timeout = setTimeout(() => {
             fetchData();
@@ -36,71 +34,57 @@ const CarListPage = () => {
         try {
             setLoading(true);
 
-            // clean params
             const cleanParams = Object.fromEntries(
                 Object.entries({
                     ...filters,
                     page: 1,
-                    size: 10
+                    size: 50
                 }).filter(([_, v]) => v !== null && v !== "" && v !== undefined)
             );
 
-            // 🔥 1. lấy danh sách series
+            // 1. lấy series
             const seriesRes = await carSeriesService.getSeries();
             const seriesData = seriesRes.data.data;
-
             setSeriesList(seriesData);
 
-            // 🔥 2. gọi cars theo từng series
-            const seriesWithCars = await Promise.all(
-                seriesData.map(async (s) => {
-                    try {
-                        const res = await carService.getCars({
-                            ...cleanParams,
-                            seriesId: s.id
-                        });
+            // 2. lấy tất cả cars theo filter
+            const carRes = await carService.getCars(cleanParams);
+            const cars = carRes.data.data;
 
-                        const cars = res.data.data;
+            // 3. group theo series
+            const grouped = seriesData.map(s => {
+                const carsInSeries = cars.filter(c => c.seriesId === s.id);
 
-                        return {
-                            id: s.id,
-                            name: s.name.toUpperCase(),
-                            image: s.imageUrl,
+                return {
+                    id: s.id,
+                    name: s.name.toUpperCase(),
+                    image: s.imageUrl,
 
-                            cars: cars.map((car) => ({
-                                id: car.id,
-                                slug: car.slug,
-                                name: car.name,
-                                image: car.images?.[0]?.url || "",
+                    cars: carsInSeries.map(car => ({
+                        id: car.id,
+                        slug: car.slug,
+                        name: car.name,
+                        image: car.images?.[0]?.url || "",
 
-                                // ⚠️ giữ number + format riêng
-                                price: car.price,
-                                formattedPrice: formatPrice(car.price),
+                        price: car.price,
+                        formattedPrice: formatPrice(car.price),
 
-                                // 🔥 QUAN TRỌNG: giữ color
-                                exteriorColors: car.exteriorColors || [],
+                        exteriorColors: car.exteriorColors || [],
 
-                                power: "-",
-                                acceleration: "-",
-                                topSpeed: "-",
-                                fuel: "-",
-                                co2: "-",
-                                height: "-",
-                                width: "-",
-                                length: "-",
-                                wheelbase: "-",
-                            }))
-                        };
+                        power: "-",
+                        acceleration: "-",
+                        topSpeed: "-",
+                        fuel: "-",
+                        co2: "-",
+                        height: "-",
+                        width: "-",
+                        length: "-",
+                        wheelbase: "-",
+                    }))
+                };
+            });
 
-                    } catch (err) {
-                        console.error("Lỗi load cars theo series:", err);
-                        return null;
-                    }
-                })
-            );
-
-            // 🔥 lọc series rỗng
-            setSeries(seriesWithCars.filter(s => s && s.cars.length > 0));
+            setSeries(grouped.filter(s => s.cars.length > 0));
 
         } catch (error) {
             console.error("Lỗi fetch data:", error);
@@ -116,7 +100,6 @@ const CarListPage = () => {
         }).format(price);
     };
 
-    // 🔥 COMPARE
     const handleCompare = async (car) => {
         if (selectedCars.length >= 3) return;
         if (selectedCars.find((c) => c.id === car.id)) return;
@@ -168,7 +151,6 @@ const CarListPage = () => {
     return (
         <div className="px-4 sm:px-6 lg:px-1 max-w-[1300px] mx-auto">
 
-            {/* 🔥 COMPARE */}
             <CarCompare
                 selectedCars={selectedCars}
                 removeCar={removeCar}
@@ -177,14 +159,12 @@ const CarListPage = () => {
 
             <h1 className="text-2xl font-bold mb-6">Danh sách xe</h1>
 
-            {/* 🔥 FILTER */}
             <CarFilter
                 filters={filters}
                 setFilters={setFilters}
                 seriesList={seriesList}
             />
 
-            {/* 🔥 LIST */}
             {loading ? (
                 <p>Đang tải dữ liệu...</p>
             ) : (
