@@ -1,5 +1,5 @@
 import "./BookingForm.scss";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { bookingService } from "@/services/bookingService";
 
@@ -12,20 +12,6 @@ export default function BookingForm({ car }) {
         email: "",
         bookingDate: ""
     });
-
-    // ================= LOAD TIME SLOT =================
-    useEffect(() => {
-        fetchTimeSlots();
-    }, []);
-
-    const fetchTimeSlots = async () => {
-        try {
-            const res = await bookingService.getActiveTimeSlots();
-            setTimeSlots(res.data?.data || []);
-        } catch (err) {
-            console.error("Lỗi load time slots:", err);
-        }
-    };
 
     // ================= HANDLE CHANGE =================
     const handleChange = (e) => {
@@ -53,17 +39,12 @@ export default function BookingForm({ car }) {
                 return;
             }
 
-            if (!selectedSlot) {
-                alert("Vui lòng chọn khung giờ");
-                return;
-            }
-
             const payload = {
                 name: form.name,
                 phone: form.phone,
                 email: form.email,
                 carModelId: car?.id || car?._id,
-                bookingDate: form.bookingDate,
+                bookingDate: form.bookingDate
             };
 
             const res = await bookingService.create(payload);
@@ -76,7 +57,7 @@ export default function BookingForm({ car }) {
             console.error("Lỗi booking:", err);
 
             if (err?.response?.status === 409) {
-                alert("Khung giờ này đã có người đặt");
+                alert("Ngày này đã có lịch, vui lòng chọn ngày khác");
             } else {
                 alert("Đặt lịch thất bại");
             }

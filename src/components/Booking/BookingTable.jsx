@@ -26,7 +26,7 @@ export default function BookingTable({
                     <th>Phone</th>
                     <th>Email</th>
                     <th>Ngày</th>
-                    <th>TimeSlot</th>
+                    <th>Giờ hoạt động</th>
                     <th>Trạng thái</th>
                     <th>Action</th>
                 </tr>

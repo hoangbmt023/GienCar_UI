@@ -15,10 +15,10 @@ const CarListPage = () => {
 
     const [filters, setFilters] = useState({
         seriesId: "",
-        minPrice: 0,
-        maxPrice: 30000000000,
-        minPowerKw: null,
-        maxPowerKw: null,
+        minPrice: "",
+        maxPrice: "",
+        minPowerKw: "",
+        maxPowerKw: "",
         status: "available"
     });
 

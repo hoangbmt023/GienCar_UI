@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import "./AvatarHeader.scss";
 
 import { authService } from "@/services/authService";
+import { userService } from "@/services/userService";
 import {
     getRoleFromToken,
     getUserFromToken,
 } from "@/utils/tokenService";
 
 export default function AvatarHeader() {
+    const [profile, setProfile] = useState(null);
     const [open, setOpen] = useState(false);
     const ref = useRef();
     const navigate = useNavigate();
@@ -18,6 +20,19 @@ export default function AvatarHeader() {
     const role = getRoleFromToken();
 
     if (!user) return null;
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const res = await userService.getMyProfile();
+                setProfile(res.data.data);
+            } catch (err) {
+                console.error("Lỗi lấy profile:", err);
+            }
+        };
+
+        fetchProfile();
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -53,7 +68,7 @@ export default function AvatarHeader() {
                 }}
             >
                 <img
-                    src="https://i.pravatar.cc/100"
+                    src={profile?.avatar || "https://i.pravatar.cc/100"}
                     alt="avatar"
                 />
             </div>
@@ -98,6 +113,15 @@ export default function AvatarHeader() {
                                 onClick={() => navigate("/ordermanager")}
                             >
                                 Quản lý đơn hàng
+                            </div>
+                        )}
+
+                        {role === "SALE" && (
+                            <div
+                                className="dropdown-item"
+                                onClick={() => navigate("/bookingmanager")}
+                            >
+                                Quản lý lịch chạy xe
                             </div>
                         )}
 

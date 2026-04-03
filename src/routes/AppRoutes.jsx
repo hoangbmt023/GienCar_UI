@@ -31,7 +31,6 @@ import ListUsers from '@/pages/Admin/User'
 import Booking from '@/pages/Booking'
 import BookingSuccess from '@/pages/BookingSuccess'
 import BookingManagementPage from '@/pages/BookingManagementPage'
-import ListBookingTimeSlots from '@/pages/Admin/BookingTimeSlot'
 
 export default function AppRoutes() {
     return (
@@ -79,7 +78,6 @@ export default function AppRoutes() {
                 <Route path="mau-xe" element={<ListCarColors />} />
                 <Route path="chi-nhanh" element={<ListBranches />} />
                 <Route path="nguoi-dung" element={<ListUsers />} />
-                <Route path="bookingtimeslot" element={<ListBookingTimeSlots />} />
             </Route>
         </Routes>
     )

@@ -2,23 +2,34 @@ import "./MyOrder.scss";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { orderService } from "@/services/orderService";
+import RenderPagination from "@/components/Commons/RenderPagination/RenderPagination";
 
 export default function MyOrder() {
     const [orders, setOrders] = useState([]);
+    const [pagination, setPagination] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchOrders();
-    }, []);
+        fetchOrders(page);
+    }, [page]);
 
-    const fetchOrders = async () => {
+    const fetchOrders = async (page) => {
         try {
-            const res = await orderService.getMyOrders();
+            setLoading(true);
+
+            const res = await orderService.getMyOrders({
+                page,
+                limit: 5 // tuỳ bạn chỉnh
+            });
 
             console.log("MY ORDERS:", res.data);
 
             setOrders(res.data?.data || []);
+            setPagination(res.data?.pagination || null);
+
         } catch (err) {
             console.error("Lỗi lấy danh sách đơn:", err);
         } finally {
@@ -42,6 +53,10 @@ export default function MyOrder() {
         }
     };
 
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    };
+
     if (loading) return <p>Đang tải...</p>;
 
     if (!orders.length) {
@@ -55,7 +70,7 @@ export default function MyOrder() {
 
             <div className="my-order__list">
 
-                {[...orders].reverse().map((order) => {
+                {[...orders].map((order) => {
                     const item = order?.orderItems?.[0];
 
                     const image =
@@ -92,6 +107,12 @@ export default function MyOrder() {
                 })}
 
             </div>
+
+            {/* 👉 PAGINATION */}
+            <RenderPagination
+                data={pagination}
+                onPageChange={handlePageChange}
+            />
 
         </div>
     );

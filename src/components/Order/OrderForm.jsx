@@ -2,6 +2,7 @@ import "./OrderForm.scss";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { orderService } from "@/services/orderService";
+import { userService } from "@/services/userService";
 
 export default function OrderForm({ data = null, readOnly = false, car }) {
     const navigate = useNavigate();
@@ -14,8 +15,10 @@ export default function OrderForm({ data = null, readOnly = false, car }) {
         note: ""
     });
 
-    // Populate khi ở OrderDetail
+    // 🔥 Load data
     useEffect(() => {
+
+        // 👉 Nếu là Order Detail → dùng data
         if (data) {
             setForm({
                 fullName: data.fullName || "",
@@ -24,7 +27,34 @@ export default function OrderForm({ data = null, readOnly = false, car }) {
                 address: data.address || "",
                 note: data.note || ""
             });
+            return;
         }
+
+        // 👉 Nếu là tạo mới → auto fill từ profile
+        const fetchProfile = async () => {
+            try {
+                const res = await userService.getMyProfile();
+                const profile = res.data.data;
+
+                const addr = profile.addresses?.[0];
+
+                setForm({
+                    fullName: profile.fullName || "",
+                    phone: profile.phoneNumber || "",
+                    email: "", // ⚠️ BE chưa trả email
+                    address: addr
+                        ? `${addr.street}, ${addr.ward}, ${addr.district}, ${addr.city}`
+                        : "",
+                    note: ""
+                });
+
+            } catch (err) {
+                console.error("Lỗi load profile:", err);
+            }
+        };
+
+        fetchProfile();
+
     }, [data]);
 
     const handleChange = (e) => {
@@ -36,11 +66,6 @@ export default function OrderForm({ data = null, readOnly = false, car }) {
 
     const handleSubmit = async () => {
         try {
-            // console.log("CAR:", car);
-            // console.log("SELECTED COLOR:", car.selectedColor);
-            // console.log("COLOR ID:", car.selectedColor?.colorId);
-            // console.log("CAR COLORS:", car.exteriorColors);
-
             if (!car?.selectedColor?.colorId) {
                 alert("Vui lòng chọn màu xe");
                 return;
@@ -62,13 +87,11 @@ export default function OrderForm({ data = null, readOnly = false, car }) {
                 ]
             };
 
-            // console.log("PAYLOAD:", payload);
-
             const res = await orderService.create(payload);
-
             const orderId = res.data.data.id;
 
             navigate(`/orderdetail/${orderId}`);
+
         } catch (err) {
             console.error("Lỗi tạo đơn:", err);
         }

@@ -5,6 +5,7 @@ import "./ProfileForm.scss";
 export default function ProfileForm() {
     const [profile, setProfile] = useState(null);
     const [form, setForm] = useState({});
+    const [preview, setPreview] = useState(null);
 
     useEffect(() => {
         fetchProfile();
@@ -20,7 +21,13 @@ export default function ProfileForm() {
         const { name, value, files } = e.target;
 
         if (files) {
-            setForm({ ...form, avatarFile: files[0] });
+            const file = files[0];
+
+            setForm({ ...form, avatarFile: file });
+
+            const previewUrl = URL.createObjectURL(file);
+            setPreview(previewUrl);
+
         } else {
             setForm({ ...form, [name]: value });
         }
@@ -42,7 +49,7 @@ export default function ProfileForm() {
             {/* INFO */}
             <div className="profile-info">
                 <div className="avatar">
-                    <img src={profile.avatar || "https://i.pravatar.cc/100"} />
+                    <img src={preview || profile.avatar || "https://i.pravatar.cc/100"} />
                     <input type="file" name="avatarFile" onChange={handleChange} />
                 </div>
 
