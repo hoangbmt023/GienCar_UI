@@ -1,0 +1,70 @@
+.order-row {
+    &__user {
+        font-weight: 600;
+        color: #f8fafc;
+    }
+
+    &__car {
+        color: #cbd5f5;
+        font-size: 13px;
+    }
+
+    &__status {
+        font-size: 12px;
+        font-weight: 600;
+
+        padding: 6px 12px;
+        border-radius: 999px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        min-width: 100px;
+        margin: 0;
+    }
+}
+
+/* STATUS COLORS */
+.status-pending {
+    background: rgba(250, 204, 21, 0.15);
+    color: #facc15;
+}
+
+.status-confirmed {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.status-pay {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+.status-test_drive {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+}
+
+.status-cancelled {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.status-pay {
+    background: rgba(59, 130, 246, 0.15) !important;
+    color: #3b82f6 !important;
+}
+
+.status-paid {
+    background: rgba(168, 85, 247, 0.15); // tím
+    color: #a855f7;
+}
+
+.status-pending,
+.status-confirmed,
+.status-test_drive,
+.status-cancelled,
+.status-pay {
+    transition: all 0.2s ease;
+}

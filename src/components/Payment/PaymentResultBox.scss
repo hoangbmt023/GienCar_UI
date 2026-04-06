@@ -1,0 +1,76 @@
+.payment-result {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    &__icon {
+        font-size: 60px;
+        margin-bottom: 10px;
+    }
+
+    &__title {
+        font-size: 22px;
+        font-weight: 600;
+
+        &--success {
+            color: #2ecc71;
+        }
+
+        &--fail {
+            color: #e74c3c;
+        }
+    }
+
+    &__message {
+        margin-top: 10px;
+        color: #555;
+    }
+
+    &__info {
+        margin-top: 15px;
+        font-size: 14px;
+        color: #777;
+
+        div {
+            margin-bottom: 4px;
+        }
+    }
+
+    &__actions {
+        margin-top: 20px;
+    }
+}
+
+.Btn {
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+    }
+}
+
+.payment-result {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .payment-result {
+        width: 90%;
+        padding: 20px;
+    }
+}

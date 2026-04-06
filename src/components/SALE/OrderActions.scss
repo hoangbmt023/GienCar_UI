@@ -1,0 +1,43 @@
+.order-actions {
+    display: flex;
+    gap: 8px;
+
+    &__btn {
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: none;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s ease;
+
+        &.confirm {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 18px rgba(59, 130, 246, 0.6);
+            }
+        }
+
+        &.update {
+            background: #1e293b;
+            color: #cbd5e1;
+
+            &:hover {
+                background: #334155;
+            }
+        }
+    }
+}
+
+.order-actions__btn.cancel {
+    background: #ef4444;
+    color: white;
+
+    &:hover {
+        background: #dc2626;
+    }
+}

@@ -1,0 +1,230 @@
+$sidebarWidth: 20px;
+$headerHeightDesktop: 301px;
+$headerHeightMobile: 180px;
+
+.AdminLayout {
+    min-height: 100vh;
+    display: flex;
+}
+
+/* MAIN */
+.AdminLayout__main {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    background: #f7fafc;
+}
+
+/* BACKGROUND HEADER */
+.BackgroundHeader {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: $headerHeightDesktop;
+    z-index: 0;
+
+    background: linear-gradient(90deg,
+            rgba(255, 150, 113, 1) 0%,
+            rgba(247, 110, 110, 1) 100%);
+}
+
+/* NAV BAR */
+.NavBar {
+    position: relative;
+    z-index: 1;
+
+    height: $headerHeightDesktop;
+    padding: 24px;
+    color: #fff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* TITLE */
+.NavBar__title {
+    font-weight: 800;
+    font-size: 32px;
+    text-align: center;
+}
+
+.NavBar__title--center {
+    margin-top: 40px;
+}
+
+/* SEARCH */
+.NavBar__searchBottom {
+    margin-top: auto;
+    margin-bottom: 24px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.NavBar__searchBottom .SearchExpand {
+    width: 420px;
+    max-width: 100%;
+}
+
+/* RIGHT USER */
+.NavBar__right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.NavBar__name {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.NavBar__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    object-fit: cover;
+}
+
+/* CONTENT */
+.AdminLayout__content {
+    position: relative;
+    z-index: 1;
+    padding: 24px;
+    margin-top: -5px;
+}
+
+/* Toggle button */
+/* Sidebar width */
+.AdminLayout {
+    display: flex;
+}
+
+/* Sidebar bình thường */
+.Sidebar {
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+/* Khi collapse */
+.AdminLayout.collapsed .Sidebar {
+    width: 80px;
+}
+
+/* Content tự giãn */
+.AdminLayout__main {
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+/* ===== TOGGLE BUTTON ===== */
+.SidebarToggle {
+    position: absolute;
+    top: 30px;
+    left: $sidebarWidth; // = 250px
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #fff;
+    border-radius: 10px;
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    z-index: 1200;
+
+    transition: all 0.3s ease;
+}
+
+/* Khi collapse */
+.AdminLayout.collapsed .SidebarToggle {
+    left: 20px;
+}
+
+/* hover đẹp hơn */
+.SidebarToggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.BotConfigTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 12px;
+
+    span {
+        position: relative;
+    }
+
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    /* Layout */
+    .AdminLayout {
+        flex-direction: column;
+    }
+
+    /* Header nhỏ lại */
+    .BackgroundHeader {
+        height: $headerHeightMobile;
+    }
+
+    .NavBar {
+        height: $headerHeightMobile;
+        padding: 16px;
+    }
+
+    /* Title nhỏ hơn */
+    .NavBar__title {
+        font-size: 22px;
+    }
+
+    .NavBar__title--center {
+        margin-top: 20px;
+    }
+
+    /* Content */
+    .AdminLayout__content {
+        padding: 16px;
+    }
+
+    /* ===== TOGGLE MOBILE ===== */
+    .SidebarToggle {
+        top: 12px;
+        left: 12px;
+
+        width: 34px;
+        height: 34px;
+
+        border-radius: 8px;
+    }
+
+    /* Ẩn toggle desktop logic */
+    .AdminLayout.collapsed .SidebarToggle {
+        left: 12px;
+    }
+
+    /* Sidebar mobile sẽ overlay (ăn theo CSS Sidebar bạn đã viết) */
+    .Sidebar {
+        width: 250px;
+    }
+
+    /* Khi mở sidebar */
+    .AdminLayout.sidebar-open .Sidebar {
+        left: 0;
+    }
+}

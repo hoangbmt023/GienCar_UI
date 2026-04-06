@@ -1,0 +1,27 @@
+.order-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    button {
+        padding: 8px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: #1a1a1a;
+        color: #94a3b8;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        &.active {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+        }
+    }
+}
