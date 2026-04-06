@@ -52,7 +52,7 @@ const menus = [
         icon: Users,
         children: [
             { label: "Quản lý người dùng", to: "/admin/nguoi-dung" },
-            { label: "Quản lý khung giờ đặt lịch", to: "/admin/bookingtimeslot" },
+            { label: "Quản lý khung giờ đặt lịch", to: "/admin/lich-lai-thu" },
         ],
     },
 ];
