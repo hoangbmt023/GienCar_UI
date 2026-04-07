@@ -1,45 +1,58 @@
-import { ToastContainer } from "react-toastify";
-import AppRoutes from '@/routes/AppRoutes'
+    import { ToastContainer } from "react-toastify";
+    import AppRoutes from '@/routes/AppRoutes'
+    import { useEffect } from "react";
+    import { chatSocket } from "./services/chatSocket";
 
-function App() {
-    return (
-        <>
-            <AppRoutes />
-            <ToastContainer />
-        </>
-    )
-}
+    function App() {
+        useEffect(() => {
+        chatSocket.connect((msg) => {
+            console.log("📩 Global message:", msg);
+            // TODO: push vào global state (Context / Redux)
+        });
 
-export default App
-// gắn ở mọi trang
-// import { useState } from "react";
-// import { ToastContainer } from "react-toastify";
-// import AppRoutes from '@/routes/AppRoutes';
-// import ChatBox from '@/components/ChatBox/ChatBox';
+        return () => {
+            chatSocket.disconnect();
+        };
+    }, []);
 
-// function App() {
-//     const [openChat, setOpenChat] = useState(false);
+        return (
+            <>
+                <AppRoutes />
+                <ToastContainer />
+            </>
+        )
+    }
 
-//     return (
-//         <>
-//             <AppRoutes />
+    export default App
+    // gắn ở mọi trang
+    // import { useState } from "react";
+    // import { ToastContainer } from "react-toastify";
+    // import AppRoutes from '@/routes/AppRoutes';
+    // import ChatBox from '@/components/ChatBox/ChatBox';
 
-//             {/* Nút mở chat */}
-//             <button
-//                 className="fixed bottom-6 right-6 bg-black text-white px-4 py-3 rounded-full shadow-lg z-50"
-//                 onClick={() => setOpenChat(true)}
-//             >
-//                 Tư vấn
-//             </button>
+    // function App() {
+    //     const [openChat, setOpenChat] = useState(false);
 
-//             {/* ChatBox */}
-//             {openChat && (
-//                 <ChatBox onClose={() => setOpenChat(false)} />
-//             )}
+    //     return (
+    //         <>
+    //             <AppRoutes />
 
-//             <ToastContainer />
-//         </>
-//     );
-// }
+    //             {/* Nút mở chat */}
+    //             <button
+    //                 className="fixed bottom-6 right-6 bg-black text-white px-4 py-3 rounded-full shadow-lg z-50"
+    //                 onClick={() => setOpenChat(true)}
+    //             >
+    //                 Tư vấn
+    //             </button>
 
-// export default App;
+    //             {/* ChatBox */}
+    //             {openChat && (
+    //                 <ChatBox onClose={() => setOpenChat(false)} />
+    //             )}
+
+    //             <ToastContainer />
+    //         </>
+    //     );
+    // }
+
+    // export default App;

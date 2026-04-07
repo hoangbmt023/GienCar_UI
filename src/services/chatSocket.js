@@ -1,109 +1,102 @@
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
+import { io } from "socket.io-client";
 import { getAccessToken } from "@/utils/tokenService";
+import env from "@/config/Config";
 
-let client = null;
+let socket = null;
+let messageHandler = null;
+let statusHandler = null;
 
 export const chatSocket = {
+  connect(onMessageReceived, onStatusChanged) {
+    const token = getAccessToken();
 
-    connect(onMessageReceived) {
-
-        // ❗ tránh connect nhiều lần
-        if (client && client.connected) {
-            console.log("⚠️ Socket đã connect rồi");
-            return;
-        }
-
-        const token = getAccessToken();
-
-        if (!token) {
-            console.warn("❌ Không có token → không connect socket");
-            return;
-        }
-
-        // 🔥 truyền token qua query (QUAN TRỌNG)
-        const socket = new SockJS(
-            `http://localhost:8080/ws?token=${token}`
-        );
-
-        client = new Client({
-            webSocketFactory: () => socket,
-
-            // ❗ vẫn giữ để dùng ở STOMP layer
-            connectHeaders: {
-                Authorization: `Bearer ${token}`
-            },
-
-            debug: (str) => {
-                console.log("STOMP:", str);
-            },
-
-            reconnectDelay: 5000,
-
-            onConnect: () => {
-                console.log("✅ WebSocket connected");
-
-                client.subscribe("/topic/chat", (message) => {
-                    try {
-                        const data = JSON.parse(message.body);
-                        console.log("📩 Received:", data);
-
-                        if (onMessageReceived) {
-                            onMessageReceived(data);
-                        }
-
-                    } catch (error) {
-                        console.error("Parse message error:", error);
-                    }
-                });
-            },
-
-            onStompError: (frame) => {
-                console.error("❌ STOMP error:", frame);
-            },
-
-            onWebSocketError: (error) => {
-                console.error("❌ WebSocket error:", error);
-            },
-
-            onDisconnect: () => {
-                console.log("🔌 WebSocket disconnected");
-            }
-        });
-
-        // 🔥 QUAN TRỌNG: delay nhẹ để tránh race condition
-        setTimeout(() => {
-            client.activate();
-        }, 100);
-    },
-
-    sendMessage(content) {
-        if (!client || !client.connected) {
-            console.warn("⚠️ Socket chưa connect");
-            return;
-        }
-
-        const payload = {
-            content: content
-        };
-
-        console.log("📤 Sending:", payload);
-
-        client.publish({
-            destination: "/app/chat.sendMessage",
-            body: JSON.stringify(payload)
-        });
-    },
-
-    disconnect() {
-        if (client) {
-            client.deactivate();
-            client = null;
-            console.log("🔌 Socket disconnected");
-        }
-    },
-
-    isConnected() {
-        return client && client.connected;
+    if (!token) {
+      console.warn("Không có token");
+      return;
     }
+
+    messageHandler = onMessageReceived;
+    statusHandler = onStatusChanged;
+
+    if (socket && socket.connected) {
+      console.log("Đã connect rồi");
+      return;
+    }
+
+    socket = io(env.BE_URL, {
+      transports: ["websocket"],
+      auth: {
+        token: token,
+      },
+    });
+
+    socket.on("connect", () => {
+      console.log("Connected:", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected");
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("Connect error:", err.message);
+    });
+
+    socket.on("user_online", (data) => {
+      console.log("User online:", data);
+      statusHandler?.({ type: "online", userId: data.userId });
+    });
+
+    socket.on("user_offline", (data) => {
+      console.log("User offline:", data);
+      statusHandler?.({ type: "offline", userId: data.userId });
+    });
+
+    socket.on("newMessage", (data) => {
+      console.log("Nhận message:", data);
+      messageHandler?.(data);
+    });
+  },
+  joinRoom(otherUserId) {
+    if (!socket || !socket.connected) {
+      console.warn("Chưa connect");
+      return;
+    }
+
+    console.log("Join chat với:", otherUserId);
+
+    socket.emit("joinChat", { otherUserId });
+  },
+
+  sendMessage(content, to) {
+    if (!socket || !socket.connected) {
+      console.warn("Chưa connect");
+      return;
+    }
+
+    socket.emit("newMessage", { content, to });
+  },
+
+  disconnect() {
+    if (socket) {
+      socket.disconnect();
+      socket = null;
+    }
+
+    messageHandler = null;
+    statusHandler = null;
+  },
+
+  isConnected() {
+    return socket && socket.connected;
+  },
+
+  heartbeat(userId, chatWithId) {
+    if (!socket || !socket.connected) {
+      console.warn("Socket không connected, không gửi heartbeat");
+      return;
+    }
+    console.log("Gửi heartbeat:", { userId, chatWithId });
+    socket.emit("heartbeat", { userId, chatWithId });
+  },
 };
