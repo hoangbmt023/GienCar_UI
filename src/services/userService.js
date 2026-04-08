@@ -43,6 +43,14 @@ export const userService = {
     // xóa địa chỉ
     removeAddress(addressId) {
         return axiosClient.delete(`/users/me/addresses/${addressId}`);
-    }
+    },
 
+    // Lấy thời gian hoạt động cuối cùng của một user
+    getLastSeenUser(userId){
+        return axiosClient.get(`/users/${userId}/last-seen`);
+    },
+    
+    getListSales(){
+        return axiosClient.get("/users/sales")
+    }
 };

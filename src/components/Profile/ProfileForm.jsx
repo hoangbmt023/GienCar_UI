@@ -50,6 +50,11 @@ export default function ProfileForm() {
             <div className="profile-info">
                 <div className="avatar">
                     <img src={preview || profile.avatar || "https://i.pravatar.cc/100"} />
+
+                    <div className="avatar-overlay">
+                        Thay đổi ảnh
+                    </div>
+
                     <input type="file" name="avatarFile" onChange={handleChange} />
                 </div>
 

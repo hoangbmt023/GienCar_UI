@@ -1,0 +1,31 @@
+/* ================= CHAT BOX CONTAINER ================= */
+.chat-box-container {
+    position: relative;
+    z-index: 100;
+}
+
+/* Desktop - Không thay đổi gì */
+@media (min-width: 1024px) {
+    .chat-box-container {
+        /* Default layout */
+    }
+}
+
+/* Tablet - Tối ưu hóa */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .chat-box-container {
+        /* Có thể sử dụng cho tablet */
+    }
+}
+
+/* Mobile - Responsive */
+@media (max-width: 767px) {
+    .chat-box-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 999;
+    }
+}
