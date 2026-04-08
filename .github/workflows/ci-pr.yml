@@ -1,0 +1,80 @@
+name: CI on release/main PR merged
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - release
+      - main
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build_test:
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
+          VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
+        run: npm run test:ci
+
+      - name: Build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
+          VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
+        run: npm run build
+
+  deploy:
+    needs: build_test
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for deploy
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
+          VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
