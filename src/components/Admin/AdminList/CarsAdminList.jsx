@@ -56,12 +56,21 @@ export default function CarsAdminList() {
             {
                 key: "image",
                 label: "Hình",
-                render: (row) =>
+                render: (row, helpers) =>
                     row.images?.[0]?.url ? (
                         <img
                             src={row.images[0].url}
                             alt="car"
-                            style={{ width: 80, height: 50, objectFit: "cover" }}
+                            style={{
+                                width: 80,
+                                height: 50,
+                                objectFit: "cover",
+                                cursor: "pointer"
+                            }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                helpers.previewImage(row.images[0].url);
+                            }}
                         />
                     ) : "-"
             },

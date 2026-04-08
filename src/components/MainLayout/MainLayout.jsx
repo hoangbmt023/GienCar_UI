@@ -1,14 +1,24 @@
 import Header from '@/components/Header/Header'
 import { Outlet, useLocation, matchPath } from 'react-router-dom'
 import Footer from '../Footer/Footer'
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 export default function MainLayout() {
     const location = useLocation();
 
-    // route tĩnh
-    const isHome = location.pathname === "/home";
+    // ===== TOAST LISTENER =====
+    useEffect(() => {
+        if (location.state?.message) {
+            toast.error(location.state.message);
 
-    // route động: /cars/:id
+            // 🔥 clear state tránh bị lặp lại khi reload/back
+            window.history.replaceState({}, document.title);
+        }
+    }, [location]);
+
+    // ===== UI LOGIC =====
+    const isHome = location.pathname === "/home";
     const isCarDetail = matchPath("/models/:slug", location.pathname);
 
     const noPadding = isHome || isCarDetail;

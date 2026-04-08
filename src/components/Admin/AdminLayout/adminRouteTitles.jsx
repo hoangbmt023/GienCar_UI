@@ -4,7 +4,6 @@ const adminRouteTitles = {
     "/admin/xe": "BẢNG THÔNG TIN XE",
     "/admin/danh-muc-xe": "BẢNG THÔNG TIN DANH MỤC XE",
     "/admin/thuong-hieu-xe": "BẢNG THÔNG TIN THƯƠNG HIỆU XE",
-    "/admin/hang-xe": "BẢNG THÔNG TIN HÃNG XE",
     "/admin/dong-xe": "BẢNG THÔNG TIN DÒNG XE",
     "/admin/thong-so-ky-thuat": "BẢNG THÔNG TIN THÔNG SỐ XE",
     "/admin/mau-xe": "BẢNG THÔNG TIN MÀU XE",

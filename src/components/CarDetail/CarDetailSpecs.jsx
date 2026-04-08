@@ -46,9 +46,6 @@ const CarDetailSpecs = ({ car }) => {
                         <span className="label">Giá tiêu chuẩn</span>
                         <span className="value price">{car.price}</span>
                     </div>
-
-                    <p className="note">{car.note}</p>
-
                 </div>
             </div>
         </div>

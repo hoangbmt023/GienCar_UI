@@ -23,6 +23,7 @@
     "react-router-dom": "^7.13.0",
     "react-toastify": "^11.0.5",
     "sass": "^1.98.0",
+    "socket.io-client": "^4.8.3",
     "sockjs-client": "^1.6.1",
     "styled-components": "^6.3.12"
   },

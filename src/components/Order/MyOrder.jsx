@@ -108,7 +108,6 @@ export default function MyOrder() {
 
             </div>
 
-            {/* 👉 PAGINATION */}
             <RenderPagination
                 data={pagination}
                 onPageChange={handlePageChange}

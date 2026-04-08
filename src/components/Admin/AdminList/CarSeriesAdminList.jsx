@@ -11,7 +11,7 @@ export default function CarSeriesAdminList() {
     const [rows, setRows] = useState([]);
     const [paging, setPaging] = useState({ page: 1, last: 1 });
 
-    const [brands, setBrands] = useState([]); // 👈 để map brand
+    const [brands, setBrands] = useState([]);
 
     const [open, setOpen] = useState(false);
     const [editing, setEditing] = useState(null);
@@ -39,18 +39,6 @@ export default function CarSeriesAdminList() {
     // ================= TABLE =================
     const columns = useMemo(
         () => [
-            {
-                key: "imageUrl",
-                label: "Hình",
-                render: (row) =>
-                    row.imageUrl ? (
-                        <img
-                            src={row.imageUrl}
-                            alt="img"
-                            style={{ width: 80, height: 50, objectFit: "cover" }}
-                        />
-                    ) : "-"
-            },
             { key: "name", label: "Tên dòng xe" },
             {
                 key: "brandId",
