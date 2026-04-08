@@ -3,8 +3,6 @@ import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 
 export default defineConfig({
-  base: "/giencar-ui/", 
-
   plugins: [react()],
 
   resolve: {
