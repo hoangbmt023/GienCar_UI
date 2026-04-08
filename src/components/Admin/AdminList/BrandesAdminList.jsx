@@ -26,7 +26,7 @@ export default function BrandesAdminList() {
             {
                 key: "logo",
                 label: "Logo",
-                render: (row) => (
+                render: (row, helpers) =>
                     row.logo ? (
                         <img
                             src={row.logo}
@@ -34,11 +34,15 @@ export default function BrandesAdminList() {
                             style={{
                                 width: 50,
                                 height: 50,
-                                objectFit: "contain"
+                                objectFit: "contain",
+                                cursor: "pointer"
+                            }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                helpers.previewImage(row.logo);
                             }}
                         />
                     ) : "-"
-                )
             },
             { key: "name", label: "Tên brand" },
             { key: "country", label: "Quốc gia" }

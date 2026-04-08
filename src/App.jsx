@@ -1,16 +1,43 @@
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import AppRoutes from '@/routes/AppRoutes'
+import { useEffect } from "react";
+import { chatSocket } from "./services/chatSocket";
 
 function App() {
+    useEffect(() => {
+
+        chatSocket.connect((msg) => {
+            console.log("Global message:", msg);
+
+            // ✅ CHỈ hiện khi có message thật
+            if (msg?.content) {
+                toast.info(`📩 ${msg.content}`);
+            }
+        });
+
+        return () => {
+            chatSocket.disconnect();
+        };
+    }, []);
+
     return (
         <>
             <AppRoutes />
-            <ToastContainer />
+
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                newestOnTop
+                pauseOnHover
+                theme="colored"
+                style={{ zIndex: 9999 }}
+            />
         </>
     )
 }
 
-export default App
+export default App;
 // gắn ở mọi trang
 // import { useState } from "react";
 // import { ToastContainer } from "react-toastify";
