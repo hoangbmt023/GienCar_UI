@@ -22,6 +22,8 @@ export default function DataTable({
 
     const [appearing, setAppearing] = useState({});
 
+    const [previewImage, setPreviewImage] = useState(null);
+
     const toggleRow = (id) => {
         if (expanded[id]) {
             // đóng
@@ -40,6 +42,10 @@ export default function DataTable({
                 setAppearing((prev) => ({ ...prev, [id]: false }));
             }, 200);
         }
+    };
+
+    const handlePreviewImage = (src) => {
+        setPreviewImage(src);
     };
 
     const renderRows = (data, level = 0) => {
@@ -83,7 +89,9 @@ export default function DataTable({
 
                                 {/* DATA */}
                                 <span>
-                                    {c.render ? c.render(r) : r[c.key]}
+                                    {c.render
+                                        ? c.render(r, { previewImage: handlePreviewImage })
+                                        : r[c.key]}
                                 </span>
                             </div>
                         </td>
@@ -119,6 +127,20 @@ export default function DataTable({
                                 <Trash2 size={16} />
                             </button>
                         </td>
+                    )}
+
+                    {previewImage && (
+                        <div
+                            className="ImagePreviewOverlay"
+                            onClick={() => setPreviewImage(null)}
+                        >
+                            <div
+                                className="ImagePreviewBox"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <img src={previewImage} alt="preview" />
+                            </div>
+                        </div>
                     )}
                 </tr>,
 

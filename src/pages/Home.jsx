@@ -9,33 +9,33 @@ import ChatBoxContainer from "@/components/ChatBox/ChatBoxContainer";
 // import LogoutButton from "../components/Commons/LogoutButton/LogoutButton";
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2500); // thời gian splash (khớp animation)
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 2500);
 
-    return () => clearTimeout(timer);
-  }, []);
+        return () => clearTimeout(timer);
+    }, []);
 
-  // 👉 Nếu đang loading thì chỉ hiện logo
-  if (loading) {
-    return <SplashScreen />;
-  }
+    // Nếu đang loading thì chỉ hiện logo
+    if (loading) {
+        return <SplashScreen />;
+    }
 
-  // 👉 Sau khi splash xong thì render Home
-  return (
-    <main className="home">
-      <HeroVideo />
+    // Sau khi splash xong thì render Home
+    return (
+        <main className="home">
+            <HeroVideo />
 
-      {/* <LogoutButton /> */}
+            {/* <LogoutButton /> */}
 
-      <HeroContent />
-      <HeroGrid />
+            <HeroContent />
+            <HeroGrid />
 
-      {/* ChatBoxContainer - Quản lý Chat + FloatingButton */}
-      <ChatBoxContainer />
-    </main>
-  );
+            {/* ChatBoxContainer - Quản lý Chat + FloatingButton */}
+            <ChatBoxContainer />
+        </main>
+    );
 }

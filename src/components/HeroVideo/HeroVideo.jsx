@@ -121,7 +121,7 @@ function HeroVideo() {
 
             {/* TEXT */}
             <div className="hero-video__content">
-                <div className="text-slide active">
+                <div key={current} className="text-slide active">
 
                     <h3 className="hero-video__title">
                         {videos[current].title}
