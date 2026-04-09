@@ -1,8 +1,7 @@
-name: CI on release/main PR merged
+name: CI and Deploy on Push
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - release
       - main
@@ -14,7 +13,6 @@ permissions:
 
 jobs:
   build_test:
-    if: ${{ github.event.pull_request.merged == true }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,7 +46,10 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
           VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
-        run: npm run build -- --base=/${{ github.event.repository.name }}/
+        run: |
+          export REPO_NAME=${GITHUB_REPOSITORY#*/}
+          npm run build -- --base=/${REPO_NAME}/
+          cp dist/index.html dist/404.html
 
       # 🔥 QUAN TRỌNG: lưu dist để job deploy dùng
       - name: Upload build artifact
@@ -60,7 +61,6 @@ jobs:
 
   deploy:
     needs: build_test
-    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' }}
     runs-on: ubuntu-latest
 
     steps:
