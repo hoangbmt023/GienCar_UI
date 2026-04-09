@@ -48,7 +48,7 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
           VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
-        run: npm run build -- --base=/${{ github.event.repository.name }}/
+        run: export REPO_NAME=${GITHUB_REPOSITORY#*/}; npm run build -- --base=/${REPO_NAME}/
 
       # 🔥 QUAN TRỌNG: lưu dist để job deploy dùng
       - name: Upload build artifact
