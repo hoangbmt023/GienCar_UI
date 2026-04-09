@@ -14,6 +14,7 @@ export default defineConfig({
   },
 
   test: {
+    reporters: "verbose",
     environment: "jsdom",
   },
 });
