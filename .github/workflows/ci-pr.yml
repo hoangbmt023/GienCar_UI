@@ -1,77 +1,77 @@
-name: CI on release/main PR merged
+# name: CI on release/main PR merged
 
-on:
-  pull_request:
-    types: [closed]
-    branches:
-      - release
-      - main
+# on:
+#   pull_request:
+#     types: [closed]
+#     branches:
+#       - release
+#       - main
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+# permissions:
+#   contents: write
+#   pages: write
+#   id-token: write
 
-jobs:
-  build_test:
-    if: ${{ github.event.pull_request.merged == true }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+# jobs:
+#   build_test:
+#     if: ${{ github.event.pull_request.merged == true }}
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
 
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+#       - name: Cache node modules
+#         uses: actions/cache@v4
+#         with:
+#           path: ~/.npm
+#           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#           restore-keys: |
+#             ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        run: npm ci
+#       - name: Install dependencies
+#         run: npm ci
 
-      - name: Run tests
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
-          VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
-        run: npm run test:ci
+#       - name: Run tests
+#         env:
+#           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+#           VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
+#           VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
+#         run: npm run test:ci
 
-      - name: Build
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
-          VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
-          VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
-        run: export REPO_NAME=${GITHUB_REPOSITORY#*/}; npm run build -- --base=/${REPO_NAME}/
+#       - name: Build
+#         env:
+#           VITE_API_URL: ${{ secrets.VITE_API_URL }}
+#           VITE_FE_URL: ${{ secrets.VITE_FE_URL }}
+#           VITE_BE_URL: ${{ secrets.VITE_BE_URL }}
+#         run: export REPO_NAME=${GITHUB_REPOSITORY#*/}; npm run build -- --base=/${REPO_NAME}/
 
-      # 🔥 QUAN TRỌNG: lưu dist để job deploy dùng
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-          overwrite: true
+#       # 🔥 QUAN TRỌNG: lưu dist để job deploy dùng
+#       - name: Upload build artifact
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: dist
+#           path: dist
+#           overwrite: true
 
-  deploy:
-    needs: build_test
-    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' }}
-    runs-on: ubuntu-latest
+#   deploy:
+#     needs: build_test
+#     if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' }}
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
+#     steps:
+#       - name: Download build artifact
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: dist
+#           path: dist
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+#       - name: Deploy to GitHub Pages
+#         uses: peaceiris/actions-gh-pages@v3
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./dist
