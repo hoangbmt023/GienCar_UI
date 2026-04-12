@@ -99,7 +99,6 @@ export default function ChatBox({ onClose, selectedUser }) {
 
         const decoded = jwtDecode(token);
         setCurrentUserId(decoded.sub);
-        console.log("✅ Init ChatBox, userId:", decoded.sub);
 
         // Fetch danh sách hội thoại
         const res = await chatService.getMyConversations();
@@ -125,43 +124,37 @@ export default function ChatBox({ onClose, selectedUser }) {
   // ================= SOCKET =================
   useEffect(() => {
     const handleMessage = (msg) => {
-      console.log("📥 Nhận:", msg);
-
       // Nếu đang mở chat với đúng người gửi hoặc nhận, thêm vào messages
       setOtherUser((currentOtherUser) => {
         if (!currentOtherUser) {
-          // Nếu chưa chat với ai, có thể load lại danh sách conversations
+          // Nếu chưa chat với ai, load lại danh sách conversations
           fetchConversations();
           return currentOtherUser;
         }
 
-        // Cập nhật messages
-        if (
-          String(msg.from?.id || msg.from) === String(currentOtherUser.id) ||
-          String(msg.to?.id || msg.to) === String(currentOtherUser.id)
-        ) {
+        const msgFrom = String(msg.from?.id || msg.from);
+        const msgTo   = String(msg.to?.id   || msg.to);
+        const otherId = String(currentOtherUser.id);
+
+        // Chỉ xử lý tin thuộc room đang mở
+        if (msgFrom === otherId || msgTo === otherId) {
           setMessages((prev) => {
-            // Kiểm tra duplicate: từ + nội dung + thời gian gần nhau
+            // Kiểm tra duplicate: cùng người gửi + nội dung + trong 3 giây
             const isDuplicate = prev.some((m) => {
-              const sameFrom =
-                String(m.from?.id || m.from) ===
-                String(msg.from?.id || msg.from);
+              const sameFrom = String(m.from?.id || m.from) === msgFrom;
               const sameContent = m.content === msg.content;
-
               if (!sameFrom || !sameContent) return false;
-
-              // Cho phép sai khác thời gian số ms (vì client vs server time)
               if (m.createdAt && msg.createdAt) {
-                const timeDiff = Math.abs(
-                  new Date(m.createdAt) - new Date(msg.createdAt),
-                );
-                return timeDiff < 3000; // 3 giây
+                return Math.abs(new Date(m.createdAt) - new Date(msg.createdAt)) < 3000;
               }
-
               return true;
             });
 
             if (!isDuplicate) {
+              // Nếu tin này từ người kia gửi đến mình → mark seen ngay (real-time seen)
+              if (msgFrom === otherId) {
+                chatSocket.sendSeen(currentOtherUser.id);
+              }
               return [...prev, msg];
             }
             return prev;
@@ -171,22 +164,51 @@ export default function ChatBox({ onClose, selectedUser }) {
       });
     };
 
-    const handleStatusChanged = ({ type, userId }) => {
+    const handleStatusChanged = ({ type, userId, lastSeen }) => {
       setOnlineUsers((prev) => ({
         ...prev,
         [userId]: type === "online",
       }));
+
+      // Nếu đang chat với user này và mạng báo offline, lập tức cập nhật thời gian lastSeen
+      if (type === "offline" && lastSeen) {
+        setOtherUser((prevOtherUser) => {
+          if (prevOtherUser && String(prevOtherUser.id) === String(userId)) {
+            return {
+              ...prevOtherUser,
+              lastSeen: lastSeen,
+            };
+          }
+          return prevOtherUser;
+        });
+      }
     };
 
-    chatSocket.connect(handleMessage, handleStatusChanged);
+    const handleSeenEvent = () => {
+      // Cập nhật isSeen = true cho tất cả tin nhắn của mình trong room đang mở
+      setMessages((prev) =>
+        prev.map((m) => {
+          const fromId = String(m.from?.id || m.from);
+          // Chỉ update tin nhắn của mình (currentUserId là sender)
+          if (fromId === String(currentUserId)) {
+            return { ...m, isSeen: true };
+          }
+          return m;
+        })
+      );
+      // Cập nhật lại danh sách hội thoại để xoá badge unread
+      fetchConversations();
+    };
+
+    chatSocket.connect(handleMessage, handleStatusChanged, handleSeenEvent);
 
     // ================= GLOBAL HEARTBEAT - Gửi heartbeat liên tục từ lúc connect =================
     const globalHeartbeatInterval = setInterval(() => {
       if (currentUserId && chatSocket.isConnected()) {
-        console.log("🔵 Global heartbeat tick, userId:", currentUserId);
+        console.log("Global heartbeat tick, userId:", currentUserId);
         chatSocket.heartbeat(currentUserId, null); // Send global heartbeat
       } else {
-        console.log("⚠️ Global heartbeat skip - not ready", {
+        console.log("Global heartbeat skip - not ready", {
           currentUserId,
           isConnected: chatSocket.isConnected(),
         });
@@ -203,7 +225,7 @@ export default function ChatBox({ onClose, selectedUser }) {
   // ================= DEBUG: Monitor pagination state =================
   useEffect(() => {
     if (otherUser) {
-      console.log("📊 Pagination state:", {
+      console.log("Pagination state:", {
         currentPage,
         hasMore,
         isLoadingMore,
@@ -226,8 +248,6 @@ export default function ChatBox({ onClose, selectedUser }) {
 
   // ================= CHỌN NGƯỜI CHAT =================
   const handleSelectUser = async (user) => {
-    console.log("👉 Chat với:", user.id);
-
     // Reset initial load flag khi chọn user mới
     isInitialLoadRef.current = true;
 
@@ -237,52 +257,39 @@ export default function ChatBox({ onClose, selectedUser }) {
     setHasMore(true);
     setIsLoadingMore(false); // Ensure not stuck
 
-    // join realtime
-    chatSocket.joinRoom(user.id);
+    // Tìm roomId từ danh sách conversations nếu đã từng chat
+    const existingConv = conversations.find(
+      (c) => String(c.otherUserId) === String(user.id),
+    );
+    const roomIdToJoin = existingConv ? existingConv.roomId : null;
+
+    // join realtime với roomId
+    chatSocket.joinRoom(user.id, roomIdToJoin);
 
     // load history messages (trang 1)
     try {
-      console.log("📝 Fetching initial messages for user:", user.id);
       const res = await chatService.getMessages(user.id, 1, 20);
-      console.log("📊 API Response:", {
-        success: res.data?.success,
-        dataLength: res.data?.data?.length,
-        fullData: res.data?.data,
-        hasTotal: !!res.data?.total,
-        totalCount: res.data?.total,
-      });
 
       if (res.data?.success) {
         const initialMessages = res.data.data || [];
         setMessages(initialMessages);
-        console.log("✅ Set initial messages:", initialMessages.length);
 
         // Dùng pagination object từ backend để kiểm tra hasMore
         let hasMorePages = false;
         if (res.data?.pagination) {
           const { page, last } = res.data.pagination;
           hasMorePages = page < last; // Nếu page hiện tại < page cuối → còn page tiếp theo
-          console.log(
-            "📊 Backend pagination:",
-            res.data.pagination,
-            "-> hasMore:",
-            hasMorePages,
-          );
         } else {
           // Fallback: kiểm tra từ số items trả về
           hasMorePages = initialMessages.length === 20;
-          console.log(
-            "📊 No pagination object, fallback to length check: hasMore:",
-            hasMorePages,
-          );
         }
 
         setHasMore(hasMorePages);
-        console.log("📄 Final hasMore state:", hasMorePages);
 
         // Cuộn xuống cuối dùng cho lần đầu load tin nhắn (tin nhắn mới nhất ở dưới)
         setTimeout(() => {
           scrollToBottom();
+
           // Đánh dấu initial load xong sau khi đã cuộn
           // Để tránh việc chưa cuộn xong mà onScroll đã bị gọi (với scrollTop = 0) gây load page 2
           setTimeout(() => {
@@ -290,19 +297,26 @@ export default function ChatBox({ onClose, selectedUser }) {
           }, 100);
         }, 50);
       } else {
-        console.warn("⚠️ API success = false");
+        console.warn("API success = false");
       }
 
-      // Load initial last seen status
+      // Load initial last seen status and online status
       const seenRes = await userService.getLastSeenUser(user.id);
       if (seenRes.data?.success) {
+        const data = seenRes.data.data;
         setOtherUser((prev) => ({
           ...prev,
-          lastSeen: seenRes.data.data.lastSeen,
+          lastSeen: data.lastSeen,
+        }));
+        
+        // Cập nhật trạng thái online nếu đang online
+        setOnlineUsers((prev) => ({
+          ...prev,
+          [user.id]: data.isOnline === true,
         }));
       }
     } catch (err) {
-      console.error("❌ Error loading initial messages:", err);
+      console.error("Error loading initial messages:", err);
     }
   };
 
@@ -314,47 +328,15 @@ export default function ChatBox({ onClose, selectedUser }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedUser]);
 
-  // ================= AUTO-REFRESH ONLINE STATUS EVERY 10S (KHI ĐANG CHAT) =================
-  useEffect(() => {
-    if (!otherUser) return;
-
-    console.log("🔄 Start auto-refresh status for user:", otherUser.id);
-
-    const refreshStatusInterval = setInterval(async () => {
-      try {
-        // Fetch status từ server
-        const seenRes = await userService.getLastSeenUser(otherUser.id);
-        if (seenRes.data?.success) {
-          console.log("📍 Updated lastSeen for", otherUser.id);
-          setOtherUser((prev) => ({
-            ...prev,
-            lastSeen: seenRes.data.data.lastSeen,
-          }));
-        }
-      } catch (err) {
-        console.error("Lỗi refresh status:", err);
-      }
-    }, 10000); // Refresh every 10 seconds
-
-    return () => {
-      clearInterval(refreshStatusInterval);
-      console.log("🛑 Stop auto-refresh status");
-    };
-  }, [otherUser]);
+  // REST API polling interval removed. Relying strictly on STOMP socket heartbeat events.
 
   // ================= LOAD MORE MESSAGES (PAGINATION) =================
   const loadMoreMessages = async () => {
     // Tránh race-condition khi onScroll gọi liên tục: khoá ngay lập tức bằng Ref
     if (isLoadingMore || isFetchingOlderRef.current || !hasMore || !otherUser) {
-      console.log("⚠️ loadMoreMessages skip:", {
-        isLoadingMore,
-        isFetchingOlder: isFetchingOlderRef.current,
-        hasMore,
-      });
       return;
     }
 
-    console.log("📥 Loading more messages... page:", currentPage + 1);
     setIsLoadingMore(true);
     isFetchingOlderRef.current = true; // KHOÁ LIỀN LẬP TỨC!
 
@@ -376,7 +358,7 @@ export default function ChatBox({ onClose, selectedUser }) {
       if (res.data?.success) {
         const newMessages = res.data.data || [];
         console.log(
-          "✅ Loaded",
+          "Loaded",
           newMessages.length,
           "messages for page",
           nextPage,
@@ -394,7 +376,7 @@ export default function ChatBox({ onClose, selectedUser }) {
         }
 
         setHasMore(newHasMore);
-        console.log("📄 Updated hasMore:", newHasMore);
+        console.log("Updated hasMore:", newHasMore);
 
         // Chú ý: Cuộn và giải phóng Loading được thực hiện tự động và ĐỒNG BỘ bên trong useLayoutEffect!
       } else {
@@ -416,7 +398,6 @@ export default function ChatBox({ onClose, selectedUser }) {
 
     // Nếu cuộn lên kịch trần trên cùng (scrollTop chạm 0), load tiếp trang cũ
     if (scrollTop <= 1 && hasMore && !isLoadingMore) {
-      console.log("🔝 Đã cuộn lên kịch trần, gọi page cũ!");
       loadMoreMessages();
     }
   };
@@ -427,8 +408,6 @@ export default function ChatBox({ onClose, selectedUser }) {
 
     const messageContent = input.trim();
     const messageTime = new Date().toISOString();
-
-    console.log("📤 Gửi:", messageContent, "→", otherUser.id);
 
     // Thêm message tạm thời để UX tốt (hiển thị ngay)
     const tempMsg = {
@@ -451,7 +430,7 @@ export default function ChatBox({ onClose, selectedUser }) {
   // ================= UI =================
   if (loading) return <div className="chat-box loading">Loading chats...</div>;
 
-  // 👉 TRẠNG THÁI HIỂN THỊ DANH SÁCH CONVERSATIONS
+  // TRẠNG THÁI HIỂN THỊ DANH SÁCH CONVERSATIONS
   if (!otherUser) {
     return (
       <div className="chat-box">
@@ -467,7 +446,13 @@ export default function ChatBox({ onClose, selectedUser }) {
             <div className="chat-box__empty">Chưa có hội thoại nào</div>
           )}
           {conversations.map((conv) => {
-            const user = conv.otherUser;
+            const user = {
+              id: conv.otherUserId,
+              email: conv.otherUserEmail,
+              fullName: conv.otherUserEmail,
+              avatar: null,
+            };
+
             const isOnline = onlineUsers[user.id];
 
             return (
@@ -497,10 +482,9 @@ export default function ChatBox({ onClose, selectedUser }) {
                     className={`chat-box__room-lastmsg ${conv.unreadCount > 0 ? "unread" : ""}`}
                   >
                     {conv.lastMessage
-                      ? String(conv.lastMessage.from?.id) ===
-                        String(currentUserId)
-                        ? `Bạn: ${conv.lastMessage.content}`
-                        : conv.lastMessage.content
+                      ? String(conv.lastMessageFrom) === String(currentUserId)
+                        ? `Bạn: ${conv.lastMessage}`
+                        : conv.lastMessage
                       : "Chưa có tin nhắn"}
                   </div>
                 </div>
@@ -518,7 +502,7 @@ export default function ChatBox({ onClose, selectedUser }) {
     );
   }
 
-  // 👉 TRẠNG THÁI CHAT VỚI 1 NGƯỜI CỤ THỂ
+  // TRẠNG THÁI CHAT VỚI 1 NGƯỜI CỤ THỂ
   const isOtherUserOnline = onlineUsers[otherUser.id];
   const lastSeenText = isOtherUserOnline
     ? "Đang hoạt động"
