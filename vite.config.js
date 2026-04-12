@@ -9,7 +9,9 @@ export default defineConfig({
       "@": resolve(__dirname, "src"),
     },
   },
-
+  define: {
+    global: "window",
+  },
   test: {
     reporters: "verbose",
     environment: "jsdom",
